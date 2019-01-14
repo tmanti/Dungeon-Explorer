@@ -9,6 +9,7 @@
 		<SlotType>1</SlotType>
 		<Tier>1</Tier>
 		<Description>A steel short sword</Description>
+		<Damage>2-4</Damage>
 		<RateOfFire>1</RateOfFire>
 	</Object>
 	<Object id="Short Staff" type="0xb00">
@@ -21,7 +22,9 @@
 		<SlotType>2</SlotType>
 		<Tier>1</Tier>
 		<Description>A basic short staff</Description>
+		<Damage>1-4</Damage>
 		<RateOfFire>1</RateOfFire>
+		<Range>1</Range>
 	</Object>
 	<Object id="Short Bow" type="0xc00">
 		<Class>Equipment</Class>
@@ -33,6 +36,8 @@
 		<SlotType>3</SlotType>
 		<Tier>1</Tier>
 		<Description>A simple Bow</Description>
+		<Damage>2-5</Damage>
 		<RateOfFire>1</RateOfFire>
+		<Range>1</Range>
 	</Object>
 </Objects>

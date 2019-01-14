@@ -13,7 +13,7 @@ class spriteRef:
         self.index = index.split("x")
         for x in self.index:
             #print(x)
-            x = int(x)*16
+            x = int(x)*8
 
 class Material:
     def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, XMLElement, rateOfFire = None):
@@ -30,6 +30,10 @@ class Material:
         self.rateOfFire = rateOfFire
 
         self.XMLRef = XMLElement
+
+    def use(self):
+        if self.isItem:
+            pass
 
     def Data(self):
         return "<%s type=%s id=%s {SlotType=%s, description=%s, Texture=[File=%s, Index=%s]}>" % (self.itemClass, self.type, self.name, self.SlotType, self.description, self.Texture.fileLocation, self.Texture.index)

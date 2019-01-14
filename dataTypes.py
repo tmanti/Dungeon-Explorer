@@ -2,7 +2,11 @@ import item
 import random
 
 FPS = 120
-frames = FPS / 6
+frames = FPS/8
+
+chunkSize = 16
+
+w,h = [800, 800]
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -15,8 +19,13 @@ class pos:
         self.x = x
         self.y = y
 
+        self.__repr__ = self.__str__
+
     def return_Position(self):
         return {"x":self.x, "y":self.y}
+
+    def __str__(self):
+        return str(self.x)+ ":" + str(self.y)
 
 class entityStats:
     def __init__(self, hp=0, mp=0, spd=0, atk=0, dex=0, vit=0):
@@ -67,6 +76,11 @@ class playerData:
 
     def return_playerData(self):
         return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.SlotType}
+
+class chunkData:
+    def __init__(self, pos, chunkData=None):
+        self.chunkPos = pos
+        self.chunkData = chunkData
 
 class worldData:
     def __init__(self, seed=random.randint(1, 100000)): #seed is used and stored for ease in the database, progression is used and stored in the database for the save as well (world events and other thigns)

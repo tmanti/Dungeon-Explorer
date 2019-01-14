@@ -25,10 +25,12 @@ class DBInterface():
         self.session = DBSession()
 
     #db functions like write read
+    #create new save with user data passed
     def newSave(self, name, userdata):
         self.session.add(PlayerSave(name=name, userdata=userdata))
         self.session.commit()
 
+    #save userdata passed
     def save(self, name, data):
         userRef = self.session.query(PlayerSave).filter_by(name=name).first()
         if userRef:
@@ -37,6 +39,7 @@ class DBInterface():
         else:
             print("Error saving to DB")
 
+    #return save data of player
     def checkSave(self, name):
         userRef = self.session.query(PlayerSave).filter_by(name=name).first()
         if userRef:
@@ -44,3 +47,6 @@ class DBInterface():
         else:
             print("Save not found")
             return None
+    #return all save data
+    def returnAllSaves(self):
+        return self.session.query(PlayerSave).all()
