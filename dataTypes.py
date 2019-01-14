@@ -43,18 +43,20 @@ class container:
     def __init__(self, size, contents=None):
         self.size = size
         if contents:
-            self.contents = contents
+            self.contents = {}
+            for x in range(self.size):
+                self.contents[str(x)] = item.ItemStack(1, item.allItems[contents[str(x)]])
         else:
-            self.contents={_:item.Nothing for _ in range(self.size)}
+            self.contents={str(_):item.ItemStack(1, item.Nothing) for _ in range(self.size)}
 
     def return_Container(self):
         toReturn = self.contents
         for x in toReturn:
-            toReturn[x] = toReturn[x].type
+            toReturn[x] = toReturn[x].material.type
         return toReturn
 
 class playerInventory:
-    def __init__(self, weapon=item.Nothing, special=item.Nothing, armour=item.Nothing, ring=item.Nothing, container=container(30)):
+    def __init__(self, weapon=item.ItemStack(1, item.Nothing), special=item.ItemStack(1, item.Nothing), armour=item.ItemStack(1, item.Nothing), ring=item.ItemStack(1, item.Nothing), container=container(30)):
         self.weapon = weapon
         self.special = special
         self.armour = armour
@@ -62,7 +64,7 @@ class playerInventory:
         self.container = container
 
     def return_playerInventory(self):
-        return {"weapon":self.weapon.type, "special":self.special.type, "armour":self.armour.type, "ring":self.ring.type, "container":self.container.return_Container()}
+        return {"weapon":self.weapon.material.type, "special":self.special.material.type, "armour":self.armour.material.type, "ring":self.ring.material.type, "container":self.container.return_Container()}
 
     def newWarriorInv(self):
         self.weapon = "Test"

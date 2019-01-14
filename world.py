@@ -126,7 +126,7 @@ class world:
             for x in range(self.chunkSize):
                 nx = startPos.x+x / self.chunkSize - 0.5
                 ny = startPos.y+y / self.chunkSize - 0.5
-                row.append([self.noise(nx, ny), dataTypes.pos(startPos.x+x, startPos.y+y)])
+                row.append([self.noise(2*nx, 2*ny), dataTypes.pos(startPos.x+x, startPos.y+y)])
             map.append(row)
 
         return map

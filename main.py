@@ -51,9 +51,10 @@ def loadSave(saveName):
 
 #parses the save data and returns it as a saveData object for easy use
 def ParseSaveData(saveData):
+    print(saveData)
     player = dataTypes.playerData(
         pos(saveData[0]['pos']['x'], saveData[0]['pos']['y']),
-        dataTypes.playerInventory(weapon=saveData[0]['inv']['weapon'], special=saveData[0]['inv']['special'], armour=saveData[0]['inv']['armour'], ring=saveData[0]['inv']['ring'], container=dataTypes.container(30, saveData[0]['inv']['container'])),
+        dataTypes.playerInventory(weapon=item.ItemStack(1, item.allItems[saveData[0]['inv']['weapon']]), special=item.ItemStack(1, item.allItems[saveData[0]['inv']['special']]), armour=item.ItemStack(1, item.allItems[saveData[0]['inv']['armour']]), ring=item.ItemStack(1, item.allItems[saveData[0]['inv']['ring']]), container=dataTypes.container(30, saveData[0]['inv']['container'])),
         dataTypes.entityStats(hp=saveData[0]['stats']['hp'], mp=saveData[0]['stats']['mp'], spd=saveData[0]['stats']['spd'], atk=saveData[0]['stats']['atk'], dex=saveData[0]['stats']['dex'], vit=saveData[0]['stats']['vit']),
         Player.className[saveData[0]['class']]
     )
@@ -157,6 +158,7 @@ class Client:
     def Load(self, name):
         # TEMP - load player save
         self.saveData = loadSave(name)
+        #print(self.saveData.return_save())
 
         # create Player and world objects from passed data by the loadsave
         self.Player = Player.player(self.saveData.player)
