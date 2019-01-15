@@ -9,26 +9,33 @@ class Chunk:
         self.pos = chunkData.chunkPos
         self.tilePos = dataTypes.pos(self.pos.x*dataTypes.chunkSize, self.pos.y*dataTypes.chunkSize)
         self.tileGroup =  pygame.sprite.Group()
+        self.tiles = {}
 
     def genChunk(self, noiseMap):
         for row in noiseMap:
             for noise, pos in row:
                 if noise < 0.2:
                     self.tileGroup.add(waterTile(pos))
+                    self.tiles[pos.__str__()] = "water"
                 elif noise < 0.3:
                     self.tileGroup.add(sandTile(pos))
-                    pass
+                    self.tiles[pos.__str__()] = "sand"
                 elif noise < 0.8:
-                    if 0.55< noise and noise < 0.56:
+                    if 0.42< noise and noise < 0.43:
                         self.tileGroup.add(grassFlowerTile(pos, 1))
-                    elif 0.57< noise and noise < 0.58:
+                        self.tiles[pos.__str__()] = "flowers"
+                    elif 0.47< noise and noise < 0.48:
                         self.tileGroup.add(grassFlowerTile(pos, 2))
+                        self.tiles[pos.__str__()] = "flowers"
                     else:
                         self.tileGroup.add(grassTile(pos))
+                        self.tiles[pos.__str__()] = "grass"
                 elif noise < 0.9:
                     self.tileGroup.add(mountainTile(pos))
+                    self.tiles[pos.__str__()] = "mountain"
                 else:
                     self.tileGroup.add(snowTile(pos))
+                    self.tiles[pos.pos.__str__()] = "snow"
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, position, image):
