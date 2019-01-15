@@ -127,7 +127,7 @@ class world:
                 nx = (startPos.x+x)/ self.chunkSize - 0.5
                 ny = (startPos.y+y)/ self.chunkSize - 0.5
                 #print(self.noise(2*nx, 2*ny))
-                row.append([self.noise(1*nx, 1*ny), dataTypes.pos(startPos.x+x, startPos.y+y)])
+                row.append([self.noise(0.25*nx, 0.25*ny), dataTypes.pos(startPos.x+x, startPos.y+y)])
             #break
             map.append(row)
 
