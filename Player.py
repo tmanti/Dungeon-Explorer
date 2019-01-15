@@ -71,7 +71,7 @@ class player(pygame.sprite.Sprite):
         #update position
         #draw
         self.tilePos = dataTypes.pos(self.position.x//32, self.position.y//32)
-        self.chunkPos = dataTypes.pos(self.tilePos.x // 16, self.tilePos.y // 16)
+        self.chunkPos = dataTypes.pos(self.tilePos.x // dataTypes.chunkSize, self.tilePos.y // dataTypes.chunkSize)
         
         keys = pygame.key.get_pressed()
 
@@ -106,5 +106,5 @@ class player(pygame.sprite.Sprite):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
 
-newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, spd=5, atk=5, dex=5, vit=5), warriorClass())
+newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, spd=3, atk=5, dex=5, vit=5), warriorClass())
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}
