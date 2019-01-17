@@ -98,7 +98,7 @@ class Client:
         #initialize items
         item.init()
 
-        self.Load("tmanti")
+        self.Load('Jackie')
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
