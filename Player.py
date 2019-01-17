@@ -67,6 +67,8 @@ class player(pygame.sprite.Sprite):
         self.rect.x = dataTypes.w/2
         self.rect.y = dataTypes.h/2
 
+        self.attacking = False
+
     def update(self, screen, *args):
         #update position
         #draw
@@ -101,6 +103,23 @@ class player(pygame.sprite.Sprite):
 
         self.position.x += velocity[0]
         self.position.y += velocity[1]
+
+        mousePressed = pygame.mouse.get_pressed()
+
+        attacking = False
+
+        if mousePressed[0] == 1:
+            print(mousePressed)
+            attacking =  True
+        elif mousePressed[0] == 0:
+            pygame.time.set_timer(pygame.USEREVENT+1, 0)
+
+        if self.attacking != attacking and attacking == True:
+            pygame.time.set_timer(pygame.USEREVENT+1, 3000//self.stats.dexterity)
+            self.attacking = True
+
+        if self.attacking:
+            self.playerAnim = self.playerIdle[self.lastFaced]
 
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)

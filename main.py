@@ -108,6 +108,7 @@ class Client:
         #main game loop
         while self.run:
             for e in p.event.get():#event queue
+                print(e)
                 if e.type == p.QUIT:
                     self.run = False
                 if e.type == p.KEYDOWN:
