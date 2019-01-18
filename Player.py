@@ -108,8 +108,10 @@ class player(pygame.sprite.Sprite):
 
         attacking = False
 
+        for e in pygame.event.get():
+            print(e)
+
         if mousePressed[0] == 1:
-            print(mousePressed)
             attacking =  True
         elif mousePressed[0] == 0:
             pygame.time.set_timer(pygame.USEREVENT+1, 0)
