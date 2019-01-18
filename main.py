@@ -6,6 +6,7 @@ import dataTypes
 import item
 import world
 import json
+import Enemies
 
 # TODO LIST - make someone say mada mada
 #for miller
@@ -104,7 +105,6 @@ class Client:
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
 
-
     def run(self):
         #main game loop
         while self.run:
@@ -153,6 +153,7 @@ class Client:
             chunk.tileGroup.draw(self.screen)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
+        Enemies.enemies().update(self.screen, self.Player.position)
 
         p.display.update()
 
@@ -169,3 +170,4 @@ class Client:
 #declaring game client
 gameClient = Client()
 gameClient.run()
+
