@@ -62,7 +62,6 @@ class ItemStack:
 Nothing = Material("None", "0xfff", "None", None, None, None)
 allItems = {"0xfff":Nothing}
 Equipment = {}
-Consumables = {}
 
 #https://docs.python.org/3/library/xml.etree.elementtree.html
 def init():
@@ -89,4 +88,5 @@ def init():
                                                    child.get('type'),
                                                    itemClass,
                                                    child.find("SlotType"),
-                                                   child.find("Description"))
+                                                   child.find("Description"),
+                                                   texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"))

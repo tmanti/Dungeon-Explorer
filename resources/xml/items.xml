@@ -107,13 +107,15 @@
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
 	</Object>
+
 	<Object id="Health Potion" type="0x000">
 		<Class>Consumable</Class>
 		<Item/>
 		<Texture>
-			<File></File>
+			<File>items</File>
+			<Index>0x0</Index>
 		</Texture>
 		<SlotType>11</SlotType>
-
+		<Description>A simple potion to restore a smaller amount of HP</Description>
 	</Object>
 </Objects>
