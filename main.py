@@ -6,7 +6,7 @@ import dataTypes
 import item
 import world
 import json
-import Enemies
+import enemy
 import methods
 
 # TODO LIST - make someone say mada mada
@@ -59,7 +59,7 @@ def ParseSaveData(saveData):
     player = dataTypes.playerData(
         pos(saveData[0]['pos']['x'], saveData[0]['pos']['y']),
         dataTypes.playerInventory(weapon=item.ItemStack(1, item.allItems[saveData[0]['inv']['weapon']]), special=item.ItemStack(1, item.allItems[saveData[0]['inv']['special']]), armour=item.ItemStack(1, item.allItems[saveData[0]['inv']['armour']]), ring=item.ItemStack(1, item.allItems[saveData[0]['inv']['ring']]), container=dataTypes.container(30, saveData[0]['inv']['container'])),
-        dataTypes.entityStats(hp=saveData[0]['stats']['hp'], mp=saveData[0]['stats']['mp'], spd=saveData[0]['stats']['spd'], atk=saveData[0]['stats']['atk'], dex=saveData[0]['stats']['dex'], vit=saveData[0]['stats']['vit']),
+        dataTypes.entityStats(hp=saveData[0]['stats']['hp'], mp=saveData[0]['stats']['mp'], defen=saveData[0]['stats']['def'] ,spd=saveData[0]['stats']['spd'], atk=saveData[0]['stats']['atk'], dex=saveData[0]['stats']['dex'], vit=saveData[0]['stats']['vit']),
         Player.className[saveData[0]['class']]
     )
     worldData = dataTypes.worldData(saveData[1]['seed'])
@@ -82,6 +82,9 @@ class Client:
 
         #initialize items
         item.init()
+
+        for items in item.allItems:
+            print(item.allItems[items])
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
@@ -157,7 +160,7 @@ class Client:
             chunk.tileGroup.draw(self.screen)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
-        Enemies.enemies().update(self.screen, self.Player.position)
+        enemy.enemies().update(self.screen, self.Player.position)
 
         p.display.update()
 

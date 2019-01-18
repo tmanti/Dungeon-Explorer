@@ -19,7 +19,7 @@ class spriteRef:
         return "[%s, %s]" % (self.index, self.fileLocation)
 
 class Material:
-    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None):
+    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None, range=None):
         self.name = name
         self.type = type
         self.itemClass = itemClass
@@ -32,14 +32,15 @@ class Material:
         self.description = desc
         self.rateOfFire = rateOfFire
         self.damage = damage
+        self.range = range
 
-        self.Data()
+        self.__repr__ = self.__str__
 
     def use(self):
-        if self.isItem:
+        if self.itemClass == "equipment":
             pass
 
-    def Data(self):
+    def __str__(self):
         return "<%s type=%s id=%s {SlotType=%s, description=%s, Texture=%s}>" % (self.itemClass, self.type, self.name, self.SlotType, self.description, self.Texture)
 
 class ItemStack:
@@ -70,6 +71,7 @@ def init():
                                                    child.find("Texture").find("Index").text,
                                                    child.find("SlotType").text,
                                                    child.find("Description").text,
-                                                   rateOfFire=child.find("RateOfFire"),
-                                                   damage=[int(_) for _ in child.find("Damage").text.split("-")])
+                                                   rateOfFire=int(child.find("RateOfFire").text),
+                                                   damage=[int(_) for _ in child.find("Damage").text.split("-")],
+                                                   range=int(child.find("Range").text))
         #print(child.get('id') + " : " + allItems[child.get('type')].Data())

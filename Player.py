@@ -127,5 +127,5 @@ class player(pygame.sprite.Sprite):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
 
-newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, spd=3, atk=5, dex=5, vit=5), warriorClass())
+newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

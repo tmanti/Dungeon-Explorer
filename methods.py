@@ -17,7 +17,6 @@ class button(pygame.sprite.Sprite):
         self.normal = pygame.Surface((200,200))
         text_to_screen(text, 5, 5, self.normal, center=False)
 
-
         self.hover = pygame.Surface((200,200))
         text_to_screen(text, 5, 5, self.hover, center=False, font=GAME_FONT2)
 

@@ -1,0 +1,13 @@
+<?xml version="1.0"?><Objects>
+    <Object type="0xg01" id="Goblin Scout">
+        <Group>Goblins</Group>
+        <Texture>
+			<File>enemies</File>
+			<Index>0x0</Index>
+		</Texture>
+        <stats>
+            <Hitpoints>20</Hitpoints>
+            <>
+        </stats>
+    </Object>
+</Objects>

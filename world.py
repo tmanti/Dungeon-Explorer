@@ -3,7 +3,7 @@ import random
 import dataTypes
 import spritesheet
 import pygame
-import Enemies
+import enemy
 
 class Chunk:
     def __init__(self, chunkData):
@@ -84,11 +84,8 @@ class grassTile(Tile):
         self.image = pygame.image.load("resources/Sprites/tiles/grass.png")
         x, y = self.image.get_size()
         self.image = pygame.transform.scale(self.image, (x*4, y*4))
-        num = random.randint(1, 100)
 
         super().__init__(position, self.image)
-        if num == 5:
-            Enemies.Enemy(self, 'Grass')
 
 class grassFlowerTile(Tile):
     def __init__(self, position, flowerNum):

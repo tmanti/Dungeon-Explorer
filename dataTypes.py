@@ -36,8 +36,9 @@ class pos:
         return str(self.x)+ ":" + str(self.y)
 
 class entityStats:
-    def __init__(self, hp=0, mp=0, spd=0, atk=0, dex=0, vit=0):
+    def __init__(self, hp=0, mp=0, defen=0, spd=0, atk=0, dex=0, vit=0):
         self.health = hp
+        self.defence = defen
         self.magic = mp
         self.speed = spd
         self.attack = atk
@@ -45,7 +46,7 @@ class entityStats:
         self.vitality = vit
 
     def return_entityStats(self):
-        return {"hp":self.health, "mp":self.magic, "spd": self.speed, "atk": self.attack, "dex":self.dexterity, "vit": self.vitality}
+        return {"hp":self.health, "mp":self.magic, "def": self.defence, "spd": self.speed, "atk": self.attack, "dex":self.dexterity, "vit": self.vitality}
 
 class container:
     def __init__(self, size, contents=None):
