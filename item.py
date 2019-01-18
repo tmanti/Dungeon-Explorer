@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+import spritesheet
+import dataTypes
 
 #SlotTypes
 # 1-warrior
@@ -19,7 +21,7 @@ class spriteRef:
         return "[%s, %s]" % (self.index, self.fileLocation)
 
 class Material:
-    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None, range=None):
+    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None, range=None, projectile=None):
         self.name = name
         self.type = type
         self.itemClass = itemClass
@@ -35,6 +37,10 @@ class Material:
         self.range = range
 
         self.__repr__ = self.__str__
+
+        if self.Texture:
+            ss = spritesheet.spritesheet(self.Texture.fileLocation)
+            self.image = ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
 
     def use(self):
         if self.itemClass == "equipment":
