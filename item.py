@@ -3,44 +3,46 @@ import spritesheet
 import dataTypes
 
 #SlotTypes
-# 1-warrior
-# 2-mage
-# 3-ranger
-# 4 - useable by all
+# 1-warrior 2 special 3 heavy armour
+# 4-mage    5 special 6 robes
+# 7-ranger  8 special 9 hides
+# 10 - rings
+#11 - usbale by all
 
 
 class spriteRef:
-    def __init__(self, spriteFile, index):
-        self.fileLocation = "resources/Sprites/" + spriteFile + "/" + spriteFile + ".png"
+    def __init__(self, spriteFile, index, foldername):
+        self.fileLocation = "resources/Sprites/" + foldername + "/" + spriteFile.lower() + ".png"
         self.index = index.split("x")
-        for x in self.index:
+        for x in range(len(self.index)):
             #print(x)
-            x = int(x)*8
+            self.index[x] = int(self.index[x])*8
 
     def __str__(self):
         return "[%s, %s]" % (self.index, self.fileLocation)
 
 class Material:
-    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None, range=None, projectile=None):
+    def __init__(self, name, type, itemClass, slotType, desc, tier=None, texture=None, rateOfFire = None, damage = None, range=None, projectile=None):
         self.name = name
         self.type = type
         self.itemClass = itemClass
-        self.isItem = isItem
-        if file:
-            self.Texture = spriteRef(file, index)
+        if texture:
+            self.Texture = texture
+            ss = spritesheet.spritesheet(self.Texture.fileLocation)
+            self.image = ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
         else:
             self.Texture = None
+        if projectile:
+            self.projectile = projectile
         self.SlotType = slotType
         self.description = desc
+        self.tier = tier
         self.rateOfFire = rateOfFire
         self.damage = damage
         self.range = range
 
         self.__repr__ = self.__str__
 
-        if self.Texture:
-            ss = spritesheet.spritesheet(self.Texture.fileLocation)
-            self.image = ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
 
     def use(self):
         if self.itemClass == "equipment":
@@ -57,27 +59,34 @@ class ItemStack:
     def return_Itemstack(self):
         return [self.amount, self.material]
 
-Nothing = Material("None", "0xfff", "None", None, None, None, 4, "", None)
+Nothing = Material("None", "0xfff", "None", None, None, None)
 allItems = {"0xfff":Nothing}
-Weapons = {}
+Equipment = {}
+Consumables = {}
 
 #https://docs.python.org/3/library/xml.etree.elementtree.html
 def init():
     tree = ET.parse("resources/xml/items.xml")
     root = tree.getroot()
     for child in root:
-        #print(child.tag, child.attrib)
+        print(child.tag, child.attrib)
         itemClass = child.find('Class').text
-        if itemClass == "Equipment":
+        if itemClass == "Equipment" and child.find("Weapon"):
             allItems[child.get('type')] = Material(child.get('id'),
                                                    child.get('type'),
-                                                   child.find("Class").text,
-                                                   child.find("Item"),
-                                                   child.find("Texture").find("File").text,
-                                                   child.find("Texture").find("Index").text,
+                                                   itemClass,
                                                    child.find("SlotType").text,
                                                    child.find("Description").text,
+                                                   tier=child.find("Tier"),
+                                                   texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"),
                                                    rateOfFire=int(child.find("RateOfFire").text),
                                                    damage=[int(_) for _ in child.find("Damage").text.split("-")],
-                                                   range=int(child.find("Range").text))
-        #print(child.get('id') + " : " + allItems[child.get('type')].Data())
+                                                   range=int(child.find("Range").text),
+                                                   projectile=spriteRef(child.find("ProjectileTexture").find("File").text, child.find("ProjectileTexture").find("Index").text, "items"))
+            Equipment[child.get('type')] = allItems[child.get('type')]
+        elif itemClass == "Consumable" and child.find("Item"):
+            allItems[child.get('type')] = Material(child.get('id'),
+                                                   child.get('type'),
+                                                   itemClass,
+                                                   child.find("SlotType"),
+                                                   child.find("Description"))

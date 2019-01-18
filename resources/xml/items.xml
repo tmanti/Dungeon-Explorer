@@ -1,9 +1,9 @@
 <?xml version="1.0"?><Objects>
 	<Object id="Short Sword" type="0xa00">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>0x0</Index>
 		</Texture>
 		<ProjectileTexture>
@@ -19,9 +19,9 @@
 	</Object>
 	<Object id="Broadsword" type="0xa01">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>1x0</Index>
 		</Texture>
 		<ProjectileTexture>
@@ -37,16 +37,16 @@
 	</Object>
 	<Object id="Short Staff" type="0xb00">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>0x1</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
 			<Index>0x1</Index>
 		</ProjectileTexture>
-		<SlotType>2</SlotType>
+		<SlotType>4</SlotType>
 		<Tier>1</Tier>
 		<Description>A basic short staff</Description>
 		<Damage>1-4</Damage>
@@ -55,16 +55,16 @@
 	</Object>
 	<Object id="Staff of Water" type="0xb01">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>1x1</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
 			<Index>1x1</Index>
 		</ProjectileTexture>
-		<SlotType>2</SlotType>
+		<SlotType>4</SlotType>
 		<Tier>2</Tier>
 		<Description>A staff embuied with the power of water</Description>
 		<Damage>3-6</Damage>
@@ -73,16 +73,16 @@
 	</Object>
 	<Object id="Short Bow" type="0xc00">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>0x2</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
 			<Index>0x2</Index>
 		</ProjectileTexture>
-		<SlotType>3</SlotType>
+		<SlotType>7</SlotType>
 		<Tier>1</Tier>
 		<Description>A simple Bow</Description>
 		<Damage>2-5</Damage>
@@ -91,20 +91,29 @@
 	</Object>
 	<Object id="Long Bow" type="0xc01">
 		<Class>Equipment</Class>
-		<Item/>
+		<Weapon/>
 		<Texture>
-			<File>items</File>
+			<File>equipment</File>
 			<Index>1x2</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
 			<Index>1x2</Index>
 		</ProjectileTexture>
-		<SlotType>3</SlotType>
+		<SlotType>7</SlotType>
 		<Tier>2</Tier>
 		<Description>A simple Bow</Description>
 		<Damage>5-6</Damage>
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
+	</Object>
+	<Object id="Health Potion" type="0x000">
+		<Class>Consumable</Class>
+		<Item/>
+		<Texture>
+			<File></File>
+		</Texture>
+		<SlotType>11</SlotType>
+
 	</Object>
 </Objects>

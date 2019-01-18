@@ -1,5 +1,6 @@
 import pygame
-import startscreen
+pygame.init()
+#import startscreen
 import Player
 import db
 import dataTypes
@@ -16,7 +17,6 @@ import methods
 
 #init pygame
 p = pygame
-p.init()
 
 #create a database interface
 dbInt = db.DBInterface()
@@ -113,7 +113,6 @@ class Client:
 
         menuState = 1 #1 is main menu, 2 is play menu, 3 is options
 
-
         while load:
             for e in pygame.event.get():
                 if e.type == p.QUIT:
@@ -121,7 +120,6 @@ class Client:
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
                         load = False
-
 
             clock.tick(dataTypes.FPS)
 
@@ -163,6 +161,18 @@ class Client:
         enemy.enemies().update(self.screen, self.Player.position)
 
         p.display.update()
+
+    def testing(self):
+        load = True
+        while load:
+            for e in pygame.event.get():
+                if e.type == p.QUIT:
+                    load = False
+                if e.type == p.KEYDOWN:
+                    if e.key == p.K_ESCAPE:
+                        load = False
+
+
 
     def Load(self, name):
         # TEMP - load player save
