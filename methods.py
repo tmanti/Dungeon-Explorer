@@ -16,18 +16,13 @@ class button(pygame.sprite.Sprite):
 
         self.normal = pygame.Surface((200,200))
         text_to_screen(text, 5, 5, self.normal, center=False)
-        if box:
-            pygame.draw.rect(self.normal, WHITE, (0,0, self.normal.get_size()[0]+5, self.normal.get_size()[1]+5), width=2)
+
 
         self.hover = pygame.Surface((200,200))
         text_to_screen(text, 5, 5, self.hover, center=False, font=GAME_FONT2)
-        if box:
-            pygame.draw.rect(self.hover, WHITE, (0,0, self.hover.get_size()[0]+5, self.hover.get_size()[1]+5), width=2)
 
         self.pressed = pygame.Surface((200,200))
         text_to_screen(text, 5, 5, self.pressed, center=False, font=GAME_FONT2)
-        if box:
-            pygame.draw.rect(self.pressed, WHITE, (0, 0, self.pressed.get_size()[0] + 5, self.pressed.get_size()[1] + 5), width=2)
 
     def press(self):
         pass
