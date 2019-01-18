@@ -83,8 +83,8 @@ class Client:
         #initialize items
         item.init()
 
-        for items in item.allItems:
-            print(item.allItems[items])
+        if len(item.allItems) != 0:
+            print("Items Loaded")
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}

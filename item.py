@@ -22,7 +22,7 @@ class spriteRef:
         return "[%s, %s]" % (self.index, self.fileLocation)
 
 class Material:
-    def __init__(self, name, type, itemClass, slotType, desc, tier=None, texture=None, rateOfFire = None, damage = None, range=None, projectile=None):
+    def __init__(self, name, type, itemClass, slotType, desc, tier=None, texture=None, rateOfFire = None, damage = None, range=None, projectile=None, use=[]):
         self.name = name
         self.type = type
         self.itemClass = itemClass
@@ -40,6 +40,7 @@ class Material:
         self.rateOfFire = rateOfFire
         self.damage = damage
         self.range = range
+        self.useMeta = use
 
         self.__repr__ = self.__str__
 
@@ -68,9 +69,10 @@ def init():
     tree = ET.parse("resources/xml/items.xml")
     root = tree.getroot()
     for child in root:
-        print(child.tag, child.attrib)
+        #print(child.tag, child.attrib)
         itemClass = child.find('Class').text
-        if itemClass == "Equipment" and child.find("Weapon"):
+
+        if itemClass == "Equipment" and child.find("Weapon")!= None:
             allItems[child.get('type')] = Material(child.get('id'),
                                                    child.get('type'),
                                                    itemClass,
@@ -83,10 +85,11 @@ def init():
                                                    range=int(child.find("Range").text),
                                                    projectile=spriteRef(child.find("ProjectileTexture").find("File").text, child.find("ProjectileTexture").find("Index").text, "items"))
             Equipment[child.get('type')] = allItems[child.get('type')]
-        elif itemClass == "Consumable" and child.find("Item"):
+        elif itemClass == "Consumable" and child.find("Item") != None:
             allItems[child.get('type')] = Material(child.get('id'),
                                                    child.get('type'),
                                                    itemClass,
                                                    child.find("SlotType"),
                                                    child.find("Description"),
-                                                   texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"))
+                                                   texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"),
+                                                   use=[child.find("Use").find("Action"), child.find("Use").find("Amount")])
