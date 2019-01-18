@@ -1,7 +1,6 @@
 #Ali
 
 import pygame
-import time
 
 pygame.init()
 
@@ -11,7 +10,7 @@ red = (255, 0, 0)
 green = (0, 155, 0)
 
 display_width = 800 #sets the screen width
-display_height = 600 #sets the screen height
+display_height = 800 #sets the screen height
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Dungeon Explorer') #Title on the title bar of the screen
@@ -30,7 +29,7 @@ def text_objects(text,color,size): #function for diffeent font sizes used
 
     return textSurface, textSurface.get_rect()
 
-def message_to_screen(msg, color, y_displace=0, size = "small"): #function for the text on the screen
+def text(msg, color, y_displace=0, size = "small"): #function for the text on the screen
     textSurf, textRect = text_objects(msg,color,size)
     textRect.center = (display_width / 2), (display_height / 2)+y_displace
     gameDisplay.blit(textSurf, textRect)
@@ -57,11 +56,11 @@ def game_intro(): #while game intro is on this is what's going happen
                     quit()
 
         gameDisplay.fill(white) # background color is white
-        message_to_screen("Dungeon Explorer", green, -100, "medium") #messages to user on the start screen
-        message_to_screen("Game's Objective", black, -30)
-        message_to_screen("Description", black, 10)
-        message_to_screen("Description", black, 50)
-        message_to_screen("Press C to Play or Q to Quit", black, 180) # instructions to start or end the game
+        text("Dungeon Explorer", green, -100, "medium") #messages to user on the start screen
+        text("Game's Objective", black, -30)
+        text("Description", black, 10)
+        text("Description", black, 50)
+        text("Press C to Play or Q to Quit", black, 180) # instructions to start or end the game
 
         pygame.display.update() # updates the screen
         clock.tick(15) # fps of 15
