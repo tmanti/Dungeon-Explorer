@@ -1,11 +1,12 @@
 import pygame
-import startscreen
+#import startscreen
 import Player
 import db
 import dataTypes
 import item
 import world
 import json
+import methods
 
 # TODO LIST - make someone say mada mada
 #for miller
@@ -22,15 +23,16 @@ dbInt = db.DBInterface()
 #another shortcut
 pos = dataTypes.pos
 
+#define color constants for easy access
+WHITE = dataTypes.WHITE
+BLACK = dataTypes.BLACK
+RED = dataTypes.RED
+GREEN = dataTypes.GREEN
+BLUE = dataTypes.BLUE
+
 #easy acces to display and clock
 display = p.display
 clock = p.time.Clock()
-
-#get game font
-try:
-    GAME_FONT = pygame.font.Font("8-bit.ttf", 27)
-except:
-    GAME_FONT = pygame.font.SysFont("Arial", 27)
 
 #reference to the save method
 save = dbInt.save
@@ -63,43 +65,22 @@ def ParseSaveData(saveData):
 
     return dataTypes.saveData(player, worldData)
 
-#button object
-#for reuse of easy buttoning
-class button(pygame.sprite.Sprite):
-    def __init__(self, x, y, w, h, text, action=None):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-        self.text = text
-        self.press = action
-
-    def press(self):
-        pass
-
-class loadButton(button):
-    def __init__(self, x, y, w, h, text):
-        super().__init__(x, y, w, h, text, action=lambda x: gameClient.Load(text))
-
 #main client object
 class Client:
     #define constants
-    run = True
+    running = True
 
     def __init__(self):
         #initialize pygame and the screen
         self.screen = p.display.set_mode((800, 800))#, pygame.FULLSCREEN)
-        p.display.set_caption("Generic RPG")
+        pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
-        self.state = 2
+        self.state = 1
 
         self.states = {1: self.main_menu, 2:self.game}
 
         #initialize items
         item.init()
-
-        self.Load('Jackie')
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
@@ -107,14 +88,13 @@ class Client:
 
     def run(self):
         #main game loop
-        while self.run:
+        while self.running:
             for e in p.event.get():#event queue
-                print(e)
                 if e.type == p.QUIT:
-                    self.run = False
+                    self.running = False
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
-                        self.run = False
+                        self.running = False
 
             clock.tick(dataTypes.FPS)
 
@@ -125,7 +105,29 @@ class Client:
         return
 
     def main_menu(self):
-        print("Menu")
+        load = True
+
+        menuState = 1 #1 is main menu, 2 is play menu, 3 is options
+
+
+        while load:
+            for e in pygame.event.get():
+                if e.type == p.QUIT:
+                    load = False
+                if e.type == p.KEYDOWN:
+                    if e.key == p.K_ESCAPE:
+                        load = False
+
+
+            clock.tick(dataTypes.FPS)
+
+            if menuState == 1:
+                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen)
+
+            display.update()
+
+        exit()
+        self.state = 2
 
     def game(self):
         #allChunks = [_.split(":") for _ in self.gennedChunks.keys()]
