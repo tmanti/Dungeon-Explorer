@@ -15,8 +15,11 @@ class spriteRef:
             #print(x)
             x = int(x)*8
 
+    def __str__(self):
+        return "[%s, %s]" % (self.index, self.fileLocation)
+
 class Material:
-    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, XMLElement, rateOfFire = None):
+    def __init__(self, name, type, itemClass, isItem, file, index, slotType, desc, rateOfFire = None, damage = None):
         self.name = name
         self.type = type
         self.itemClass = itemClass
@@ -28,15 +31,16 @@ class Material:
         self.SlotType = slotType
         self.description = desc
         self.rateOfFire = rateOfFire
+        self.damage = damage
 
-        self.XMLRef = XMLElement
+        self.Data()
 
     def use(self):
         if self.isItem:
             pass
 
     def Data(self):
-        return "<%s type=%s id=%s {SlotType=%s, description=%s, Texture=[File=%s, Index=%s]}>" % (self.itemClass, self.type, self.name, self.SlotType, self.description, self.Texture.fileLocation, self.Texture.index)
+        return "<%s type=%s id=%s {SlotType=%s, description=%s, Texture=%s}>" % (self.itemClass, self.type, self.name, self.SlotType, self.description, self.Texture)
 
 class ItemStack:
     def __init__(self, amount, material):
@@ -48,6 +52,7 @@ class ItemStack:
 
 Nothing = Material("None", "0xfff", "None", None, None, None, 4, "", None)
 allItems = {"0xfff":Nothing}
+Weapons = {}
 
 #https://docs.python.org/3/library/xml.etree.elementtree.html
 def init():
@@ -57,5 +62,14 @@ def init():
         #print(child.tag, child.attrib)
         itemClass = child.find('Class').text
         if itemClass == "Equipment":
-            allItems[child.get('type')] = Material(child.get('id'), child.get('type'), child.find("Class").text, child.find("Item"), child.find("Texture").find("File").text, child.find("Texture").find("Index").text, child.find("SlotType").text, child.find("Description").text, child.find("RateOfFire").text)
+            allItems[child.get('type')] = Material(child.get('id'),
+                                                   child.get('type'),
+                                                   child.find("Class").text,
+                                                   child.find("Item"),
+                                                   child.find("Texture").find("File").text,
+                                                   child.find("Texture").find("Index").text,
+                                                   child.find("SlotType").text,
+                                                   child.find("Description").text,
+                                                   rateOfFire=child.find("RateOfFire"),
+                                                   damage=[int(_) for _ in child.find("Damage").text.split("-")])
         #print(child.get('id') + " : " + allItems[child.get('type')].Data())
