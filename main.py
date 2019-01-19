@@ -83,9 +83,6 @@ class Client:
         #initialize items
         item.init()
 
-        if len(item.allItems) != 0:
-            print("Items Loaded")
-
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
 
@@ -111,7 +108,30 @@ class Client:
     def main_menu(self):
         load = True
 
-        menuState = 1 #1 is main menu, 2 is play menu, 3 is options
+        menuState = 1 #1 is main menu, 2 is play menu
+
+        buttons1 = p.sprite.Group()
+        buttons1.add(methods.playButton(dataTypes.w//2, 400))
+
+
+        gennedChunks = {}
+        loadedChunks = []
+        World = world.world()
+
+        toGen = dataTypes.pos(-1, -1)
+        genTemp = dataTypes.pos(toGen.x, toGen.y)
+
+        for y in range(3):
+            genTemp.y = toGen.y + y
+            genTemp.x = toGen.x
+            for x in range(3):
+                genTemp.x = toGen.x + x
+                if str(genTemp) not in gennedChunks.keys():
+                    gennedChunks[str(genTemp)] = world.Chunk(dataTypes.chunkData(genTemp))
+                    gennedChunks[str(genTemp)].genChunk(World.genNoiseMap(gennedChunks[str(genTemp)].tilePos))
+                loadedChunks.append(gennedChunks[str(genTemp)])
+
+
 
         while load:
             for e in pygame.event.get():
@@ -124,7 +144,12 @@ class Client:
             clock.tick(dataTypes.FPS)
 
             if menuState == 1:
-                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen)
+                for chunk in loadedChunks:
+                    chunk.tileGroup.draw(self.screen)
+
+                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen, font=dataTypes.GAME_FONT3)
+                buttons1.update(self.screen)
+                display.update()
 
             display.update()
 

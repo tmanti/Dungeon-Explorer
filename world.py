@@ -36,7 +36,7 @@ class Chunk:
                     self.tiles[pos.__str__()] = "mountain"
                 else:
                     self.tileGroup.add(snowTile(pos))
-                    self.tiles[pos.pos.__str__()] = "snow"
+                    self.tiles[pos.__str__()] = "snow"
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, position, image):
