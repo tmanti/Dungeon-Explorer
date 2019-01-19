@@ -8,35 +8,41 @@ GAME_FONT2 = dataTypes.GAME_FONT2
 #button object
 #for reuse of easy buttoning
 class button(pygame.sprite.Sprite):
-    def __init__(self, x, y, text, box=True):
+    def __init__(self, x, y, w, h, text):
         super().__init__()
         self.x = x
         self.y = y
+        self.w = w
+        self.h = h
         self.text = text
 
-        self.normal = pygame.Surface((200,200))
-        text_to_screen(text, 5, 5, self.normal, center=False)
-
-        self.hover = pygame.Surface((200,200))
-        text_to_screen(text, 5, 5, self.hover, center=False, font=GAME_FONT2)
-
-        self.pressed = pygame.Surface((200,200))
-        text_to_screen(text, 5, 5, self.pressed, center=False, font=GAME_FONT2)
-
-    def press(self):
+    def press(self, *args, **kwargs):
         pass
 
-    def update(self, screen, hover=False, pressed=False):
-        if hover:
-            screen.blit(self.hover, (self.x, self.y))
-        elif pressed:
-            screen.blit(self.pressed, (self.x, self.y))
+    def update(self, screen):
+        mouse = pygame.mouse.get_pos()
+
+        if ((self.x + self.w) > mouse[0] > self.x) and ((self.y + self.h) > mouse[1] > self.y):
+            text_to_screen(self.text, self.x+self.w//2, self.y+self.h//2, screen, center=True)
         else:
-            screen.blit(self.normal, (self.x-self.normal.get_size()[0]//2, self.y))
+            text_to_screen(self.text, self.x+self.w//2, self.y+self.h//2, screen, center=True, font=GAME_FONT2)
 
 class playButton(button):
     def __init__(self, x, y):
-        super().__init__(x, y, "Play", box=False)
+        super().__init__(x-75, y, 150, 50, "Play")
+
+class loadButton(button):
+    def __init__(self, x, y, loadName):
+        super().__init__(x-75, y, 150, 50, loadName)
+
+    def press(self, method, name):
+        method(name)
+
+class newSaveButton(button):
+    def __init__(self, x, y):
+        super().__init__(x-100, y, 200, 50, "New Save")
+
+    #def press(self, ): swap to save creation screen
 
 def text_obj(text, font):
     textSurface = font.render(text, True, dataTypes.WHITE)
