@@ -77,12 +77,14 @@ class Client:
         self.screen = p.display.set_mode((800, 800))#, pygame.FULLSCREEN)
         pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
-        self.state = 1
+        self.state = 2
 
         self.states = {1: self.main_menu, 2:self.game}
 
         #initialize items
         item.init()
+
+        self.Load("tmanti")
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
@@ -205,6 +207,11 @@ class Client:
         for chunk in loadedChunks:
             chunk.tileGroup.update(self.Player.position)
             chunk.tileGroup.draw(self.screen)
+
+        for coords in list(self.gennedChunks):
+            temp = [int(_) for _ in coords.split(":")]
+            if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
+                del self.gennedChunks[coords]
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
 
