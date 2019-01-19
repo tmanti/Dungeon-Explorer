@@ -16,7 +16,7 @@ class button(pygame.sprite.Sprite):
         self.h = h
         self.text = text
 
-    def press(self):
+    def press(self, *args, **kwargs):
         pass
 
     def update(self, screen):
@@ -31,8 +31,18 @@ class playButton(button):
     def __init__(self, x, y):
         super().__init__(x-75, y, 150, 50, "Play")
 
-    def press(self, method):
-        method("tmanti")
+class loadButton(button):
+    def __init__(self, x, y, loadName):
+        super().__init__(x-75, y, 150, 50, loadName)
+
+    def press(self, method, name):
+        method(name)
+
+class newSaveButton(button):
+    def __init__(self, x, y):
+        super().__init__(x-100, y, 200, 50, "New Save")
+
+    #def press(self, ): swap to save creation screen
 
 def text_obj(text, font):
     textSurface = font.render(text, True, dataTypes.WHITE)

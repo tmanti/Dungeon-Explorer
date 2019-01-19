@@ -9,6 +9,7 @@ import world
 import json
 import enemy
 import methods
+import random
 
 # TODO LIST - make someone say mada mada
 #for miller
@@ -90,13 +91,6 @@ class Client:
     def run(self):
         #main game loop
         while self.running:
-            for e in p.event.get():#event queue
-                if e.type == p.QUIT:
-                    self.running = False
-                if e.type == p.KEYDOWN:
-                    if e.key == p.K_ESCAPE:
-                        self.running = False
-
             clock.tick(dataTypes.FPS)
 
             self.states[self.state]()
@@ -110,13 +104,10 @@ class Client:
 
         menuState = 1 #1 is main menu, 2 is play menu
 
-        buttons1 = p.sprite.Group()
-        buttons1.add(methods.playButton(dataTypes.w//2, 400))
-
-
         gennedChunks = {}
         loadedChunks = []
-        World = world.world()
+
+        World = world.world(random.randint(1, 10000))
 
         toGen = dataTypes.pos(-1, -1)
         genTemp = dataTypes.pos(toGen.x, toGen.y)
@@ -131,15 +122,36 @@ class Client:
                     gennedChunks[str(genTemp)].genChunk(World.genNoiseMap(gennedChunks[str(genTemp)].tilePos))
                 loadedChunks.append(gennedChunks[str(genTemp)])
 
+        buttons1 = p.sprite.Group()
+        buttons1.add(methods.playButton(dataTypes.w//2, 400))
 
+        buttons2Load = p.sprite.Group()
+        buttons2NewSave = p.sprite.Group()
+
+        saves = 5
+
+        temp = 0
+
+        for x in dbInt.returnAllSaves():
+            buttons2Load.add(methods.loadButton(dataTypes.w // 2, 300 + temp * 100, x.name))
+            temp += 1
+            saves -= 1
+
+        for y in range(saves):
+            buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100))
 
         while load:
             for e in pygame.event.get():
                 if e.type == p.QUIT:
-                    load = False
+                    quit()
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
-                        load = False
+                        quit()
+                if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
+                    mouse = p.mouse.get_pos()  # get mouse position
+                    for x in buttons1:  # for each button on screen 1
+                        if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
+                            menuState = 2
 
             clock.tick(dataTypes.FPS)
 
@@ -151,14 +163,26 @@ class Client:
                 buttons1.update(self.screen)
                 display.update()
 
+            elif menuState == 2:
+                for chunk in loadedChunks:
+                    chunk.tileGroup.draw(self.screen)
+                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT3)
+                display.update()
+
             display.update()
 
-        exit()
         self.state = 2
 
     def game(self):
         #allChunks = [_.split(":") for _ in self.gennedChunks.keys()]
         #allChunks = [[int(allChunks[x][0]), int(allChunks[x][1])] for x in range(len(allChunks))]
+        for e in p.event.get():  # event queue
+            if e.type == p.QUIT:
+                self.running = False
+            if e.type == p.KEYDOWN:
+                if e.key == p.K_ESCAPE:
+                    self.running = False
+
         loadedChunks = []
 
         self.screen.fill(dataTypes.BLACK)
@@ -183,7 +207,6 @@ class Client:
             chunk.tileGroup.draw(self.screen)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
-        enemy.enemies().update(self.screen, self.Player.position)
 
         p.display.update()
 
@@ -196,8 +219,6 @@ class Client:
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
                         load = False
-
-
 
     def Load(self, name):
         # TEMP - load player save

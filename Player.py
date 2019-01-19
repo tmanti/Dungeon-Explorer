@@ -98,30 +98,30 @@ class player(pygame.sprite.Sprite):
             self.playerAnim = self.playerWalk[1].next()
             self.lastFaced = 1
 
-        if velocity == [0, 0]:
-            self.playerAnim =self.playerIdle[self.lastFaced]
-
-        self.position.x += velocity[0]
-        self.position.y += velocity[1]
-
         mousePressed = pygame.mouse.get_pressed()
 
         attacking = False
 
-        for e in pygame.event.get():
-            print(e)
-
         if mousePressed[0] == 1:
             attacking =  True
-        elif mousePressed[0] == 0:
-            pygame.time.set_timer(pygame.USEREVENT+1, 0)
+        else:
+            self.attacking = False
+            pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
         if self.attacking != attacking and attacking == True:
             pygame.time.set_timer(pygame.USEREVENT+1, 3000//self.stats.dexterity)
             self.attacking = True
 
+        print(self.attacking)
+
         if self.attacking:
+            mousePos = pygame.mouse.get_pos()
             self.playerAnim = self.playerIdle[self.lastFaced]
+        elif velocity == [0, 0]:
+            self.playerAnim = self.playerIdle[self.lastFaced]
+
+        self.position.x += velocity[0]
+        self.position.y += velocity[1]
 
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
