@@ -41,8 +41,8 @@ save = dbInt.save
 
 #DATA BASE METHODS
 #generate new save (compiles all information then writes to db)
-def GenerateNewSave(playerName):
-    player = Player.newPlayerData
+def GenerateNewSave(playerName, playerClass):
+    player = Player.generateNewPlayerData(playerClass)
     worldData = dataTypes.worldData()
 
     saveData = dataTypes.saveData(player, worldData).return_save()
@@ -77,18 +77,15 @@ class Client:
         self.screen = p.display.set_mode((800, 800))#, pygame.FULLSCREEN)
         pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
-        self.state = 2
+        self.state = 1
 
         self.states = {1: self.main_menu, 2:self.game}
 
         #initialize items
         item.init()
 
-        self.Load("tmanti")
-
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
-
 
     def run(self):
         #main game loop
@@ -134,6 +131,8 @@ class Client:
 
         temp = 0
 
+        menuSwapped = False
+
         for x in dbInt.returnAllSaves():
             buttons2Load.add(methods.loadButton(dataTypes.w // 2, 300 + temp * 100, x.name))
             temp += 1
@@ -141,6 +140,8 @@ class Client:
 
         for y in range(saves):
             buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100))
+
+        TextField = []
 
         while load:
             for e in pygame.event.get():
@@ -151,9 +152,35 @@ class Client:
                         quit()
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
                     mouse = p.mouse.get_pos()  # get mouse position
-                    for x in buttons1:  # for each button on screen 1
-                        if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
-                            menuState = 2
+                    if not menuSwapped and menuState == 1:
+                        for x in buttons1:  # for each button on screen 1
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
+                                menuState = 2
+                                menuSwapped = True
+                    if menuState == 2 and not menuSwapped:
+                        for x in buttons2Load:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                self.Load(x.text)
+                                load = False
+                                menuSwapped = True
+                        for x in buttons2NewSave:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                menuState = 3
+                                menuSwapped = True
+                                TextField = []
+                if menuState == 3:
+                    if e.type == p.KEYDOWN:
+                        if e.key == p.K_BACKSPACE:
+                            if len(TextField) > 0:
+                                TextField.pop()
+                        elif e.key == p.K_SPACE:
+                            TextField.append(" ")
+                        else:
+                            TextField.append(pygame.key.name(e.key))
+
+
+                if e.type == p.MOUSEBUTTONUP:
+                    menuSwapped = False
 
             clock.tick(dataTypes.FPS)
 
@@ -163,13 +190,20 @@ class Client:
 
                 methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen, font=dataTypes.GAME_FONT3)
                 buttons1.update(self.screen)
-                display.update()
 
             elif menuState == 2:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
                 methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT3)
-                display.update()
+                buttons2NewSave.update(self.screen)
+                buttons2Load.update(self.screen)
+
+            elif menuState == 3:
+                for chunk in loadedChunks:
+                    chunk.tileGroup.draw(self.screen)
+                methods.text_to_screen("Create New Character", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT3)
+                methods.text_to_screen("~ Name ~", dataTypes.w//2, dataTypes.h//4+100, self.screen, font=dataTypes.GAME_FONT2)
+                methods.text_to_screen("".join(TextField), dataTypes.w//2, dataTypes.h//4+150, self.screen, center=True)
 
             display.update()
 
@@ -200,6 +234,7 @@ class Client:
             for x in range(3):
                 genTemp.x = toGen.x+x
                 if str(genTemp) not in self.gennedChunks.keys():
+                    print("test")
                     self.gennedChunks[str(genTemp)] = world.Chunk(dataTypes.chunkData(genTemp))
                     self.gennedChunks[str(genTemp)].genChunk(self.World.genNoiseMap(self.gennedChunks[str(genTemp)].tilePos))
                 loadedChunks.append(self.gennedChunks[str(genTemp)])

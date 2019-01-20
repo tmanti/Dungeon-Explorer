@@ -112,10 +112,8 @@ class player(pygame.sprite.Sprite):
             pygame.time.set_timer(pygame.USEREVENT+1, 3000//self.stats.dexterity)
             self.attacking = True
 
-        print(self.attacking)
-
         if self.attacking:
-            mousePos = pygame.mouse.get_pos()
+            #mousePos = pygame.mouse.get_pos()
             self.playerAnim = self.playerIdle[self.lastFaced]
         elif velocity == [0, 0]:
             self.playerAnim = self.playerIdle[self.lastFaced]
@@ -126,6 +124,8 @@ class player(pygame.sprite.Sprite):
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
+def generateNewPlayerData(playerClass):
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory, dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass)
 
-newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
+testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

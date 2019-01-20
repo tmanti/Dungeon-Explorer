@@ -17,7 +17,7 @@
         </stats>
         <drops>
             <dropCell>
-                <itemId></itemId>
+                <itemId>0x</itemId>
                 <Chance></Chance>
             </dropCell>
         </drops>
