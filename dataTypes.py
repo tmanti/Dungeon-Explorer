@@ -16,9 +16,15 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 #get game font
-GAME_FONT = pygame.font.Font("8-bit.ttf", 27)
-GAME_FONT2 = pygame.font.Font("8-bit.ttf", 30)
-GAME_FONT3 = pygame.font.Font("8-bit.ttf", 40)
+GAME_FONT_BUTTON = pygame.font.Font("8-bit.ttf", 27)
+GAME_FONT = pygame.font.Font("8-bit.ttf", 30)
+GAME_FONT_BIG = pygame.font.Font("8-bit.ttf", 40)
+GAME_FONT_SMALL = pygame.font.Font("8-bit.ttf", 20)
+
+GUI_FONT = pygame.font.Font("Pixel-Miners.otf", 30)
+GUI_FONT_BIG = pygame.font.Font("Pixel-Miners.otf", 40)
+GUI_FONT_SMALL = pygame.font.Font("Pixel-Miners.otf", 20)
+GUI_FONT_BUTTON = pygame.font.Font("Pixel-Miners.otf", 27)
 
 class pos:
     def __init__(self, x, y):

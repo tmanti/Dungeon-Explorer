@@ -15,11 +15,11 @@
             <Attack>2-4</Attack>
             <Dexterity>3</Dexterity>
         </stats>
-        <drops>
-            <dropCell>
-                <itemId>0x</itemId>
-                <Chance></Chance>
-            </dropCell>
-        </drops>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>50</Chance>
+            </DropCell>
+        </DropTable>
     </Object>
 </Objects>

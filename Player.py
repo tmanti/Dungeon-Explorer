@@ -7,34 +7,43 @@ import spritesheet
 pos = dataTypes.pos
 
 class warriorClass:
+    name = "Warrior"
     def __init__(self):
         self.ClassType = 1
         self.slotTypes = [1,2,3]
         self.projectileDistance = 4
-        self.name = "Warrior"
 
     def setupClass(self, playerInv):
         playerInv.weapon =item.ItemStack(1,  item.allItems["0xa00"])
+        #moresetup
+
+        return playerInv
 
 class mageClass:
+    name = "Mage"
     def __init__(self):
         self.ClassType = 2
         self.slotTypes = [4,5,6]
         self.projectileDistance = 12
-        self.name = "Mage"
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xb00"])
+        # moresetup
+
+        return playerInv
 
 class rangerClass:
+    name = "Ranger"
     def __init__(self):
         self.ClassType = 3
         self.slotTypes = [7,8,9]
         self.projectileDistance = 8
-        self.name = "Ranger"
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xc00"])
+        # moresetup
+
+        return playerInv
 
 class player(pygame.sprite.Sprite):
     def __init__(self, setupData):
@@ -47,9 +56,9 @@ class player(pygame.sprite.Sprite):
 
         self.playerClass = setupData.playerClass
 
-        self.playerClass.setupClass(self.inventory)
+        self.inventory = self.playerClass.setupClass(self.inventory)
 
-        ss = spritesheet.spritesheet('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png')#get spritesheet reference
+        ss = spritesheet.spritesheet('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png')#get spritesheet reference
         self.playerIdle = [#list of player idle states
             ss.image_at((0, 8, 8, 8), colorkey=dataTypes.WHITE),#down
             ss.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),#right
@@ -57,10 +66,10 @@ class player(pygame.sprite.Sprite):
             ss.image_at((0, 16, 8, 8), colorkey=dataTypes.WHITE)#left
         ]
         self.playerWalk = [
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (8, 8, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#down
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (0, 0, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#right
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (8, 24, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#up
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (0, 16, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames)#left
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (8, 8, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#down
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (0, 0, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#right
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (8, 24, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#up
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (0, 16, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames)#left
         ]
 
         self.playerAnim = self.playerIdle[0]
