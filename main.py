@@ -46,7 +46,7 @@ def GenerateNewSave(playerName, playerClass):
     worldData = dataTypes.worldData()
 
     saveData = dataTypes.saveData(player, worldData).return_save()
-    dbInt.newSave(playerName, json.dumps(saveData))
+    dbInt.newSave(playerName, saveData)
 
 #loads a save then return the parsed save data
 def loadSave(saveName):
@@ -81,6 +81,8 @@ class Client:
 
         #initialize items
         item.init()
+
+        self.name = None
 
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
@@ -248,9 +250,13 @@ class Client:
         for e in p.event.get():  # event queue
             if e.type == p.QUIT:
                 self.running = False
+                if self.name:
+                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
                     self.running = False
+                    if self.name:
+                        dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
 
         loadedChunks = []
 
@@ -297,6 +303,7 @@ class Client:
     def Load(self, name):
         # TEMP - load player save
         self.saveData = loadSave(name)
+        self.name = name
         #print(self.saveData.return_save())
 
         # create Player and world objects from passed data by the loadsave

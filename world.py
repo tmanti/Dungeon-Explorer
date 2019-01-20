@@ -122,7 +122,7 @@ class world:
         return self.gen.noise2d(x=x, y=y)/ 2.0 + 0.5
 
     def returnWorldData(self):
-        return {"seed":self.seed}
+        return dataTypes.worldData(seed=self.seed)
     
     def genNoiseMap(self, tilePos):
         startPos = tilePos

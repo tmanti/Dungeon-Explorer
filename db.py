@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import dataTypes
+import json
 
 Base = declarative_base()
 
@@ -27,14 +28,14 @@ class DBInterface():
     #db functions like write read
     #create new save with user data passed
     def newSave(self, name, userdata):
-        self.session.add(PlayerSave(name=name, userdata=userdata))
+        self.session.add(PlayerSave(name=name, userdata=json.dumps(userdata)))
         self.session.commit()
 
     #save userdata passed
-    def save(self, name, data):
+    def save(self, name, userdata):
         userRef = self.session.query(PlayerSave).filter_by(name=name).first()
         if userRef:
-            userRef.userdata = data
+            userRef.userdata = json.dumps(userdata)
             self.session.commit()
         else:
             print("Error saving to DB")

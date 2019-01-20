@@ -63,9 +63,9 @@ class container:
             self.contents={str(_):item.ItemStack(1, item.Nothing) for _ in range(self.size)}
 
     def return_Container(self):
-        toReturn = self.contents
-        for x in toReturn:
-            toReturn[x] = toReturn[x].material.type
+        toReturn = {}
+        for x in self.contents:
+            toReturn[x] = self.contents[x].material.type
         return toReturn
 
 class playerInventory:
