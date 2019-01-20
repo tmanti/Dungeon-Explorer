@@ -127,6 +127,9 @@ class Client:
         buttons2Load = p.sprite.Group()
         buttons2NewSave = p.sprite.Group()
 
+        buttons3 = p.sprite.Group()
+        buttons3.add(methods.createSaveButton(dataTypes.w//2, dataTypes.h//4+dataTypes.h//2))
+
         saves = 5
 
         temp = 0
@@ -142,6 +145,8 @@ class Client:
             buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100))
 
         TextField = []
+        classes = [Player.warriorClass, Player.mageClass, Player.rangerClass]
+        classesIndex = 0
 
         while load:
             for e in pygame.event.get():
@@ -168,6 +173,11 @@ class Client:
                                 menuState = 3
                                 menuSwapped = True
                                 TextField = []
+                    if menuState == 3 and not menuSwapped:
+                        for x in buttons3:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                if len(TextField) > 0:
+                                    GenerateNewSave("".join(TextField), classes[classesIndex])
                 if menuState == 3:
                     if e.type == p.KEYDOWN:
                         if e.key == p.K_BACKSPACE:
@@ -204,6 +214,7 @@ class Client:
                 methods.text_to_screen("Create New Character", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT3)
                 methods.text_to_screen("~ Name ~", dataTypes.w//2, dataTypes.h//4+100, self.screen, font=dataTypes.GAME_FONT2)
                 methods.text_to_screen("".join(TextField), dataTypes.w//2, dataTypes.h//4+150, self.screen, center=True)
+                buttons3.update(self.screen)
 
             display.update()
 

@@ -42,6 +42,11 @@ class newSaveButton(button):
     def __init__(self, x, y):
         super().__init__(x-100, y, 200, 50, "New Save")
 
+class createSaveButton(button):
+    def __init__(self, x, y):
+        super().__init__(x-100, y, 200, 50, "Create")
+
+
     #def press(self, ): swap to save creation screen
 
 def text_obj(text, font):

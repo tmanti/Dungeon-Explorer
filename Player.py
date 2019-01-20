@@ -8,7 +8,8 @@ pos = dataTypes.pos
 
 class warriorClass:
     def __init__(self):
-        self.SlotType = 1
+        self.ClassType = 1
+        self.slotTypes = [1,2,3]
         self.projectileDistance = 4
         self.name = "Warrior"
 
@@ -17,7 +18,8 @@ class warriorClass:
 
 class mageClass:
     def __init__(self):
-        self.SlotType = 2
+        self.ClassType = 2
+        self.slotTypes = [4,5,6]
         self.projectileDistance = 12
         self.name = "Mage"
 
@@ -26,7 +28,8 @@ class mageClass:
 
 class rangerClass:
     def __init__(self):
-        self.SlotType = 3
+        self.ClassType = 3
+        self.slotTypes = [7,8,9]
         self.projectileDistance = 8
         self.name = "Ranger"
 
@@ -125,7 +128,7 @@ class player(pygame.sprite.Sprite):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
 def generateNewPlayerData(playerClass):
-    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory, dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass)
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass())
 
 testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

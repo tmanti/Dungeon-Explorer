@@ -84,7 +84,7 @@ class playerData:
         self.playerClass = classType
 
     def return_playerData(self):
-        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.SlotType}
+        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.ClassType}
 
 class chunkData:
     def __init__(self, pos, chunkData=None):
