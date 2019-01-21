@@ -43,10 +43,9 @@ class Bullet(pygame.sprite.Sprite):
         self.bulletSpeed = bulletSpeed*0.03
         self.distance = dataTypes.pos(self.moveTo.x - self.position.x, self.moveTo.y - self.position.y)
         self.toTravel = toTravel
+        self.image = pygame.transform.rotate(self.image, rotation-45)
 
         self.rect = self.image.get_rect()
-
-        self.image = pygame.transform.rotate(self.image, rotation)
 
     def update(self, *args):
         if math.sqrt((self.position.x - self.startPos.x)**2 + (self.position.y - self.startPos.y)**2) >= self.toTravel:
@@ -114,7 +113,7 @@ class Goblin(pygame.sprite.Sprite):
         screen.blit(self.HpBar, (self.rect.x-10, self.rect.y+50))
 
     def Fire(self, playerPos):
-        rel_x, rel_y = playerPos.x - self.position.x , playerPos.y- self.position.y
+        rel_x, rel_y = playerPos.x - self.rect.x , playerPos.y- self.rect.y
         angle = (180/math.pi) * -math.atan2(rel_y, rel_x)
         moveToPos = dataTypes.pos(self.projRange*math.cos(angle/55.47)+dataTypes.w//2, self.projRange*math.sin(-angle/55.47)+ dataTypes.h//2)
         self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.rect.x, self.rect.y), moveToPos, angle, toTravel=self.projRange*32))

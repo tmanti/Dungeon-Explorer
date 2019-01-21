@@ -264,7 +264,7 @@ class Client:
             if e.type == pygame.USEREVENT+1:
                 self.Player.Fire(pygame.mouse.get_pos())
                 for x in self.enemies:
-                    x.Fire(self.Player.position)
+                    x.Fire(dataTypes.pos(dataTypes.w//2, dataTypes.h//2))
 
         loadedChunks = []
 
