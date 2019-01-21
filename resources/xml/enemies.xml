@@ -6,7 +6,7 @@
 			<Index>0x0</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>

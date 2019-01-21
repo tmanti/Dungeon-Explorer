@@ -53,7 +53,7 @@
 			<RateOfFire>5</RateOfFire>
 			<Range>1</Range>
 	</Object>
-	<Object id="Sword of The Gods" type="0xa03">
+	<Object id="Sword of The Mad God" type="0xa03">
 			<Class>Equipment</Class>
 			<Weapon/>
 			<Texture>
