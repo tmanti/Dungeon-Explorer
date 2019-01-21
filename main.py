@@ -263,6 +263,8 @@ class Client:
                         dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
             if e.type == pygame.USEREVENT+1:
                 self.Player.Fire(pygame.mouse.get_pos())
+                for x in self.enemies:
+                    x.Fire(dataTypes.pos(dataTypes.w//2, dataTypes.h//2))
 
         loadedChunks = []
 
@@ -292,6 +294,9 @@ class Client:
 
         self.enemies.update(self.Player.position, self.screen)
         self.enemies.draw(self.screen)
+        for x in self.enemies:
+            x.bullets.update()
+            x.bullets.draw(self.screen)
 
         self.Player.bullets.update()
         self.Player.bullets.draw(self.screen)
