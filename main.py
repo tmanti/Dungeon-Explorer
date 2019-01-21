@@ -82,6 +82,9 @@ class Client:
         #initialize items
         item.init()
 
+        #initialize enemies
+        enemy.init()
+
         self.name = None
 
         #genned Chunks dict to easily store all genned chunks for easy reuse

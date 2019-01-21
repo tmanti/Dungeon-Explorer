@@ -33,7 +33,7 @@ class Behavior:
         self.distance = distance
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, group, name, type, stats, position, texture, projectile, drops):
+    def __init__(self, group, name, type, stats, position, texture, projectile, drops, behavior):
         super().__init__()
 
         self.stats = stats
@@ -41,6 +41,8 @@ class Enemy(pygame.sprite.Sprite):
         self.entityGroup = group
         self.type= type
         self.name = name
+
+        self.behavior = behavior
 
         #get texture files
         self.Texture = texture
@@ -51,16 +53,20 @@ class Enemy(pygame.sprite.Sprite):
         ss = spritesheet.spritesheet(self.Texture.fileLocation)
         ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
 
+        self.droptable = drops
+
+    def spawn(self, x, y):
+        self.position.x = x
+        self.position.y = y
         self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
         self.chunkPos = dataTypes.pos(self.tilePos.x // 16, self.tilePos.y // 16)
 
-        self.droptable = drops
 
 allMobs = {}
 goblins = {}
 
 def init():
-    tree = ET.parse("resources/xml/items.xml")
+    tree = ET.parse("resources/xml/enemies.xml")
     root = tree.getroot()
     for child in root:
         allMobs[child.get('type')] = Enemy(
@@ -75,9 +81,10 @@ def init():
                 dex=int(child.find("stats").find("Dexterity").text)
             ),
             dataTypes.pos(None, None),
-            item.spriteRef(child.find("Texture").find("File").text, child.find("ProjectileTexture").find("Index").text, "enemies"),
+            item.spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "enemies"),
             item.spriteRef(child.find("ProjectileTexture").find("File").text, child.find("ProjectileTexture").find("Index").text, "enemies"),
-            dropTable([dropCell(x.find("itemId").text, int(x.find("Chance").text), x.find("Amount").text) for x in child.find("DropTable").findall("DropCell")])
+            dropTable([dropCell(x.find("itemId").text, int(x.find("Chance").text), x.find("Amount").text) for x in child.find("DropTable").findall("DropCell")]),
+            Behavior(child.find("Behavior").get("type"), distance=child.find("Behavior").get("distance"))
         )
         if child.find("Group").text == "Goblins":
             goblins[child.get('type')] = allMobs[child.get('type')]

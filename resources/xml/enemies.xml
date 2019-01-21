@@ -7,7 +7,7 @@
 		</Texture>
         <ProjectileTexture>
             <File>projectile</File>
-            <index>0x0</index>
+            <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
             <Hitpoints>20</Hitpoints>
