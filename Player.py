@@ -53,9 +53,11 @@ class Bullet(pygame.sprite.Sprite):
         self.distance = dataTypes.pos(self.moveTo.x - self.position.x, self.moveTo.y - self.position.y)
         self.toTravel = toTravel
 
+        self.rect = self.image.get_rect()
+
         self.image = pygame.transform.rotate(self.image, rotation-45)
 
-    def update(self, screen, *args):
+    def update(self, *args):
         if math.sqrt((self.position.x - dataTypes.w//2)**2 + (self.position.y - dataTypes.h//2)**2) >= self.toTravel:
             self.kill()
 
@@ -63,7 +65,9 @@ class Bullet(pygame.sprite.Sprite):
         self.position.x +=velo[0]
         self.position.y +=velo[1]
 
-        screen.blit(self.image, (self.position.x, self.position.y))
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
 
 class player(pygame.sprite.Sprite):
     def __init__(self, setupData):
@@ -117,6 +121,21 @@ class player(pygame.sprite.Sprite):
                 spritesheet.SpriteStripAnim('resources/Sprites/player/' + self.playerClass.name + "Attacking.png",
                                             (0, 0, 0, 0), 2, colorkey=dataTypes.WHITE, loop=True,
                                             frames=dataTypes.frames, images=[(0, 24, 11, 8), (11, 24, 8, 8)]),  # left
+            ]
+        elif self.playerClass.name == rangerClass.name:
+            self.playerAttack = [
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + self.playerClass.name + "Attacking.png",
+                                            (0, 8, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True,
+                                            frames=dataTypes.frames),  # down
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + self.playerClass.name + "Attacking.png",
+                                            (0, 0, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True,
+                                            frames=dataTypes.frames),  # right
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + self.playerClass.name + "Attacking.png",
+                                            (0, 16, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True,
+                                            frames=dataTypes.frames),  # up
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + self.playerClass.name + "Attacking.png",
+                                            (0, 24, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True,
+                                            frames=dataTypes.frames),  # left
             ]
 
         self.playerAnim = self.playerIdle[0]
@@ -205,9 +224,9 @@ class player(pygame.sprite.Sprite):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
     def Fire(self, mousePos):
-        rel_x, rel_y = mousePos[0] - dataTypes.w//2 , mousePos[1]- dataTypes.h//2
-        angle = (180/math.pi) * -math.atan2(rel_y, rel_x)
-        moveToPos = dataTypes.pos(self.playerClass.projectileDistance*math.cos(angle/55.47)+dataTypes.w//2, self.playerClass.projectileDistance*math.sin(-angle/55.47)+ dataTypes.h//2)
+        rel_x, rel_y = mousePos[0] - dataTypes.w // 2, mousePos[1] - dataTypes.h // 2
+        angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
+        moveToPos = dataTypes.pos(self.playerClass.projectileDistance * math.cos(angle / 55.47) + dataTypes.w // 2, self.playerClass.projectileDistance * math.sin(-angle / 55.47) + dataTypes.h // 2)
         self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, moveToPos, angle, toTravel=self.playerClass.projectileDistance))
 
 def generateNewPlayerData(playerClass):

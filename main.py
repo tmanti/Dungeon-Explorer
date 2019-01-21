@@ -293,7 +293,8 @@ class Client:
         self.enemies.update(self.Player.position, self.screen)
         self.enemies.draw(self.screen)
 
-        self.Player.bullets.update(self.screen)
+        self.Player.bullets.update()
+        self.Player.bullets.draw(self.screen)
         #check for colosion between bullet gorups
         #deal damage to object collided with
         self.Player.update()
