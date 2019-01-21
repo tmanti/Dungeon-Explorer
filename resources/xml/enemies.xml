@@ -7,11 +7,12 @@
 		</Texture>
         <ProjectileTexture>
             <File>projectile</File>
+            <index>0x0</index>
         </ProjectileTexture>
         <stats>
             <Hitpoints>20</Hitpoints>
             <Defence>3</Defence>
-            <Speed>3</Speed>
+            <Speed>2</Speed>
             <Attack>2-4</Attack>
             <Dexterity>3</Dexterity>
         </stats>
@@ -19,7 +20,9 @@
             <DropCell>
                 <itemId>0x000</itemId>
                 <Chance>50</Chance>
+                <Amount>1-5</Amount>
             </DropCell>
         </DropTable>
+        <Behavior type="follow" distance="3"/>
     </Object>
 </Objects>
