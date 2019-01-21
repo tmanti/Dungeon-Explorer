@@ -32,7 +32,7 @@ class Behavior:
         self.type = type
         self.distance = distance
 
-class Enemy(pygame.sprite.Sprite):
+class EnemyData:
     def __init__(self, group, name, type, stats, position, texture, projectile, drops, behavior):
         super().__init__()
 
@@ -42,24 +42,43 @@ class Enemy(pygame.sprite.Sprite):
         self.type= type
         self.name = name
 
-        self.behavior = behavior
-
-        #get texture files
         self.Texture = texture
-        ss=spritesheet.spritesheet(self.Texture.fileLocation)
-        ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
-
         self.projectile = projectile
-        ss = spritesheet.spritesheet(self.Texture.fileLocation)
-        ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+
+        self.behavior = behavior
 
         self.droptable = drops
 
-    def spawn(self, x, y):
-        self.position.x = x
-        self.position.y = y
+class Goblin(pygame.sprite.Sprite):
+    def __init__(self, x, y, data):
+        super().__init__()
+        self.data = data
+
+        self.position = dataTypes.pos(x,y)
+
+        ss=spritesheet.spritesheet(self.data.Texture.fileLocation)
+        self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+
+        ss = spritesheet.spritesheet(self.data.Texture.fileLocation)
+        self.projImage = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
         self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
         self.chunkPos = dataTypes.pos(self.tilePos.x // 16, self.tilePos.y // 16)
+
+        self.projRange = 5
+
+        self.bullets = pygame.sprite.Group()
+
+    def update(self, playerPos, *args):
+        self.bullets.update()
+        self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
+        self.chunkPos = dataTypes.pos(self.tilePos.x // dataTypes.chunkSize, self.tilePos.y // dataTypes.chunkSize)
+        self.rect.x = self.position.x - playerPos.x
+        self.rect.y = self.position.y - playerPos.y
 
 
 allMobs = {}
@@ -69,7 +88,7 @@ def init():
     tree = ET.parse("resources/xml/enemies.xml")
     root = tree.getroot()
     for child in root:
-        allMobs[child.get('type')] = Enemy(
+        allMobs[child.get('type')] = EnemyData(
             child.find("Group").text,
             child.get("type"),
             child.get("id"),
@@ -88,3 +107,4 @@ def init():
         )
         if child.find("Group").text == "Goblins":
             goblins[child.get('type')] = allMobs[child.get('type')]
+    print(allMobs)

@@ -87,6 +87,7 @@ class Client:
 
         self.name = None
 
+        self.enemies = p.sprite.Group()
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
 
@@ -277,7 +278,7 @@ class Client:
                 genTemp.x = toGen.x+x
                 if str(genTemp) not in self.gennedChunks.keys():
                     self.gennedChunks[str(genTemp)] = world.Chunk(dataTypes.chunkData(genTemp))
-                    self.gennedChunks[str(genTemp)].genChunk(self.World.genNoiseMap(self.gennedChunks[str(genTemp)].tilePos))
+                    self.gennedChunks[str(genTemp)].genChunk(self.World.genNoiseMap(self.gennedChunks[str(genTemp)].tilePos), enemiesGroup=self.enemies)
                 loadedChunks.append(self.gennedChunks[str(genTemp)])
 
         for chunk in loadedChunks:
@@ -289,9 +290,13 @@ class Client:
             if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
                 del self.gennedChunks[coords]
 
+        self.enemies.update(self.Player.position)
+        self.enemies.draw(self.screen)
+
         self.Player.bullets.update(self.screen)
         #check for colosion between bullet gorups
         #deal damage to object collided with
+        self.Player.update()
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 
@@ -304,8 +309,6 @@ class Client:
             self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w//4+300, 750))
         if self.Player.inventory.ring.material.image:
             self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w//4+400, 750))
-
-        self.Player.update(self.screen)
 
         p.display.update()
 

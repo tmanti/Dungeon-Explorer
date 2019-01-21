@@ -128,7 +128,7 @@ class player(pygame.sprite.Sprite):
 
         self.attacking = False
 
-    def update(self, screen, *args):
+    def update(self, *args):
         #update position
         #draw
         self.tilePos = dataTypes.pos(self.position.x//32, self.position.y//32)
