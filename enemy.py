@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import item
 import spritesheet
 import random
+import math
 
 class dropTable:
     def __init__(self, dropsList):
@@ -32,6 +33,31 @@ class Behavior:
         self.type = type
         self.distance = distance
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, projectileTexture, startPos, moveTo, rotation, bulletSpeed=1, toTravel=0):
+        super().__init__()
+        self.position = dataTypes.pos(startPos.x, startPos.y)
+        self.image = projectileTexture
+        self.moveTo = moveTo
+        self.bulletSpeed = bulletSpeed*0.03
+        self.distance = dataTypes.pos(self.moveTo.x - self.position.x, self.moveTo.y - self.position.y)
+        self.toTravel = toTravel
+
+        self.rect = self.image.get_rect()
+
+        self.image = pygame.transform.rotate(self.image, rotation-45)
+
+    def update(self, *args):
+        if math.sqrt((self.position.x - dataTypes.w//2)**2 + (self.position.y - dataTypes.h//2)**2) >= self.toTravel:
+            self.kill()
+
+        velo = [self.distance.x*self.bulletSpeed, self.distance.y*self.bulletSpeed]
+        self.position.x +=velo[0]
+        self.position.y +=velo[1]
+
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
 class EnemyData:
     def __init__(self, group, type, name, stats, position, texture, projectile, drops, behavior):
         super().__init__()
@@ -55,6 +81,8 @@ class Goblin(pygame.sprite.Sprite):
         self.data = data
 
         self.position = dataTypes.pos(x,y)
+
+        self.canAttack = True
 
         ss=spritesheet.spritesheet(self.data.Texture.fileLocation)
         self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
@@ -83,6 +111,12 @@ class Goblin(pygame.sprite.Sprite):
         self.rect.y = self.position.y - playerPos.y
 
         screen.blit(self.HpBar, (self.rect.x-10, self.rect.y+50))
+
+    def Fire(self, mousePos):
+        rel_x, rel_y = mousePos[0] - dataTypes.w//2 , mousePos[1]- dataTypes.h//2
+        angle = (180/math.pi) * -math.atan2(rel_y, rel_x)
+        moveToPos = dataTypes.pos(self.playerClass.projectileDistance*math.cos(angle/55.47)+dataTypes.w//2, self.playerClass.projectileDistance*math.sin(-angle/55.47)+ dataTypes.h//2)
+        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, moveToPos, angle, toTravel=self.playerClass.projectileDistance))
 
 
 allMobs = {}
