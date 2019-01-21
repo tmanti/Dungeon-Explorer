@@ -9,7 +9,7 @@ class SpriteStripAnim(object):
     strip wraps to the next row.
     """
 
-    def __init__(self, filename, rect, count, colorkey=None, loop=False, frames=1):
+    def __init__(self, filename, rect, count, colorkey=None, loop=False, frames=1, images=None):
         """construct a SpriteStripAnim
 
         filename, rect, count, and colorkey are the same arguments used
@@ -23,7 +23,10 @@ class SpriteStripAnim(object):
         """
         self.filename = filename
         ss = spritesheet(filename)
-        self.images = ss.load_strip(rect, count, colorkey)
+        if not images:
+            self.images = ss.load_strip(rect, count, colorkey)
+        else:
+            self.images = ss.images_at(images, colorkey=colorkey)
         self.i = 0
         self.loop = loop
         self.frames = frames

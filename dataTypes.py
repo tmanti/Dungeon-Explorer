@@ -16,9 +16,15 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 #get game font
-GAME_FONT = pygame.font.Font("8-bit.ttf", 27)
-GAME_FONT2 = pygame.font.Font("8-bit.ttf", 30)
-GAME_FONT3 = pygame.font.Font("8-bit.ttf", 40)
+GAME_FONT_BUTTON = pygame.font.Font("8-bit.ttf", 27)
+GAME_FONT = pygame.font.Font("8-bit.ttf", 30)
+GAME_FONT_BIG = pygame.font.Font("8-bit.ttf", 40)
+GAME_FONT_SMALL = pygame.font.Font("8-bit.ttf", 20)
+
+GUI_FONT = pygame.font.Font("Pixel-Miners.otf", 30)
+GUI_FONT_BIG = pygame.font.Font("Pixel-Miners.otf", 40)
+GUI_FONT_SMALL = pygame.font.Font("Pixel-Miners.otf", 20)
+GUI_FONT_BUTTON = pygame.font.Font("Pixel-Miners.otf", 27)
 
 class pos:
     def __init__(self, x, y):
@@ -57,9 +63,9 @@ class container:
             self.contents={str(_):item.ItemStack(1, item.Nothing) for _ in range(self.size)}
 
     def return_Container(self):
-        toReturn = self.contents
-        for x in toReturn:
-            toReturn[x] = toReturn[x].material.type
+        toReturn = {}
+        for x in self.contents:
+            toReturn[x] = self.contents[x].material.type
         return toReturn
 
 class playerInventory:
@@ -84,7 +90,7 @@ class playerData:
         self.playerClass = classType
 
     def return_playerData(self):
-        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.SlotType}
+        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.ClassType}
 
 class chunkData:
     def __init__(self, pos, chunkData=None):

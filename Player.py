@@ -3,35 +3,48 @@ import dataTypes
 import item
 import pygame
 import spritesheet
+import math
 
 pos = dataTypes.pos
 
 class warriorClass:
+    name = "Warrior"
     def __init__(self):
-        self.SlotType = 1
+        self.ClassType = 1
+        self.slotTypes = [1,2,3]
         self.projectileDistance = 4
-        self.name = "Warrior"
 
     def setupClass(self, playerInv):
         playerInv.weapon =item.ItemStack(1,  item.allItems["0xa00"])
+        #moresetup
+
+        return playerInv
 
 class mageClass:
+    name = "Mage"
     def __init__(self):
-        self.SlotType = 2
+        self.ClassType = 2
+        self.slotTypes = [4,5,6]
         self.projectileDistance = 12
-        self.name = "Mage"
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xb00"])
+        # moresetup
+
+        return playerInv
 
 class rangerClass:
+    name = "Ranger"
     def __init__(self):
-        self.SlotType = 3
+        self.ClassType = 3
+        self.slotTypes = [7,8,9]
         self.projectileDistance = 8
-        self.name = "Ranger"
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xc00"])
+        # moresetup
+
+        return playerInv
 
 class player(pygame.sprite.Sprite):
     def __init__(self, setupData):
@@ -42,11 +55,13 @@ class player(pygame.sprite.Sprite):
         self.inventory = setupData.inventory
         self.stats = setupData.stats
 
+        self.drawOffset
+
         self.playerClass = setupData.playerClass
 
-        self.playerClass.setupClass(self.inventory)
+        self.inventory = self.playerClass.setupClass(self.inventory)
 
-        ss = spritesheet.spritesheet('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png')#get spritesheet reference
+        ss = spritesheet.spritesheet('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png')#get spritesheet reference
         self.playerIdle = [#list of player idle states
             ss.image_at((0, 8, 8, 8), colorkey=dataTypes.WHITE),#down
             ss.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),#right
@@ -54,11 +69,19 @@ class player(pygame.sprite.Sprite):
             ss.image_at((0, 16, 8, 8), colorkey=dataTypes.WHITE)#left
         ]
         self.playerWalk = [
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (8, 8, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#down
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (0, 0, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#right
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (8, 24, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#up
-            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.SlotType].name + '.png', (0, 16, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames)#left
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (8, 8, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#down
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (0, 0, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#right
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (8, 24, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#up
+            spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (0, 16, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames)#left
         ]
+
+        if className[self.playerClass.ClassType].name == warriorClass.name:
+            self.playerAttack = [
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 8, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames),#down
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 0, 0, 0), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames, images=[(0,0,8,8), (8,0,12,8)]),#right
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 16, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames),#up
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 0, 0, 0), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames, images=[(0,24,12,8), (12,24,8,8)]),#left
+            ]
 
         self.playerAnim = self.playerIdle[0]
         self.lastFaced = 0
@@ -112,11 +135,24 @@ class player(pygame.sprite.Sprite):
             pygame.time.set_timer(pygame.USEREVENT+1, 3000//self.stats.dexterity)
             self.attacking = True
 
-        print(self.attacking)
-
         if self.attacking:
-            mousePos = pygame.mouse.get_pos()
-            self.playerAnim = self.playerIdle[self.lastFaced]
+            #code from https://gamedev.stackexchange.com/a/134090
+            mX, mY = pygame.mouse.get_pos()
+            rel_x, rel_y = mX - dataTypes.w//2, mY - dataTypes.h//2
+            angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
+            #end borrowed code (didnt want to remember math lol)
+
+            if -45 <= angle and angle <= 45:
+                self.lastFaced = 1
+            elif 45 <= angle and angle <= 135:
+                self.lastFaced = 2
+            elif angle >= 135 or angle <= -135:
+                self.lastFaced = 3
+            elif -45 >= angle and angle >= -135:
+                self.lastFaced = 0
+            self.playerAnim = self.playerAttack[self.lastFaced].next()
+            print(self.playerAnim)
+
         elif velocity == [0, 0]:
             self.playerAnim = self.playerIdle[self.lastFaced]
 
@@ -126,6 +162,8 @@ class player(pygame.sprite.Sprite):
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
 
+def generateNewPlayerData(playerClass):
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass())
 
-newPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
+testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

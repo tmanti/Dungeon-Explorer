@@ -41,13 +41,12 @@ save = dbInt.save
 
 #DATA BASE METHODS
 #generate new save (compiles all information then writes to db)
-def GenerateNewSave(playerName):
-    player = Player.newPlayerData
+def GenerateNewSave(playerName, playerClass):
+    player = Player.generateNewPlayerData(playerClass)
     worldData = dataTypes.worldData()
 
     saveData = dataTypes.saveData(player, worldData).return_save()
-    print(saveData)
-    dbInt.newSave(playerName, json.dumps(saveData))
+    dbInt.newSave(playerName, saveData)
 
 #loads a save then return the parsed save data
 def loadSave(saveName):
@@ -56,7 +55,6 @@ def loadSave(saveName):
 
 #parses the save data and returns it as a saveData object for easy use
 def ParseSaveData(saveData):
-    print(saveData)
     player = dataTypes.playerData(
         pos(saveData[0]['pos']['x'], saveData[0]['pos']['y']),
         dataTypes.playerInventory(weapon=item.ItemStack(1, item.allItems[saveData[0]['inv']['weapon']]), special=item.ItemStack(1, item.allItems[saveData[0]['inv']['special']]), armour=item.ItemStack(1, item.allItems[saveData[0]['inv']['armour']]), ring=item.ItemStack(1, item.allItems[saveData[0]['inv']['ring']]), container=dataTypes.container(30, saveData[0]['inv']['container'])),
@@ -84,9 +82,10 @@ class Client:
         #initialize items
         item.init()
 
+        self.name = None
+
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
-
 
     def run(self):
         #main game loop
@@ -128,17 +127,36 @@ class Client:
         buttons2Load = p.sprite.Group()
         buttons2NewSave = p.sprite.Group()
 
+        buttons3 = p.sprite.Group()
+        buttons3.add(methods.createSaveButton(dataTypes.w//2, dataTypes.h//4+dataTypes.h//2))
+        buttons3Next = p.sprite.Group()
+        buttons3Next.add(methods.nextButton(dataTypes.w//2-130, dataTypes.h//4+227, "L", fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
+        buttons3Next.add(methods.nextButton(dataTypes.w // 2 + 75, dataTypes.h // 4 + 226, "R", fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
+        buttons3Back = p.sprite.Group()
+        buttons3Back.add(methods.backButton(dataTypes.w//2, dataTypes.h//4+dataTypes.h//2+100))
+
         saves = 5
 
         temp = 0
 
+        menuSwapped = False
+
+        accs = []
+
         for x in dbInt.returnAllSaves():
-            buttons2Load.add(methods.loadButton(dataTypes.w // 2, 300 + temp * 100, x.name))
+            buttons2Load.add(methods.loadButton(dataTypes.w // 2, 300 + temp * 100, x.name, fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
+            accs.append(x.name)
             temp += 1
             saves -= 1
 
         for y in range(saves):
-            buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100))
+            buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100, fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
+
+        TextField = []
+        classes = [Player.warriorClass, Player.mageClass, Player.rangerClass]
+        classesIndex = 0
+
+        errorMessages = []
 
         while load:
             for e in pygame.event.get():
@@ -149,9 +167,51 @@ class Client:
                         quit()
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
                     mouse = p.mouse.get_pos()  # get mouse position
-                    for x in buttons1:  # for each button on screen 1
-                        if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
-                            menuState = 2
+                    if not menuSwapped and menuState == 1:
+                        for x in buttons1:  # for each button on screen 1
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
+                                menuState = 2
+                                menuSwapped = True
+                    if menuState == 2 and not menuSwapped:
+                        for x in buttons2Load:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                self.Load(x.text)
+                                load = False
+                                menuSwapped = True
+                        for x in buttons2NewSave:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                menuState = 3
+                                menuSwapped = True
+                                TextField = []
+                    if menuState == 3 and not menuSwapped:
+                        for x in buttons3:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                if len(TextField) > 0:
+                                    if "".join(TextField) not in accs:
+                                        GenerateNewSave("".join(TextField), classes[classesIndex])
+                                        self.Load("".join(TextField))
+                                        load=False
+                        for x in buttons3Next:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                classesIndex = x.press(classesIndex)
+                        for x in buttons3Back:
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                                TextField = []
+                                classesIndex = 0
+                                menuState = 2
+                if menuState == 3:
+                    if e.type == p.KEYDOWN:
+                        if e.key == p.K_BACKSPACE:
+                            if len(TextField) > 0:
+                                TextField.pop()
+                        elif e.key == p.K_SPACE:
+                            TextField.append(" ")
+                        else:
+                            TextField.append(pygame.key.name(e.key))
+
+
+                if e.type == p.MOUSEBUTTONUP:
+                    menuSwapped = False
 
             clock.tick(dataTypes.FPS)
 
@@ -159,15 +219,26 @@ class Client:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
 
-                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen, font=dataTypes.GAME_FONT3)
+                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen, font=dataTypes.GAME_FONT_BIG)
                 buttons1.update(self.screen)
-                display.update()
 
             elif menuState == 2:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
-                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT3)
-                display.update()
+                methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT_BIG)
+                buttons2NewSave.update(self.screen)
+                buttons2Load.update(self.screen)
+
+            elif menuState == 3:
+                for chunk in loadedChunks:
+                    chunk.tileGroup.draw(self.screen)
+                methods.text_to_screen("Create New Character", dataTypes.w // 2, 200, self.screen, font=dataTypes.GAME_FONT_BIG)
+                methods.text_to_screen("- Name -", dataTypes.w//2, dataTypes.h//4+100, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("".join(TextField), dataTypes.w//2, dataTypes.h//4+150, self.screen, center=True, font=dataTypes.GUI_FONT)
+                methods.text_to_screen(classes[classesIndex].name, dataTypes.w//2, dataTypes.h//4 +250, self.screen, center=True, font=dataTypes.GUI_FONT)
+                buttons3.update(self.screen)
+                buttons3Back.update(self.screen)
+                buttons3Next.update(self.screen)
 
             display.update()
 
@@ -179,9 +250,13 @@ class Client:
         for e in p.event.get():  # event queue
             if e.type == p.QUIT:
                 self.running = False
+                if self.name:
+                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
                     self.running = False
+                    if self.name:
+                        dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
 
         loadedChunks = []
 
@@ -206,6 +281,11 @@ class Client:
             chunk.tileGroup.update(self.Player.position)
             chunk.tileGroup.draw(self.screen)
 
+        for coords in list(self.gennedChunks):
+            temp = [int(_) for _ in coords.split(":")]
+            if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
+                del self.gennedChunks[coords]
+
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
 
         p.display.update()
@@ -223,6 +303,7 @@ class Client:
     def Load(self, name):
         # TEMP - load player save
         self.saveData = loadSave(name)
+        self.name = name
         #print(self.saveData.return_save())
 
         # create Player and world objects from passed data by the loadsave
