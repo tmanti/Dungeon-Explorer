@@ -33,7 +33,7 @@ class Behavior:
         self.distance = distance
 
 class EnemyData:
-    def __init__(self, group, name, type, stats, position, texture, projectile, drops, behavior):
+    def __init__(self, group, type, name, stats, position, texture, projectile, drops, behavior):
         super().__init__()
 
         self.stats = stats
@@ -73,12 +73,16 @@ class Goblin(pygame.sprite.Sprite):
 
         self.bullets = pygame.sprite.Group()
 
-    def update(self, playerPos, *args):
+    def update(self, playerPos, screen, *args):
         self.bullets.update()
         self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
         self.chunkPos = dataTypes.pos(self.tilePos.x // dataTypes.chunkSize, self.tilePos.y // dataTypes.chunkSize)
+        self.HpBar = pygame.Surface((50, 10))
+        pygame.draw.rect(self.HpBar, dataTypes.RED, (0, 0, ((50 / goblins[self.data.type].stats.health) * self.data.stats.health), 10))
         self.rect.x = self.position.x - playerPos.x
         self.rect.y = self.position.y - playerPos.y
+
+        screen.blit(self.HpBar, (self.rect.x-10, self.rect.y+50))
 
 
 allMobs = {}

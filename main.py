@@ -290,7 +290,7 @@ class Client:
             if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
                 del self.gennedChunks[coords]
 
-        self.enemies.update(self.Player.position)
+        self.enemies.update(self.Player.position, self.screen)
         self.enemies.draw(self.screen)
 
         self.Player.bullets.update(self.screen)
