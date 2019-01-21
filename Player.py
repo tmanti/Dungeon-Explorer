@@ -4,6 +4,7 @@ import item
 import pygame
 import spritesheet
 import math
+import random
 
 pos = dataTypes.pos
 
@@ -44,30 +45,34 @@ class rangerClass:
         return playerInv
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, projectileTexture, moveTo, rotation, bulletSpeed=1, toTravel=0):
+    def __init__(self, projectileTexture, start, moveTo, rotation, Damage, bulletSpeed=1, toTravel=0):
         super().__init__()
-        self.position = dataTypes.pos(dataTypes.w//2-16, dataTypes.h//2-16)
+        self.position = dataTypes.pos(start.x, start.y)
+        self.startPos = dataTypes.pos(self.position.x, self.position.y)
         self.image = projectileTexture
         self.moveTo = moveTo
         self.bulletSpeed = bulletSpeed*0.03
         self.distance = dataTypes.pos(self.moveTo.x - self.position.x, self.moveTo.y - self.position.y)
         self.toTravel = toTravel
 
+        self.damage = Damage
+
         self.rect = self.image.get_rect()
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
 
         self.image = pygame.transform.rotate(self.image, rotation-45)
 
-    def update(self, *args):
-        if math.sqrt((self.position.x - dataTypes.w//2)**2 + (self.position.y - dataTypes.h//2)**2) >= self.toTravel:
+    def update(self, playerPos, *args):
+        if math.sqrt((self.position.x - self.startPos.x)**2 + (self.position.y - self.startPos.y)**2) >= self.toTravel:
             self.kill()
 
         velo = [self.distance.x*self.bulletSpeed, self.distance.y*self.bulletSpeed]
         self.position.x +=velo[0]
         self.position.y +=velo[1]
 
-        self.rect.x = self.position.x
-        self.rect.y = self.position.y
-
+        self.rect.x = self.position.x - playerPos.x
+        self.rect.y = self.position.y - playerPos.y
 
 class player(pygame.sprite.Sprite):
     def __init__(self, setupData):
@@ -79,6 +84,8 @@ class player(pygame.sprite.Sprite):
         self.stats = setupData.stats
 
         self.bullets = pygame.sprite.Group()
+
+        self.level = setupData.level
 
         self.drawOffset = 0
 
@@ -142,8 +149,8 @@ class player(pygame.sprite.Sprite):
         self.lastFaced = 0
 
         self.rect = self.playerAnim.get_rect()
-        self.rect.x = dataTypes.w/2
-        self.rect.y = dataTypes.h/2
+        self.rect.x = dataTypes.w//2-16
+        self.rect.y = dataTypes.h//2-16
 
         self.attacking = False
 
@@ -189,7 +196,7 @@ class player(pygame.sprite.Sprite):
             pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
         if self.attacking != attacking and attacking == True and self.inventory.weapon.material.type != "0x000":
-            pygame.time.set_timer(pygame.USEREVENT+1, 2500//self.stats.dexterity)
+            pygame.time.set_timer(pygame.USEREVENT+1, 2500//self.stats.dexterity+self.inventory.weapon.material.rateOfFire)
             self.attacking = True
 
         if self.attacking or self.AttackingToggled:
@@ -221,16 +228,18 @@ class player(pygame.sprite.Sprite):
         self.position.y += velocity[1]
 
     def return_playerData(self):
-        return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass)
+        return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass, self.level)
 
     def Fire(self, mousePos):
         rel_x, rel_y = mousePos[0] - dataTypes.w // 2, mousePos[1] - dataTypes.h // 2
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         moveToPos = dataTypes.pos(self.playerClass.projectileDistance * math.cos(angle / 55.47) + dataTypes.w // 2, self.playerClass.projectileDistance * math.sin(-angle / 55.47) + dataTypes.h // 2)
-        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, moveToPos, angle, toTravel=self.playerClass.projectileDistance))
+        moveToPos.x += self.position.x
+        moveToPos.y += self.position.y
+        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, self.position, moveToPos, angle, random.randint(self.inventory.weapon.material.damage[0], self.inventory.weapon.material.damage[1]), toTravel=self.playerClass.projectileDistance))
 
 def generateNewPlayerData(playerClass):
-    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass())
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
 
-testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass())
+testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass(), dataTypes.Level(1, 0))
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

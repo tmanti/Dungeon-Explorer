@@ -7,6 +7,7 @@ import item
 import spritesheet
 import random
 import math
+import copy
 
 class dropTable:
     def __init__(self, dropsList):
@@ -31,10 +32,10 @@ class dropCell:
 class Behavior:
     def __init__(self, type, distance=0):
         self.type = type
-        self.distance = distance
+        self.distance = int(distance)*32
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, projectileTexture, startPos, moveTo, rotation, bulletSpeed=1, toTravel=0):
+    def __init__(self, projectileTexture, startPos, moveTo, rotation, bulletSpeed=1, toTravel=0, damage=0):
         super().__init__()
         self.position = dataTypes.pos(startPos.x, startPos.y)
         self.startPos = dataTypes.pos(self.position.x, self.position.y)
@@ -45,9 +46,13 @@ class Bullet(pygame.sprite.Sprite):
         self.toTravel = toTravel
         self.image = pygame.transform.rotate(self.image, rotation-45)
 
-        self.rect = self.image.get_rect()
+        self.damage = damage
 
-    def update(self, *args):
+        self.rect = self.image.get_rect()
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
+    def update(self, playerPos, *args):
         if math.sqrt((self.position.x - self.startPos.x)**2 + (self.position.y - self.startPos.y)**2) >= self.toTravel:
             self.kill()
 
@@ -55,18 +60,16 @@ class Bullet(pygame.sprite.Sprite):
         self.position.x +=velo[0]
         self.position.y +=velo[1]
 
-        self.rect.x = self.position.x
-        self.rect.y = self.position.y
+        self.rect.x = self.position.x-playerPos.x
+        self.rect.y = self.position.y-playerPos.y
 
 class EnemyData:
-    def __init__(self, group, type, name, stats, position, texture, projectile, drops, behavior):
-        super().__init__()
-
-        self.stats = stats
-        self.position = position
+    def __init__(self, group, type, name, stats, texture, projectile, drops, behavior):
         self.entityGroup = group
         self.type= type
         self.name = name
+
+        self.stats = stats
 
         self.Texture = texture
         self.projectile = projectile
@@ -76,13 +79,16 @@ class EnemyData:
         self.droptable = drops
 
 class Goblin(pygame.sprite.Sprite):
-    def __init__(self, x, y, data):
+    def __init__(self, x, y, stats, data):
         super().__init__()
         self.data = data
+        
+        self.stats = dataTypes.entityStats(hp=stats["hp"], defen=stats["def"], spd=stats["spd"], atk=stats["atk"], dex=stats["dex"])
 
         self.position = dataTypes.pos(x,y)
 
         self.canAttack = True
+        self.wait = 0
 
         ss=spritesheet.spritesheet(self.data.Texture.fileLocation)
         self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
@@ -102,11 +108,49 @@ class Goblin(pygame.sprite.Sprite):
         self.bullets = pygame.sprite.Group()
 
     def update(self, playerPos, screen, *args):
-        self.bullets.update()
         self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
         self.chunkPos = dataTypes.pos(self.tilePos.x // dataTypes.chunkSize, self.tilePos.y // dataTypes.chunkSize)
         self.HpBar = pygame.Surface((50, 10))
-        pygame.draw.rect(self.HpBar, dataTypes.RED, (0, 0, ((50 / goblins[self.data.type].stats.health) * self.data.stats.health), 10))
+        pygame.draw.rect(self.HpBar, dataTypes.RED, (0, 0, ((50 / goblins[self.data.type].stats["hp"]) * self.stats.health), 10))
+
+        velo = [0, 0]
+
+        if self.data.behavior.type == "follow":
+            direction = [playerPos.x+dataTypes.w//2>self.position.x, playerPos.y+dataTypes.h//2 > self.position.y]
+
+            if abs(playerPos.x+dataTypes.w//2-self.position.x) > self.data.behavior.distance:
+                if direction[0]:
+                    velo[0]+=self.stats.speed
+                else:
+                    velo[0]-=self.stats.speed
+            elif (playerPos.y+dataTypes.h//2-self.data.behavior.distance < self.position.y < playerPos.y+dataTypes.h//2+self.data.behavior.distance):
+                if direction[0]:
+                    velo[0]-=self.stats.speed
+                else:
+                    velo[0]+=self.stats.speed
+
+            if abs(playerPos.y+dataTypes.h//2-self.position.y) > self.data.behavior.distance:
+                if direction[1]:
+                    velo[1]+=self.stats.speed
+                else:
+                    velo[1]-=self.stats.speed
+            elif (playerPos.x+dataTypes.w//2-self.data.behavior.distance < self.position.x < playerPos.x+dataTypes.w//2+self.data.behavior.distance):
+                if direction[1]:
+                    velo[1]-=self.stats.speed
+                else:
+                    velo[1]+=self.stats.speed
+
+        if ((playerPos.x+dataTypes.w//2-self.position.x)**2 + (playerPos.y+dataTypes.h//2-self.position.y)**2)**0.5 < 5*32 and self.canAttack:
+            self.Fire(playerPos)
+            self.canAttack=False
+            self.wait = pygame.time.get_ticks() + 3000
+
+        if pygame.time.get_ticks() > self.wait:
+            self.canAttack = True
+
+        self.position.x += velo[0]
+        self.position.y += velo[1]
+
         self.rect.x = self.position.x - playerPos.x
         self.rect.y = self.position.y - playerPos.y
 
@@ -116,7 +160,17 @@ class Goblin(pygame.sprite.Sprite):
         rel_x, rel_y = playerPos.x - self.rect.x , playerPos.y- self.rect.y
         angle = (180/math.pi) * -math.atan2(rel_y, rel_x)
         moveToPos = dataTypes.pos(self.projRange*math.cos(angle/55.47)+dataTypes.w//2, self.projRange*math.sin(-angle/55.47)+ dataTypes.h//2)
-        self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.rect.x, self.rect.y), moveToPos, angle, toTravel=self.projRange*32))
+        moveToPos.x+=playerPos.x
+        moveToPos.y += playerPos.y
+        self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.position.x, self.position.y), moveToPos, angle, toTravel=self.projRange*32))
+
+    def hit(self, damage):
+        print("Hit for " + str(damage))
+        self.stats.health-=damage
+        if self.stats.health <= 0:
+            print(self.data.droptable.get_Drops())
+            self.kill()
+
 
 
 allMobs = {}
@@ -130,14 +184,13 @@ def init():
             child.find("Group").text,
             child.get("type"),
             child.get("id"),
-            dataTypes.entityStats(
-                hp=int(child.find("stats").find("Hitpoints").text),
-                defen=int(child.find("stats").find("Defence").text),
-                spd=int(child.find("stats").find("Speed").text),
-                atk=[int(_) for _ in child.find("stats").find("Attack").text.split("-")],
-                dex=int(child.find("stats").find("Dexterity").text)
-            ),
-            dataTypes.pos(None, None),
+            {
+                "hp": int(child.find("stats").find("Hitpoints").text),
+                "def": int(child.find("stats").find("Defence").text),
+                "spd": int(child.find("stats").find("Speed").text),
+                "atk": [int(_) for _ in child.find("stats").find("Attack").text.split("-")],
+                "dex": int(child.find("stats").find("Dexterity").text)
+            },
             item.spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "enemies"),
             item.spriteRef(child.find("ProjectileTexture").find("File").text, child.find("ProjectileTexture").find("Index").text, "enemies"),
             dropTable([dropCell(x.find("itemId").text, int(x.find("Chance").text), x.find("Amount").text) for x in child.find("DropTable").findall("DropCell")]),

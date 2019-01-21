@@ -22,6 +22,11 @@
                 <Chance>50</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
+            <DropCell>
+                <itemId>0xa01</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>

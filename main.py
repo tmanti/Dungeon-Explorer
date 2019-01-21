@@ -59,7 +59,8 @@ def ParseSaveData(saveData):
         pos(saveData[0]['pos']['x'], saveData[0]['pos']['y']),
         dataTypes.playerInventory(weapon=item.ItemStack(1, item.allItems[saveData[0]['inv']['weapon']]), special=item.ItemStack(1, item.allItems[saveData[0]['inv']['special']]), armour=item.ItemStack(1, item.allItems[saveData[0]['inv']['armour']]), ring=item.ItemStack(1, item.allItems[saveData[0]['inv']['ring']]), container=dataTypes.container(30, saveData[0]['inv']['container'])),
         dataTypes.entityStats(hp=saveData[0]['stats']['hp'], mp=saveData[0]['stats']['mp'], defen=saveData[0]['stats']['def'] ,spd=saveData[0]['stats']['spd'], atk=saveData[0]['stats']['atk'], dex=saveData[0]['stats']['dex'], vit=saveData[0]['stats']['vit']),
-        Player.className[saveData[0]['class']]
+        Player.className[saveData[0]['class']],
+        dataTypes.Level(saveData[0]['level']['lvl'], saveData[0]['level']['exp'])
     )
     worldData = dataTypes.worldData(saveData[1]['seed'])
 
@@ -263,8 +264,6 @@ class Client:
                         dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
             if e.type == pygame.USEREVENT+1:
                 self.Player.Fire(pygame.mouse.get_pos())
-                for x in self.enemies:
-                    x.Fire(dataTypes.pos(dataTypes.w//2, dataTypes.h//2))
 
         loadedChunks = []
 
@@ -295,14 +294,20 @@ class Client:
         self.enemies.update(self.Player.position, self.screen)
         self.enemies.draw(self.screen)
         for x in self.enemies:
-            x.bullets.update()
+            x.bullets.update(self.Player.position)
             x.bullets.draw(self.screen)
 
-        self.Player.bullets.update()
+        self.Player.bullets.update(self.Player.position)
         self.Player.bullets.draw(self.screen)
         #check for colosion between bullet gorups
         #deal damage to object collided with
-        self.Player.update()
+        hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, False, False)
+        for hit in hits:
+            hits[hit][0].hit(hit.damage)
+           #for hi in hits[hit]:
+               #hi.hit(hit.damage)
+
+        self.Player.update(self.gennedChunks)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 

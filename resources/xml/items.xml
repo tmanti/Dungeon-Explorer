@@ -13,8 +13,8 @@
 		<SlotType>1</SlotType>
 		<Tier>1</Tier>
 		<Description>A steel short sword</Description>
-		<Damage>2-4</Damage>
-		<RateOfFire>1</RateOfFire>
+		<Damage>4-6</Damage>
+		<RateOfFire>2</RateOfFire>
 		<Range>1</Range>
 	</Object>
 	<Object id="Broadsword" type="0xa01">
@@ -31,8 +31,8 @@
 		<SlotType>1</SlotType>
 		<Tier>2</Tier>
 		<Description>A Iron Broadsword</Description>
-		<Damage>4-6</Damage>
-		<RateOfFire>2</RateOfFire>
+		<Damage>8-12</Damage>
+		<RateOfFire>3</RateOfFire>
 		<Range>1</Range>
 	</Object>
 	<Object id="Xiphos" type="0xa02">
@@ -49,7 +49,7 @@
 			<SlotType>1</SlotType>
 			<Tier>3</Tier>
 			<Description>A Steel Xiphos</Description>
-			<Damage>6-8</Damage>
+			<Damage>14-20</Damage>
 			<RateOfFire>5</RateOfFire>
 			<Range>1</Range>
 	</Object>
@@ -67,8 +67,8 @@
 			<SlotType>1</SlotType>
 			<Tier>4</Tier>
 			<Description>An Obsidian Longsword</Description>
-			<Damage>8-10</Damage>
-			<RateOfFire>3</RateOfFire>
+			<Damage>25-35</Damage>
+			<RateOfFire>6</RateOfFire>
 			<Range>2</Range>
 	</Object>
 	<Object id="Short Staff" type="0xb00">
@@ -86,7 +86,7 @@
 		<Tier>1</Tier>
 		<Description>A basic short staff</Description>
 		<Damage>1-4</Damage>
-		<RateOfFire>1</RateOfFire>
+		<RateOfFire>4</RateOfFire>
 		<Range>1</Range>
 	</Object>
 	<Object id="Staff of Water" type="0xb01">
@@ -102,9 +102,9 @@
 		</ProjectileTexture>
 		<SlotType>4</SlotType>
 		<Tier>2</Tier>
-		<Description>A staff embuied with the power of water</Description>
+		<Description>A staff embodied with the power of water</Description>
 		<Damage>3-6</Damage>
-		<RateOfFire>1</RateOfFire>
+		<RateOfFire>8</RateOfFire>
 		<Range>1</Range>
 	</Object>
 	<Object id="Short Bow" type="0xc00">
@@ -121,7 +121,7 @@
 		<SlotType>7</SlotType>
 		<Tier>1</Tier>
 		<Description>A simple Bow</Description>
-		<Damage>2-5</Damage>
+		<Damage>2-8</Damage>
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
 	</Object>
@@ -139,7 +139,7 @@
 		<SlotType>7</SlotType>
 		<Tier>2</Tier>
 		<Description>A simple Bow</Description>
-		<Damage>5-6</Damage>
+		<Damage>5-16</Damage>
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
 	</Object>

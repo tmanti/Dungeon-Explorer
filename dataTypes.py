@@ -39,6 +39,19 @@ class pos:
     def __str__(self):
         return str(self.x)+ ":" + str(self.y)
 
+class Level:
+    def __init__(self, lvl, exp):
+        self.lvl = int(lvl)
+        self.exp = int(exp)
+
+        self.__repr__ = self.__str__
+
+    def returnLvl(self):
+        return {"lvl":self.lvl, "exp":self.exp}
+
+    def __str__(self):
+        return "Level: " + str(self.lvl) + " With " + str(self.exp) + " XP"
+
 class entityStats:
     def __init__(self, hp=0, mp=0, defen=0, spd=0, atk=0, dex=0, vit=0):
         self.health = hp
@@ -83,14 +96,15 @@ class playerInventory:
         self.weapon = "Test"
 
 class playerData:
-    def __init__(self, position, inventory, stats, classType):
+    def __init__(self, position, inventory, stats, classType, Level):
         self.position = position
         self.inventory = inventory
         self.stats = stats
         self.playerClass = classType
+        self.level = Level
 
     def return_playerData(self):
-        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.ClassType}
+        return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.ClassType, "level":self.level.returnLvl()}
 
 class chunkData:
     def __init__(self, pos, chunkData=None):

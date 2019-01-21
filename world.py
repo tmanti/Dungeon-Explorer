@@ -4,6 +4,7 @@ import dataTypes
 import spritesheet
 import pygame
 import enemy
+import copy
 
 class Chunk:
     def __init__(self, chunkData):
@@ -33,7 +34,7 @@ class Chunk:
                         self.tiles[pos.__str__()] = "grass"
                         spawn = random.randint(1, 300)
                         if spawn == 5 and enemiesGroup != None:
-                            enemiesGroup.add(enemy.Goblin(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"]))
+                            enemiesGroup.add(enemy.Goblin(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"].stats, enemy.allMobs["0xg01"]))
                 elif noise < 0.9:
                     self.tileGroup.add(mountainTile(pos))
                     self.tiles[pos.__str__()] = "mountain"
