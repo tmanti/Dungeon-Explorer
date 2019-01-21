@@ -169,7 +169,7 @@ class player(pygame.sprite.Sprite):
             self.attacking = False
             pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
-        if self.attacking != attacking and attacking == True:
+        if self.attacking != attacking and attacking == True and self.inventory.weapon.material.type != "0x000":
             pygame.time.set_timer(pygame.USEREVENT+1, 2500//self.stats.dexterity)
             self.attacking = True
 
@@ -208,7 +208,7 @@ class player(pygame.sprite.Sprite):
         rel_x, rel_y = mousePos[0] - dataTypes.w//2 , mousePos[1]- dataTypes.h//2
         angle = (180/math.pi) * -math.atan2(rel_y, rel_x)
         moveToPos = dataTypes.pos(self.playerClass.projectileDistance*math.cos(angle/55.47)+dataTypes.w//2, self.playerClass.projectileDistance*math.sin(-angle/55.47)+ dataTypes.h//2)
-        self.bullets.add(Bullet(self.inventory.weapon.material.image, moveToPos, angle, toTravel=self.playerClass.projectileDistance))
+        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, moveToPos, angle, toTravel=self.playerClass.projectileDistance))
 
 def generateNewPlayerData(playerClass):
     return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass())

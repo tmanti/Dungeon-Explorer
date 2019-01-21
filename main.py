@@ -289,6 +289,10 @@ class Client:
         self.Player.bullets.update(self.screen)
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 
+        #gui
+
+        self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4, 700))
+
         self.Player.update(self.screen)
 
         p.display.update()

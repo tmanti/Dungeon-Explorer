@@ -35,7 +35,7 @@ class Material:
         if projectile:
             self.projectile = projectile
             ss = spritesheet.spritesheet(self.projectile.fileLocation)
-            self.image = ss.image_at((self.projectile.index[0], self.projectile.index[1], 8, 8), colorkey=dataTypes.WHITE)
+            self.projectileImage = ss.image_at((self.projectile.index[0], self.projectile.index[1], 8, 8), colorkey=dataTypes.WHITE)
         self.SlotType = slotType
         self.description = desc
         self.tier = tier
