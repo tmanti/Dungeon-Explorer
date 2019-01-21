@@ -12,7 +12,7 @@ class Chunk:
         self.tileGroup =  pygame.sprite.Group()
         self.tiles = {}
 
-    def genChunk(self, noiseMap):
+    def genChunk(self, noiseMap, enemiesGroup=None):
         for row in noiseMap:
             for noise, pos in row:
                 if noise < 0.2:
@@ -31,6 +31,9 @@ class Chunk:
                     else:
                         self.tileGroup.add(grassTile(pos))
                         self.tiles[pos.__str__()] = "grass"
+                        spawn = random.randint(1, 300)
+                        if spawn == 5 and enemiesGroup != None:
+                            enemiesGroup.add(enemy.Goblin(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"]))
                 elif noise < 0.9:
                     self.tileGroup.add(mountainTile(pos))
                     self.tiles[pos.__str__()] = "mountain"

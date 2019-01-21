@@ -82,8 +82,12 @@ class Client:
         #initialize items
         item.init()
 
+        #initialize enemies
+        enemy.init()
+
         self.name = None
 
+        self.enemies = p.sprite.Group()
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
 
@@ -257,12 +261,12 @@ class Client:
                     self.running = False
                     if self.name:
                         dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+            if e.type == pygame.USEREVENT+1:
+                self.Player.Fire(pygame.mouse.get_pos())
 
         loadedChunks = []
 
         self.screen.fill(dataTypes.BLACK)
-
-        self.Player.update(self.screen)
 
         toGen = dataTypes.pos(self.Player.chunkPos.x-1, self.Player.chunkPos.y-1)
         genTemp = dataTypes.pos(toGen.x, toGen.y)
@@ -274,7 +278,7 @@ class Client:
                 genTemp.x = toGen.x+x
                 if str(genTemp) not in self.gennedChunks.keys():
                     self.gennedChunks[str(genTemp)] = world.Chunk(dataTypes.chunkData(genTemp))
-                    self.gennedChunks[str(genTemp)].genChunk(self.World.genNoiseMap(self.gennedChunks[str(genTemp)].tilePos))
+                    self.gennedChunks[str(genTemp)].genChunk(self.World.genNoiseMap(self.gennedChunks[str(genTemp)].tilePos), enemiesGroup=self.enemies)
                 loadedChunks.append(self.gennedChunks[str(genTemp)])
 
         for chunk in loadedChunks:
@@ -286,7 +290,25 @@ class Client:
             if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
                 del self.gennedChunks[coords]
 
-        self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
+        self.enemies.update(self.Player.position, self.screen)
+        self.enemies.draw(self.screen)
+
+        self.Player.bullets.update(self.screen)
+        #check for colosion between bullet gorups
+        #deal damage to object collided with
+        self.Player.update()
+
+        self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
+
+        #gui
+        if self.Player.inventory.weapon.material.image:
+            self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4+100, 750))
+        if self.Player.inventory.special.material.image:
+            self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w//4+200, 750))
+        if self.Player.inventory.armour.material.image:
+            self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w//4+300, 750))
+        if self.Player.inventory.ring.material.image:
+            self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w//4+400, 750))
 
         p.display.update()
 

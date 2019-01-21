@@ -44,7 +44,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>0x1</Index>
+			<Index>0x2</Index>
 		</ProjectileTexture>
 		<SlotType>4</SlotType>
 		<Tier>1</Tier>
@@ -62,7 +62,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>1x1</Index>
+			<Index>1x2</Index>
 		</ProjectileTexture>
 		<SlotType>4</SlotType>
 		<Tier>2</Tier>
@@ -80,7 +80,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>0x2</Index>
+			<Index>0x1</Index>
 		</ProjectileTexture>
 		<SlotType>7</SlotType>
 		<Tier>1</Tier>
@@ -98,7 +98,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>1x2</Index>
+			<Index>1x1</Index>
 		</ProjectileTexture>
 		<SlotType>7</SlotType>
 		<Tier>2</Tier>
