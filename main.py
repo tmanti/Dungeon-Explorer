@@ -257,12 +257,12 @@ class Client:
                     self.running = False
                     if self.name:
                         dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+            if e.type == pygame.USEREVENT+1:
+                self.Player.Fire(pygame.mouse.get_pos())
 
         loadedChunks = []
 
         self.screen.fill(dataTypes.BLACK)
-
-        self.Player.update(self.screen)
 
         toGen = dataTypes.pos(self.Player.chunkPos.x-1, self.Player.chunkPos.y-1)
         genTemp = dataTypes.pos(toGen.x, toGen.y)
@@ -286,7 +286,10 @@ class Client:
             if (((temp[0] - self.Player.chunkPos.x)**2 + (temp[1] - self.Player.chunkPos.y)**2)**0.5) > 4:
                 del self.gennedChunks[coords]
 
-        self.screen.blit(self.Player.playerAnim, (dataTypes.w/2, dataTypes.h/2))
+        self.Player.bullets.update(self.screen)
+        self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
+
+        self.Player.update(self.screen)
 
         p.display.update()
 
