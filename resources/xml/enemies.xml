@@ -82,38 +82,38 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-        <Object type="0xr01" id="Rat">
-        <Group>Bats</Group>
-        <Texture>
-			<File>enemies</File>
-			<Index>1x1</Index>
-		</Texture>
-        <ProjectileTexture>
-            <File>projectile</File>
-            <Index>0x0</Index>
-        </ProjectileTexture>
-        <stats>
-            <Hitpoints>20</Hitpoints>
-            <Defence>1</Defence>
-            <Speed>3</Speed>
-            <Attack>2-4</Attack>
-            <Dexterity>3</Dexterity>
-        </stats>
-        <DropTable>
-            <DropCell>
-                <itemId>0x000</itemId>
-                <Chance>50</Chance>
-                <Amount>1-5</Amount>
-            </DropCell>
-        </DropTable>
-        <Behavior type="follow" distance="3"/>
-    </Object>
-        <Object type="0xi01" id="Fire Imp">
+    <Object type="0xr01" id="Rat">
+    <Group>Bats</Group>
+    <Texture>
+        <File>enemies</File>
+        <Index>1x1</Index>
+    </Texture>
+    <ProjectileTexture>
+        <File>projectile</File>
+        <Index>0x0</Index>
+    </ProjectileTexture>
+    <stats>
+        <Hitpoints>20</Hitpoints>
+        <Defence>1</Defence>
+        <Speed>3</Speed>
+        <Attack>2-4</Attack>
+        <Dexterity>3</Dexterity>
+    </stats>
+    <DropTable>
+        <DropCell>
+            <itemId>0x000</itemId>
+            <Chance>50</Chance>
+            <Amount>1-5</Amount>
+        </DropCell>
+    </DropTable>
+    <Behavior type="follow" distance="3"/>
+</Object>
+    <Object type="0xi01" id="Fire Imp">
         <Group>Imps</Group>
         <Texture>
-			<File>enemies</File>
-			<Index>4x1</Index>
-		</Texture>
+            <File>enemies</File>
+            <Index>4x1</Index>
+        </Texture>
         <ProjectileTexture>
             <File>projectile</File>
             <Index>0x0</Index>
@@ -134,7 +134,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-        <Object type="0xi02" id="Water Imp">
+    <Object type="0xi02" id="Water Imp">
         <Group>Imps</Group>
         <Texture>
 			<File>enemies</File>
@@ -160,7 +160,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-        <Object type="0xf01" id="Evil Fire Fairy">
+    <Object type="0xf01" id="Evil Fire Fairy">
         <Group>Fairies</Group>
         <Texture>
 			<File>enemies</File>
@@ -212,7 +212,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-        <Object type="0xd01" id="Possessed Duck">
+    <Object type="0xd01" id="Possessed Duck">
         <Group>Ducks</Group>
         <Texture>
 			<File>enemies</File>
