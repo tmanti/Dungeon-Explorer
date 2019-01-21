@@ -1,5 +1,4 @@
 <?xml version="1.0"?><Objects>
-	#Short Sword (Sword Tier 1)
 	<Object id="Short Sword" type="0xa00">
 		<Class>Equipment</Class>
 		<Weapon/>
@@ -18,7 +17,6 @@
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
 	</Object>
-	#Broadsword (sword tier 2)
 	<Object id="Broadsword" type="0xa01">
 		<Class>Equipment</Class>
 		<Weapon/>
@@ -34,10 +32,9 @@
 		<Tier>2</Tier>
 		<Description>A Iron Broadsword</Description>
 		<Damage>4-6</Damage>
-		<RateOfFire>3</RateOfFire>
+		<RateOfFire>2</RateOfFire>
 		<Range>1</Range>
 	</Object>
-	#Xiphos (Sword Tier 3)
 	<Object id="Xiphos" type="0xa02">
 			<Class>Equipment</Class>
 			<Weapon/>
@@ -46,16 +43,17 @@
 					<Index>2x0</Index>
 			</Texture>
 			<ProjectileTexture>
+				<File>projectiles</File>
+				<Index>2x0</Index>
+			</ProjectileTexture>
 			<SlotType>1</SlotType>
 			<Tier>3</Tier>
 			<Description>A Steel Xiphos</Description>
 			<Damage>6-8</Damage>
 			<RateOfFire>5</RateOfFire>
 			<Range>1</Range>
-			</ProjectileTexture>
 	</Object>
-	#Longsword (Sword Tier 4)
-	<Object id="Longsword" type="0xa03">
+	<Object id="Sword of The Gods" type="0xa03">
 			<Class>Equipment</Class>
 			<Weapon/>
 			<Texture>
@@ -63,13 +61,15 @@
 					<Index>3x0</Index>
 			</Texture>
 			<ProjectileTexture>
+				<File>projectiles</File>
+				<Index>3x0</Index>
+			</ProjectileTexture>
 			<SlotType>1</SlotType>
 			<Tier>4</Tier>
 			<Description>An Obsidian Longsword</Description>
 			<Damage>8-10</Damage>
-			<RateOfFire>7</RateOfFire>
+			<RateOfFire>3</RateOfFire>
 			<Range>2</Range>
-			</ProjectileTexture>
 	</Object>
 	<Object id="Short Staff" type="0xb00">
 		<Class>Equipment</Class>
