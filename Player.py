@@ -3,6 +3,7 @@ import dataTypes
 import item
 import pygame
 import spritesheet
+import math
 
 pos = dataTypes.pos
 
@@ -54,6 +55,8 @@ class player(pygame.sprite.Sprite):
         self.inventory = setupData.inventory
         self.stats = setupData.stats
 
+        self.drawOffset
+
         self.playerClass = setupData.playerClass
 
         self.inventory = self.playerClass.setupClass(self.inventory)
@@ -71,6 +74,14 @@ class player(pygame.sprite.Sprite):
             spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (8, 24, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames),#up
             spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + '.png', (0, 16, 8, 8), 2, dataTypes.WHITE, True, dataTypes.frames)#left
         ]
+
+        if className[self.playerClass.ClassType].name == warriorClass.name:
+            self.playerAttack = [
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 8, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames),#down
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 0, 0, 0), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames, images=[(0,0,8,8), (8,0,12,8)]),#right
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 16, 8, 8), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames),#up
+                spritesheet.SpriteStripAnim('resources/Sprites/player/' + className[self.playerClass.ClassType].name + "Attacking.png", (0, 0, 0, 0), 2, colorkey=dataTypes.WHITE, loop=True, frames=dataTypes.frames, images=[(0,24,12,8), (12,24,8,8)]),#left
+            ]
 
         self.playerAnim = self.playerIdle[0]
         self.lastFaced = 0
@@ -125,8 +136,23 @@ class player(pygame.sprite.Sprite):
             self.attacking = True
 
         if self.attacking:
-            #mousePos = pygame.mouse.get_pos()
-            self.playerAnim = self.playerIdle[self.lastFaced]
+            #code from https://gamedev.stackexchange.com/a/134090
+            mX, mY = pygame.mouse.get_pos()
+            rel_x, rel_y = mX - dataTypes.w//2, mY - dataTypes.h//2
+            angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
+            #end borrowed code (didnt want to remember math lol)
+
+            if -45 <= angle and angle <= 45:
+                self.lastFaced = 1
+            elif 45 <= angle and angle <= 135:
+                self.lastFaced = 2
+            elif angle >= 135 or angle <= -135:
+                self.lastFaced = 3
+            elif -45 >= angle and angle >= -135:
+                self.lastFaced = 0
+            self.playerAnim = self.playerAttack[self.lastFaced].next()
+            print(self.playerAnim)
+
         elif velocity == [0, 0]:
             self.playerAnim = self.playerIdle[self.lastFaced]
 
