@@ -40,7 +40,7 @@
 		<Weapon/>
 		<Texture>
 			<File>equipment</File>
-			<Index>0x1</Index>
+			<Index>0x2</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
@@ -58,7 +58,7 @@
 		<Weapon/>
 		<Texture>
 			<File>equipment</File>
-			<Index>1x1</Index>
+			<Index>1x2</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
@@ -76,7 +76,7 @@
 		<Weapon/>
 		<Texture>
 			<File>equipment</File>
-			<Index>0x2</Index>
+			<Index>0x1</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
@@ -94,7 +94,7 @@
 		<Weapon/>
 		<Texture>
 			<File>equipment</File>
-			<Index>1x2</Index>
+			<Index>1x1</Index>
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
