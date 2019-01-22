@@ -198,4 +198,5 @@ def init():
         )
         if child.find("Group").text == "Goblins":
             goblins[child.get('type')] = allMobs[child.get('type')]
+        #elif child.find("")
     print(allMobs)

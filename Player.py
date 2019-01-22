@@ -172,15 +172,15 @@ class player(pygame.sprite.Sprite):
             velocity[1] -= 1*self.stats.speed
             self.playerAnim = self.playerWalk[2].next()
             self.lastFaced = 2
-        if keys[pygame.K_s] or keys[pygame.K_LEFT]:
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             velocity[1] += 1 * self.stats.speed
             self.playerAnim = self.playerWalk[0].next()
             self.lastFaced = 0
-        if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             velocity[0] -= 1 * self.stats.speed
             self.playerAnim = self.playerWalk[3].next()
             self.lastFaced = 3
-        if keys[pygame.K_d] or keys[pygame.K_DOWN]:
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             velocity[0] += 1 *self.stats.speed
             self.playerAnim = self.playerWalk[1].next()
             self.lastFaced = 1
