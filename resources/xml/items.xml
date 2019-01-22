@@ -118,7 +118,7 @@
 					<File>projectiles</File>
 					<Index>2x2</Index>
 			</ProjectileTexture>
-			<slotType>4</slotType>
+			<SlotType>4</SlotType>
 			<Tier>3</Tier>
 			<Description>A staff embodied with the power of fire</Description>
 			<Damage>14-18</Damage>
@@ -191,7 +191,7 @@
 					<File>projectiles</File>
 					<Index>2x1</Index>
 			</ProjectileTexture>
-			<slotType>7</slotType>
+			<SlotType>7</SlotType>
 			<Tier>3</Tier>
 			<Description>A simple crossbow</Description>
 			<Damage>11-20</Damage>
