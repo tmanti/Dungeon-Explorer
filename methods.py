@@ -30,6 +30,10 @@ class playButton(button):
     def __init__(self, x, y, fonts=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON)):
         super().__init__(x-75, y, 150, 50, "Play", font=fonts)
 
+class instructionsButton(button):
+    def __init__(self, x, y, fonts=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON)):
+        super().__init__(x-75, y, 150, 50, "Instructions", font=fonts)
+
 class loadButton(button):
     def __init__(self, x, y, loadName, fonts=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON)):
         super().__init__(x-75, y, 150, 50, loadName, font=fonts)

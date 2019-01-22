@@ -186,7 +186,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-    <Object type="0xf01" id="Evil Water Fairy">
+    <Object type="0xf02" id="Evil Water Fairy">
         <Group>Fairies</Group>
         <Texture>
 			<File>enemies</File>
@@ -228,6 +228,84 @@
             <Speed>2</Speed>
             <Attack>2-4</Attack>
             <Dexterity>4</Dexterity>
+        </stats>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>50</Chance>
+                <Amount>1-5</Amount>
+            </DropCell>
+        </DropTable>
+        <Behavior type="follow" distance="3"/>
+    </Object>
+    <Object type="0xs02" id="Basilisk">
+        <Group>Snakes</Group>
+        <Texture>
+			<File>enemies</File>
+			<Index>2x0x2</Index>
+		</Texture>
+        <ProjectileTexture>
+            <File>projectile</File>
+            <Index>0x0</Index>
+        </ProjectileTexture>
+        <stats>
+            <Hitpoints>25</Hitpoints>
+            <Defence>3</Defence>
+            <Speed>3</Speed>
+            <Attack>3-5</Attack>
+            <Dexterity>2</Dexterity>
+        </stats>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>50</Chance>
+                <Amount>1-5</Amount>
+            </DropCell>
+        </DropTable>
+        <Behavior type="follow" distance="3"/>
+    </Object>
+        <Object type="0x01" id="Dragon">
+        <Group>Dragons</Group>
+        <Texture>
+			<File>enemies</File>
+			<Index>0x2x2</Index>
+		</Texture>
+        <ProjectileTexture>
+            <File>projectile</File>
+            <Index>0x0</Index>
+        </ProjectileTexture>
+        <stats>
+            <Hitpoints>30</Hitpoints>
+            <Defence>4</Defence>
+            <Speed>3</Speed>
+            <Attack>4-5</Attack>
+            <Dexterity>2</Dexterity>
+        </stats>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>50</Chance>
+                <Amount>1-5</Amount>
+            </DropCell>
+        </DropTable>
+        <Behavior type="follow" distance="3"/>
+    </Object>
+      <Object type="0xt02" id="Evil Ent">
+        <Group>Trees</Group>
+        <Texture>
+			<File>enemies</File>
+			<Index>0x4x2</Index>
+		</Texture>
+        <ProjectileTexture>
+            <File>projectile</File>
+            <Index>0x0</Index>
+        </ProjectileTexture>
+        <stats>
+            <Hitpoints>25</Hitpoints>
+            <Defence>3</Defence>
+            <Speed>3</Speed>
+            <Attack>4-6</Attack>
+            <Dexterity>2</Dexterity>
         </stats>
         <DropTable>
             <DropCell>
