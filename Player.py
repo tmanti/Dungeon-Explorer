@@ -168,19 +168,19 @@ class player(pygame.sprite.Sprite):
 
         #0 - down, 1 - right, 2 - up, 3 - left
 
-        if keys[pygame.K_w]:
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
             velocity[1] -= 1*self.stats.speed
             self.playerAnim = self.playerWalk[2].next()
             self.lastFaced = 2
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] or keys[pygame.K_LEFT]:
             velocity[1] += 1 * self.stats.speed
             self.playerAnim = self.playerWalk[0].next()
             self.lastFaced = 0
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
             velocity[0] -= 1 * self.stats.speed
             self.playerAnim = self.playerWalk[3].next()
             self.lastFaced = 3
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_DOWN]:
             velocity[0] += 1 *self.stats.speed
             self.playerAnim = self.playerWalk[1].next()
             self.lastFaced = 1
@@ -236,7 +236,8 @@ class player(pygame.sprite.Sprite):
         moveToPos = dataTypes.pos(self.playerClass.projectileDistance * math.cos(angle / 55.47) + dataTypes.w // 2, self.playerClass.projectileDistance * math.sin(-angle / 55.47) + dataTypes.h // 2)
         moveToPos.x += self.position.x
         moveToPos.y += self.position.y
-        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, self.position, moveToPos, angle, random.randint(self.inventory.weapon.material.damage[0], self.inventory.weapon.material.damage[1]), toTravel=self.playerClass.projectileDistance))
+        startPos = dataTypes.pos(self.position.x+dataTypes.w//2, self.position.y+dataTypes.h//2)
+        self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, startPos, moveToPos, angle, random.randint(self.inventory.weapon.material.damage[0], self.inventory.weapon.material.damage[1]), toTravel=self.playerClass.projectileDistance))
 
 def generateNewPlayerData(playerClass):
     return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
