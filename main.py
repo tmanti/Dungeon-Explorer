@@ -127,7 +127,7 @@ class Client:
                 loadedChunks.append(gennedChunks[str(genTemp)])
 
         buttons1 = p.sprite.Group()
-        buttons1.add(methods.playButton(dataTypes.w//2, 400))
+        buttons1.add(methods.playButton(dataTypes.w//2, 400), methods.instructionsButton(dataTypes.w//2, 300))
 
         buttons2Load = p.sprite.Group()
         buttons2NewSave = p.sprite.Group()
@@ -139,6 +139,8 @@ class Client:
         buttons3Next.add(methods.nextButton(dataTypes.w // 2 + 75, dataTypes.h // 4 + 226, "R", fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
         buttons3Back = p.sprite.Group()
         buttons3Back.add(methods.backButton(dataTypes.w//2, dataTypes.h//4+dataTypes.h//2+100))
+
+        buttons4 = p.sprite.Group(methods.backButton(dataTypes.w // 2, 100))
 
         saves = 5
 
@@ -175,7 +177,10 @@ class Client:
                     if not menuSwapped and menuState == 1:
                         for x in buttons1:  # for each button on screen 1
                             if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
-                                menuState = 2
+                                if x.text == 'Play':
+                                    menuState = 2
+                                elif x.text == 'Instructions':
+                                    menuState = 4
                                 menuSwapped = True
                     if menuState == 2 and not menuSwapped:
                         for x in buttons2Load:
@@ -204,6 +209,11 @@ class Client:
                                 TextField = []
                                 classesIndex = 0
                                 menuState = 2
+                    if menuState == 4 and not menuSwapped:
+                        for x in buttons4:
+                            if p.Rect(x.x, x.y, x.w, x.h).collidepoint(mouse[0], mouse[1]):
+                                menuState = 1
+                                menuSwapped = True
                 if menuState == 3:
                     if e.type == p.KEYDOWN:
                         if e.key == p.K_BACKSPACE:
@@ -244,6 +254,20 @@ class Client:
                 buttons3.update(self.screen)
                 buttons3Back.update(self.screen)
                 buttons3Next.update(self.screen)
+            elif menuState == 4:
+                for chunk in loadedChunks:
+                    chunk.tileGroup.draw(self.screen)
+
+                methods.text_to_screen("You are placed in an infinite world.", dataTypes.w // 2, dataTypes.h // 4 + 50, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("Enemies attack you, and holding", dataTypes.w // 2, dataTypes.h // 4 + 100, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("left click you can fight back.", dataTypes.w // 2, dataTypes.h // 4 + 150,self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("The arrow keys or WASD allow you", dataTypes.w // 2, dataTypes.h // 4 + 200, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("to move and avoid projectiles.",dataTypes.w // 2, dataTypes.h // 4 + 250, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("Equip items enemies drop", dataTypes.w // 2, dataTypes.h // 4 + 300, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("to become more powerful.", dataTypes.w // 2, dataTypes.h // 4 + 350, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("Try to survive as long as possible.", dataTypes.w // 2, dataTypes.h // 4 + 400, self.screen, font=dataTypes.GUI_FONT)
+
+                buttons4.update(self.screen)
 
             display.update()
 
