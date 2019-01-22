@@ -73,12 +73,12 @@ class Client:
 
     def __init__(self):
         #initialize pygame and the screen
-        self.screen = p.display.set_mode((800, 800))#, pygame.FULLSCREEN)
+        self.screen = p.display.set_mode((dataTypes.w, dataTypes.h), pygame.FULLSCREEN)
         pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
         self.state = 1
 
-        self.states = {1: self.main_menu, 2:self.game}
+        self.states = {1: self.main_menu, 2:self.game, 3:self.pause}
 
         #initialize items
         item.init()
@@ -259,9 +259,7 @@ class Client:
                     dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
-                    self.running = False
-                    if self.name:
-                        dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+                    self.state = 3
             if e.type == pygame.USEREVENT+1:
                 self.Player.Fire(pygame.mouse.get_pos())
 
@@ -323,15 +321,22 @@ class Client:
 
         p.display.update()
 
-    def testing(self):
-        load = True
-        while load:
-            for e in pygame.event.get():
-                if e.type == p.QUIT:
-                    load = False
-                if e.type == p.KEYDOWN:
-                    if e.key == p.K_ESCAPE:
-                        load = False
+    def pause(self):
+        for e in pygame.event.get():
+            if e.type == p.KEYDOWN:
+                if e.key == p.K_ESCAPE:
+                    self.state = 2
+
+            methods.text_to_screen("PAUSED", dataTypes.w//2, dataTypes.h//8, self.screen, font=dataTypes.GUI_FONT_BIG)
+
+            Inventory = pygame.Surface((600, 600))
+            w, h = Inventory.get_size()
+
+            Inventory.fill(dataTypes.GRAY)
+
+            self.screen.blit(Inventory, (200, 200))
+
+            display.flip()
 
     def Load(self, name):
         # TEMP - load player save

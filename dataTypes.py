@@ -7,13 +7,14 @@ frames = FPS/8
 
 chunkSize = 16
 
-w,h = [800, 800]
+w,h = [1000, 1000]
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+GRAY = (233,233,233)
 
 #get game font
 GAME_FONT_BUTTON = pygame.font.Font("8-bit.ttf", 27)
