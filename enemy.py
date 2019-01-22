@@ -91,7 +91,7 @@ class Goblin(pygame.sprite.Sprite):
         self.wait = 0
 
         ss=spritesheet.spritesheet(self.data.Texture.fileLocation)
-        self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+        self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], self.data.Texture.size, self.data.Texture.size), colorkey=dataTypes.WHITE)
 
         ss = spritesheet.spritesheet(self.data.projectile.fileLocation)
         self.projImage = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
