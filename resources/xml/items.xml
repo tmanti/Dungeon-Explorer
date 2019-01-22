@@ -53,7 +53,7 @@
 			<RateOfFire>5</RateOfFire>
 			<Range>1</Range>
 	</Object>
-	<Object id="Sword of The Mad God" type="0xa03">
+	<Object id="Tmanti's Sword" type="0xa03">
 			<Class>Equipment</Class>
 			<Weapon/>
 			<Texture>
@@ -66,7 +66,7 @@
 			</ProjectileTexture>
 			<SlotType>1</SlotType>
 			<Tier>4</Tier>
-			<Description>An Obsidian Longsword</Description>
+			<Description>The sword of the legendary warrior Tmanti</Description>
 			<Damage>25-35</Damage>
 			<RateOfFire>6</RateOfFire>
 			<Range>2</Range>
@@ -86,7 +86,7 @@
 		<Tier>1</Tier>
 		<Description>A basic short staff</Description>
 		<Damage>1-4</Damage>
-		<RateOfFire>4</RateOfFire>
+		<RateOfFire>2</RateOfFire>
 		<Range>1</Range>
 	</Object>
 	<Object id="Staff of Water" type="0xb01">
@@ -104,8 +104,45 @@
 		<Tier>2</Tier>
 		<Description>A staff embodied with the power of water</Description>
 		<Damage>3-6</Damage>
-		<RateOfFire>8</RateOfFire>
+		<RateOfFire>4</RateOfFire>
 		<Range>1</Range>
+	</Object>
+	<Object id="Staff of Fire" type="0xb02">
+			<Class>Equipment</Class>
+			<Weapon/>
+			<Texture>
+					<File>equipment</File>
+					<Index>2x2</Index>
+			</Texture>
+			<ProjectileTexture>
+					<File>projectiles</File>
+					<Index>2x2</Index>
+			</ProjectileTexture>
+			<slotType>4</slotType>
+			<Tier>3</Tier>
+			<Description>A staff embodied with the power of fire</Description>
+			<Damage>14-18</Damage>
+			<RateOfFire>6</RateOfFire>
+			<Range>1</Range>
+	</Object>
+
+	<Object id="Staff of Tmanti" type="0xb03">
+			<Class>Equipment</Class>
+			<Weapon/>
+			<Texture>
+					<File>equipment</File>
+					<Index>3x2</Index>
+			</Texture>
+			<ProjectileTexture>
+					<File>projectiles</File>
+					<Index>3x2</Index>
+			</ProjectileTexture>
+			<SlotType>4</SlotType>
+			<Tier>4</Tier>
+			<Description>A staff embodied with the power of the legendary magician Tmanti</Description>
+			<Damage>24-28</Damage>
+			<RateOfFire>8</RateOfFire>
+			<Range>2</Range>
 	</Object>
 	<Object id="Short Bow" type="0xc00">
 		<Class>Equipment</Class>
@@ -138,12 +175,47 @@
 		</ProjectileTexture>
 		<SlotType>7</SlotType>
 		<Tier>2</Tier>
-		<Description>A simple Bow</Description>
+		<Description>A simple Long Bow</Description>
 		<Damage>5-16</Damage>
 		<RateOfFire>1</RateOfFire>
 		<Range>1</Range>
 	</Object>
-
+	<Object id="Crossbow" type="0xc02">
+			<Class>Equipment</Class>
+			<Weapon/>
+			<Texture>
+					<File>equipment</File>
+					<Index>2x1</Index>
+			</Texture>
+			<ProjectileTexture>
+					<File>projectiles</File>
+					<Index>2x1</Index>
+			</ProjectileTexture>
+			<slotType>7</slotType>
+			<Tier>3</Tier>
+			<Description>A simple crossbow</Description>
+			<Damage>11-20</Damage>
+			<RateOfFire>1</RateOfFire>
+			<Range>1</Range>
+	</Object>
+	<Object id="Tmanti's bow" type="0xc03">
+			<Class>Equipment</Class>
+			<Weapon/>
+			<Texture>
+					<File>equipment</File>
+					<Index>3x1</Index>
+			</Texture>
+			<ProjectileTexture>
+					<File>projectiles</File>
+					<Index>3x1</Index>
+			</ProjectileTexture>
+			<SlotType>7</SlotType>
+			<Tier>4</Tier>
+			<Description>The Bow of the legendary archer Tmanti</Description>
+			<Damage>20-28</Damage>
+			<RateOfFire>2</RateOfFire>
+			<Range>1</Range>
+	</Object>
 	<Object id="Small Health Potion" type="0x000">
 		<Class>Consumable</Class>
 		<Item/>

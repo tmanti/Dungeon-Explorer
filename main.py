@@ -336,7 +336,6 @@ class Client:
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 
         #gui
-        print(self.Player.inventory.weapon.material.image)
         if self.Player.inventory.weapon.material.image:
             self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4+100, 750))
         if self.Player.inventory.special.material.image:

@@ -18,6 +18,11 @@ class spriteRef:
             #print(x)
             self.index[x] = int(self.index[x])*8
 
+        if len(self.index) == 3:
+            self.size = 8*self.index[2]
+        else:
+            self.size = 8
+
     def __str__(self):
         return "[%s, %s]" % (self.index, self.fileLocation)
 
@@ -29,14 +34,14 @@ class Material:
         if texture:
             self.Texture = texture
             ss = spritesheet.spritesheet(self.Texture.fileLocation)
-            self.image = ss.image_at((self.Texture.index[0], self.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+            self.image = ss.image_at((self.Texture.index[0], self.Texture.index[1], self.Texture.size, self.Texture.size), colorkey=dataTypes.WHITE)
         else:
             self.Texture = None
             self.image = None
         if projectile:
             self.projectile = projectile
             ss = spritesheet.spritesheet(self.projectile.fileLocation)
-            self.projectileImage = ss.image_at((self.projectile.index[0], self.projectile.index[1], 8, 8), colorkey=dataTypes.WHITE)
+            self.projectileImage = ss.image_at((self.projectile.index[0], self.projectile.index[1], self.Texture.size, self.Texture.size), colorkey=dataTypes.WHITE)
         self.SlotType = slotType
         self.description = desc
         self.tier = tier
