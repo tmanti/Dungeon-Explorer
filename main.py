@@ -127,7 +127,7 @@ class Client:
                 loadedChunks.append(gennedChunks[str(genTemp)])
 
         buttons1 = p.sprite.Group()
-        buttons1.add(methods.playButton(dataTypes.w//2, 400), methods.instructionsButton(dataTypes.w//2, 300))
+        buttons1.add(methods.playButton(dataTypes.w//2, 400), methods.instructionsButton(dataTypes.w//2, 500), methods.backButton(dataTypes.w//2, 600, text="Exit"))
 
         buttons2Load = p.sprite.Group()
         buttons2NewSave = p.sprite.Group()
@@ -181,6 +181,9 @@ class Client:
                                     menuState = 2
                                 elif x.text == 'Instructions':
                                     menuState = 4
+                                elif x.text == 'Exit':
+                                    load=False
+                                    self.running = False
                                 menuSwapped = True
                     if menuState == 2 and not menuSwapped:
                         for x in buttons2Load:
@@ -326,41 +329,73 @@ class Client:
         hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, False, False)
         for hit in hits:
             hits[hit][0].hit(hit.damage)
-           #for hi in hits[hit]:
-               #hi.hit(hit.damage)
 
         self.Player.update(self.gennedChunks)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 
         #gui
+        pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
+
         if self.Player.inventory.weapon.material.image:
-            self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4+100, 750))
+            self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4+100, 950))
         if self.Player.inventory.special.material.image:
-            self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w//4+200, 750))
+            self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w//4+200, 950))
         if self.Player.inventory.armour.material.image:
-            self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w//4+300, 750))
+            self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w//4+300, 950))
         if self.Player.inventory.ring.material.image:
-            self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w//4+400, 750))
+            self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w//4+400, 950))
 
         p.display.update()
 
     def pause(self):
-        for e in pygame.event.get():
-            if e.type == p.KEYDOWN:
-                if e.key == p.K_ESCAPE:
-                    self.state = 2
+        load = True
 
-            methods.text_to_screen("PAUSED", dataTypes.w//2, dataTypes.h//8, self.screen, font=dataTypes.GUI_FONT_BIG)
+        exitGame = False
 
-            Inventory = pygame.Surface((600, 600))
-            w, h = Inventory.get_size()
+        buttons = p.sprite.Group()
+        buttons.add(methods.backButton(500, 550, text="Back To Menu", fonts=[dataTypes.GUI_FONT_SMALL, dataTypes.GUI_FONT_SMALLER], boxOffset=200))
 
-            Inventory.fill(dataTypes.GRAY)
+        while load:
+            for e in pygame.event.get():
+                if e.type == p.KEYDOWN:
+                    if e.key == p.K_ESCAPE:
+                        load = False
+                        self.state = 2
+                if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
+                    mouse = p.mouse.get_pos()  # get mouse position
+                    for x in buttons:
+                        if ((x.x + x.w+200) > mouse[0] > (x.x+200)) and ((x.y + x.h+200) > mouse[1] > (x.y+200)):
+                            print(x.text)
+                            if x.text == "Back To Menu":
+                                dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+                                load=False
+                                self.state = 1
 
-            self.screen.blit(Inventory, (200, 200))
+                methods.text_to_screen("PAUSED", dataTypes.w//2, dataTypes.h//8, self.screen, font=dataTypes.GUI_FONT_BIG)
 
-            display.flip()
+                Inventory = pygame.Surface((600, 600))
+                w, h = Inventory.get_size()
+
+                Inventory.fill(dataTypes.DARK_GRAY)
+                buttons.update(Inventory)
+
+                pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
+
+                if self.Player.inventory.weapon.material.image:
+                    self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w // 4 + 100, 950))
+                if self.Player.inventory.special.material.image:
+                    self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w // 4 + 200, 950))
+                if self.Player.inventory.armour.material.image:
+                    self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w // 4 + 300, 950))
+                if self.Player.inventory.ring.material.image:
+                    self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w // 4 + 400, 950))
+
+                self.screen.blit(Inventory, (200, 200))
+
+                display.flip()
+
+
 
     def Load(self, name):
         # TEMP - load player save
@@ -371,7 +406,6 @@ class Client:
         # create Player and world objects from passed data by the loadsave
         self.Player = Player.player(self.saveData.player)
         self.World = world.world(seed=self.saveData.world.seed)
-
 
 #declaring game client
 gameClient = Client()

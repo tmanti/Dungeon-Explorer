@@ -6,7 +6,7 @@ WHITE = dataTypes.WHITE
 #button object
 #for reuse of easy buttoning
 class button(pygame.sprite.Sprite):
-    def __init__(self, x, y, w, h, text, font=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON)):
+    def __init__(self, x, y, w, h, text, font=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON), boxOffset=0):
         super().__init__()
         self.x = x
         self.y = y
@@ -14,6 +14,7 @@ class button(pygame.sprite.Sprite):
         self.h = h
         self.text = text
         self.fonts = font
+        self.offset= boxOffset
 
     def press(self, *args, **kwargs):
         pass
@@ -21,7 +22,7 @@ class button(pygame.sprite.Sprite):
     def update(self, screen):
         mouse = pygame.mouse.get_pos()
 
-        if ((self.x + self.w) > mouse[0] > self.x) and ((self.y + self.h) > mouse[1] > self.y):
+        if ((self.x + self.w + self.offset) > mouse[0] > self.x+self.offset) and ((self.y + self.h+self.offset) > mouse[1] > self.y+self.offset):
             text_to_screen(self.text, self.x+self.w//2, self.y+self.h//2, screen, center=True, font=self.fonts[0])
         else:
             text_to_screen(self.text, self.x+self.w//2, self.y+self.h//2, screen, center=True, font=self.fonts[1])
@@ -65,9 +66,8 @@ class nextButton(button):
             return (iterVar-1)%3
 
 class backButton(button):
-    def __init__(self, x, y, fonts=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON)):
-        super().__init__(x-50, y, 100, 50, "Back", font=fonts)
-
+    def __init__(self, x, y, fonts=(dataTypes.GAME_FONT, dataTypes.GAME_FONT_BUTTON), text="Back", boxOffset=0):
+        super().__init__(x-50, y, 100, 50, text, font=fonts, boxOffset=boxOffset)
 
 def text_obj(text, font):
     textSurface = font.render(text, True, dataTypes.WHITE)

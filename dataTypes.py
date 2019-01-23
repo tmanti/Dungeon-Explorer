@@ -14,7 +14,8 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-GRAY = (233,233,233)
+GRAY = (150,150,150)
+DARK_GRAY = (90, 90, 90)
 
 #get game font
 GAME_FONT_BUTTON = pygame.font.Font("8-bit.ttf", 27)
@@ -25,6 +26,7 @@ GAME_FONT_SMALL = pygame.font.Font("8-bit.ttf", 20)
 GUI_FONT = pygame.font.Font("Pixel-Miners.otf", 30)
 GUI_FONT_BIG = pygame.font.Font("Pixel-Miners.otf", 40)
 GUI_FONT_SMALL = pygame.font.Font("Pixel-Miners.otf", 20)
+GUI_FONT_SMALLER = pygame.font.Font("Pixel-Miners.otf", 17)
 GUI_FONT_BUTTON = pygame.font.Font("Pixel-Miners.otf", 27)
 
 class pos:
