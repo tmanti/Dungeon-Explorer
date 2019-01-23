@@ -96,7 +96,7 @@ class Enemy(pygame.sprite.Sprite):
 
         ss = spritesheet.spritesheet(self.data.Texture.fileLocation)
         self.image = ss.image_at(
-            (self.data.Texture.index[0], self.data.Texture.index[1], self.data.Texture.size, self.data.Texture.size),
+            pygame.Rect(self.data.Texture.index[0], self.data.Texture.index[1], self.data.Texture.size, self.data.Texture.size),
             colorkey=dataTypes.WHITE)
 
         ss = spritesheet.spritesheet(self.data.projectile.fileLocation)

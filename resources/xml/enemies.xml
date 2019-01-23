@@ -2,7 +2,38 @@
     <Object type="0xg01" id="Goblin Scout">
         <Group>Goblins</Group>
         <Texture>
-			<File>goblin</File>
+			<File>enemies</File>
+			<Index>0x0</Index>
+		</Texture>
+        <ProjectileTexture>
+            <File>projectiles</File>
+            <Index>0x0</Index>
+        </ProjectileTexture>
+        <stats>
+            <Hitpoints>20</Hitpoints>
+            <Defence>3</Defence>
+            <Speed>2</Speed>
+            <Attack>2-4</Attack>
+            <Dexterity>3</Dexterity>
+        </stats>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>50</Chance>
+                <Amount>1-5</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xa01</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+        </DropTable>
+        <Behavior type="follow" distance="3"/>
+    </Object>
+    <Object type="0xg02" id="Goblin">
+        <Group>Goblins</Group>
+        <Texture>
+			<File>enemies</File>
 			<Index>0x0</Index>
 		</Texture>
         <ProjectileTexture>
@@ -256,7 +287,7 @@
         <Group>Ducks</Group>
         <Texture>
 			<File>enemies</File>
-			<Index>0x1</Index>
+			<Index>5x0</Index>
 		</Texture>
         <ProjectileTexture>
             <File>projectiles</File>
@@ -304,10 +335,10 @@
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
-            <Hitpoints>25</Hitpoints>
-            <Defence>3</Defence>
+            <Hitpoints>50</Hitpoints>
+            <Defence>5</Defence>
             <Speed>3</Speed>
-            <Attack>3-5</Attack>
+            <Attack>6-10</Attack>
             <Dexterity>2</Dexterity>
         </stats>
         <DropTable>
@@ -334,7 +365,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-        <Object type="0x01" id="Dragon">
+        <Object type="0xn01" id="Dragon">
         <Group>Dragons</Group>
         <Texture>
 			<File>enemies</File>

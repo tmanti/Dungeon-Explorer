@@ -19,16 +19,35 @@ class Chunk:
                 if noise < 0.2:
                     self.tileGroup.add(waterTile(pos))
                     self.tiles[pos.__str__()] = "water"
+                    spawn = random.randint(1, 2000)
+                    if spawn == 5 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xd01"].stats, enemy.allMobs["0xd01"]))
+                    elif spawn == 10 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xf02"].stats, enemy.allMobs["0xf02"]))
+                    if spawn == 15 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xi02"].stats, enemy.allMobs["0xi02"]))
                 elif noise < 0.3:
                     self.tileGroup.add(sandTile(pos))
                     self.tiles[pos.__str__()] = "sand"
+                    spawn = random.randint(1, 300)
+                    spawn_2 = random.randint(1, 3000)
+                    if spawn == 15 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xs01"].stats, enemy.allMobs["0xs01"]))
+                    if spawn_2 == 15 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xs02"].stats, enemy.allMobs["0xs02"]))
                 elif noise < 0.8:
                     if 0.42< noise and noise < 0.43:
                         self.tileGroup.add(grassFlowerTile(pos, 1))
                         self.tiles[pos.__str__()] = "flowers"
+                        spawn = random.randint(0, 5000)
+                        if spawn == 15 and enemiesGroup != None:
+                            enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xt01"].stats, enemy.allMobs["0xt01"]))
                     elif 0.47< noise and noise < 0.48:
                         self.tileGroup.add(grassFlowerTile(pos, 2))
                         self.tiles[pos.__str__()] = "flowers"
+                        spawn = random.randint(0, 5000)
+                        if spawn == 15 and enemiesGroup != None:
+                            enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xt01"].stats, enemy.allMobs["0xt01"]))
                     else:
                         self.tileGroup.add(grassTile(pos))
                         self.tiles[pos.__str__()] = "grass"
@@ -37,12 +56,26 @@ class Chunk:
                             enemiesGroup.add(enemy.Enemy(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"].stats, enemy.allMobs["0xg01"]))
                         elif spawn == 1755 and enemiesGroup!= None:
                             enemiesGroup.add(enemy.Enemy(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xr01"].stats, enemy.allMobs["0xr01"]))
+                        if spawn == 20 and enemiesGroup != None:
+                            enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xg02"].stats, enemy.allMobs["0xg02"]))
                 elif noise < 0.9:
                     self.tileGroup.add(mountainTile(pos))
                     self.tiles[pos.__str__()] = "mountain"
+                    spawn = random.randint(1, 3000)
+                    spawn_2 = random.randint(1, 500)
+                    if spawn == 300 and enemiesGroup != None:
+                        print('yes')
+                        enemiesGroup.add(enemy.Enemy(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xn01"].stats, enemy.allMobs["0xn01"]))
+                    if spawn_2 == 15 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xi01"].stats, enemy.allMobs["0xi01"]))
+                    if spawn_2 == 20 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xf01"].stats, enemy.allMobs["0xf01"]))
                 else:
                     self.tileGroup.add(snowTile(pos))
                     self.tiles[pos.__str__()] = "snow"
+                    spawn = random.randint(1, 300)
+                    if spawn == 20 and enemiesGroup != None:
+                        enemiesGroup.add(enemy.Enemy(pos.x * 32 + dataTypes.w // 2, pos.y * 32 + dataTypes.h // 2, enemy.allMobs["0xb01"].stats, enemy.allMobs["0xb01"]))
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, position, image):

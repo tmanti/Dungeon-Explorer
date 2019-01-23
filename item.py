@@ -19,7 +19,7 @@ class spriteRef:
             self.index[x] = int(self.index[x])*8
 
         if len(self.index) == 3:
-            self.size = 8*self.index[2]
+            self.size = 8*int(self.index[2])
         else:
             self.size = 8
 
