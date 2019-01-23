@@ -246,11 +246,19 @@ class player(pygame.sprite.Sprite):
 
     def hit(self, damage):
         print("took " + str(damage))
-        self.currentHp-=damage
+        self.currentHp-=damage-self.stats.defence
         if self.currentHp <= 0:
             return True
         else:
             return False
+
+    def levelUp(self):
+        self.stats.health += 10
+        self.stats.magic += 10
+        self.stats.dexterity +=3
+        self.stats.vitality += 2
+        self.stats.speed += 1
+        self.stats.defence += 2
 
 
 def generateNewPlayerData(playerClass):
