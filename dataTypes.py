@@ -1,3 +1,4 @@
+#imports
 import item
 import random
 import pygame
@@ -58,12 +59,15 @@ class Level:
         self.__repr__ = self.__str__
 
     def returnLvl(self):
+        #return Lvl as a dictionary
         return {"lvl":self.lvl, "exp":self.exp}
 
     def __str__(self):
+        #return Lvl as a string
         return "Level: " + str(self.lvl) + " With " + str(self.exp) + " XP"
 
 class entityStats:
+    #stats for characters
     def __init__(self, hp=0, mp=0, defen=0, spd=0, atk=0, dex=0, vit=0):
         self.health = hp
         self.defence = defen
@@ -74,9 +78,11 @@ class entityStats:
         self.vitality = vit
 
     def return_entityStats(self):
+        #return entityStats as a dictionary
         return {"hp":self.health, "mp":self.magic, "def": self.defence, "spd": self.speed, "atk": self.attack, "dex":self.dexterity, "vit": self.vitality}
 
 class container:
+    #class to store data
     def __init__(self, size, contents=None):
         self.size = size
         if contents:
@@ -88,6 +94,7 @@ class container:
             self.contents={str(_):item.ItemStack(1, item.Nothing) for _ in range(self.size)}
 
     def AddTo(self, ItemStack):
+        #adds data to container
         contains, index = self.contains(ItemStack.material.type)
         if contains:
             self.contents[index].amount += ItemStack.amount
@@ -98,6 +105,7 @@ class container:
                     return
 
     def contains(self, type):
+        #checks if an item with a certain id is in the container
         for x in self.contents:
             if self.contents[x].material.type == type:
                 return True, x
@@ -105,6 +113,7 @@ class container:
             return False, None
 
     def containsGroup(self, groupId):
+        #checks if an group id is in the container
         for x in self.contents:
             if self.contents[x].material.group == groupId:
                 return True, x
@@ -112,12 +121,14 @@ class container:
             return False, None
 
     def return_Container(self):
+        #return container as a dictionary
         toReturn = {}
         for x in self.contents:
             toReturn[x] = [self.contents[x].amount, self.contents[x].material.type]
         return toReturn
 
 class playerInventory:
+    #class for player inventory
     def __init__(self, weapon=item.ItemStack(1, item.Nothing), special=item.ItemStack(1, item.Nothing), armour=item.ItemStack(1, item.Nothing), ring=item.ItemStack(1, item.Nothing), container=container(30)):
         self.weapon = weapon
         self.special = special
@@ -126,9 +137,11 @@ class playerInventory:
         self.container = container
 
     def return_playerInventory(self):
+        #return player inventory as a dictonary
         return {"weapon":self.weapon.material.type, "special":self.special.material.type, "armour":self.armour.material.type, "ring":self.ring.material.type, "container":self.container.return_Container()}
 
 class playerData:
+    #class for player data
     def __init__(self, position, inventory, stats, classType, Level):
         self.position = position
         self.inventory = inventory
@@ -137,24 +150,30 @@ class playerData:
         self.level = Level
 
     def return_playerData(self):
+        #return player data as a dictionary
         return {"pos":self.position.return_Position(), "inv":self.inventory.return_playerInventory(), "stats": self.stats.return_entityStats(), "class":self.playerClass.ClassType, "level":self.level.returnLvl()}
 
 class chunkData:
+    #stores information about a chunk
     def __init__(self, pos, chunkData=None):
         self.chunkPos = pos
         self.chunkData = chunkData
 
 class worldData:
+    #class for the world data
     def __init__(self, seed=random.randint(1, 100000)): #seed is used and stored for ease in the database, progression is used and stored in the database for the save as well (world events and other thigns)
         self.seed = seed
 
     def return_worldData(self):
+        #return worlddata as a string
         return {"seed":self.seed}
 
 class saveData:
+    #class for saving
     def __init__(self, playerData, worldData):
         self.player = playerData
         self.world =  worldData
 
     def return_save(self):
+        #return save as a dictionary
         return [self.player.return_playerData(), self.world.return_worldData()]
