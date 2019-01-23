@@ -470,17 +470,20 @@ class Client:
                     for x in slots:
                         if x.rect.collidepoint(e.pos):
                             if x.invSlot in ["weapon", "special", "ring", "armour"]:
-                                if x.invSlot == "weapon" and self.Player.playerClass.name == Player.warriorClass.name:
-                                    tohold = x.ret_InvElemt()
-                                    slots.remove(x)
+                                if x.invSlot == "weapon":
                                     if holding:
-                                        if int(holding.Itemstack.material.SlotType) in [1, 4, 7]:
-                                            self.Player.inventory.weapon = holding.Itemstack
-                                        else:
-                                            continue
+                                        if self.Player.playerClass.slotTypes[0] == int(holding.Itemstack.material.SlotType):
+                                            tohold = x.ret_InvElemt()
+                                            slots.remove(x)
+                                            if int(holding.Itemstack.material.SlotType) == 1:
+                                                self.Player.inventory.weapon = holding.Itemstack
+                                            else:
+                                                continue
+                                            holding = tohold
                                     else:
+                                        holding = x.ret_InvElemt()
                                         self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
-                                    holding = tohold
+                                        slots.remove(x)
 
                                 continue
                             tohold = x.ret_InvElemt()
