@@ -27,6 +27,16 @@
                 <Chance>5</Chance>
                 <Amount>1</Amount>
             </DropCell>
+            <DropCell>
+                <itemId>0xb01</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc01</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
@@ -131,6 +141,21 @@
                 <Chance>50</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
+            <DropCell>
+                <itemId>0xa02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
@@ -209,6 +234,21 @@
                 <Chance>50</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
+            <DropCell>
+                <itemId>0xa02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc02</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
@@ -234,6 +274,21 @@
                 <itemId>0x000</itemId>
                 <Chance>50</Chance>
                 <Amount>1-5</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xa03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
             </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
@@ -261,6 +316,21 @@
                 <Chance>50</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
+                 <DropCell>
+                <itemId>0xa03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc03</itemId>
+                <Chance>1</Chance>
+                <Amount>1</Amount>
+            </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
@@ -275,10 +345,10 @@
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
-            <Hitpoints>30</Hitpoints>
-            <Defence>4</Defence>
-            <Speed>3</Speed>
-            <Attack>4-5</Attack>
+            <Hitpoints>300</Hitpoints>
+            <Defence>10</Defence>
+            <Speed>5</Speed>
+            <Attack>20-40</Attack>
             <Dexterity>2</Dexterity>
         </stats>
         <DropTable>
@@ -290,6 +360,31 @@
             <DropCell>
                 <itemId>0xc03</itemId>
                 <Chance>2</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xa03</itemId>
+                <Chance>2</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb03</itemId>
+                <Chance>2</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xa00</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xb00</itemId>
+                <Chance>5</Chance>
+                <Amount>1</Amount>
+            </DropCell>
+            <DropCell>
+                <itemId>0xc00</itemId>
+                <Chance>5</Chance>
                 <Amount>1</Amount>
             </DropCell>
         </DropTable>
