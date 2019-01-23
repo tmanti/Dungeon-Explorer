@@ -578,7 +578,7 @@ class Client:
         mpbar = pygame.Surface((550, 10))
         pygame.draw.rect(mpbar, dataTypes.BLUE, (0, 0, (self.Player.currentMp / self.Player.stats.magic) * 550, 10))
 
-        xpBar
+        #xpBar = pygame.Surface((550, 5))
 
         self.screen.blit(hpbar, (dataTypes.w // 4, dataTypes.h - 125))
         self.screen.blit(mpbar, (dataTypes.w // 4, dataTypes.h - 100))

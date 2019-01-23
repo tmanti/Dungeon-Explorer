@@ -14,7 +14,7 @@ class spriteRef:
     def __init__(self, spriteFile, index, foldername):
         self.fileLocation = "resources/Sprites/" + foldername + "/" + spriteFile.lower() + ".png"
         self.index = index.split("x")
-        for x in range(len(self.index)):
+        for x in range(2):
             #print(x)
             self.index[x] = int(self.index[x])*8
 
