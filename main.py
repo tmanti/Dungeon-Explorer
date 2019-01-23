@@ -62,11 +62,12 @@ def ParseSaveData(saveData):
         dataTypes.entityStats(hp=saveData[0]['stats']['hp'], mp=saveData[0]['stats']['mp'], defen=saveData[0]['stats']['def'] ,spd=saveData[0]['stats']['spd'], atk=saveData[0]['stats']['atk'], dex=saveData[0]['stats']['dex'], vit=saveData[0]['stats']['vit']),
         Player.className[saveData[0]['class']],
         dataTypes.Level(saveData[0]['level']['lvl'], saveData[0]['level']['exp'])
-    )
+    )#create playerdata object
     worldData = dataTypes.worldData(saveData[1]['seed'])
 
     return dataTypes.saveData(player, worldData)
 
+#inventory elemnt
 class invElement(pygame.sprite.Sprite):
     def __init__(self, x, y, image, slot, Itemstack):
         super().__init__()
@@ -359,8 +360,6 @@ class Client:
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
                     self.state = 3
-                if e.key == p.K_SPACE:
-                    self.Player.inventory.container.AddTo(item.ItemStack(5, item.allItems["0x000"]))
             if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:
                 self.Player.Fire(pygame.mouse.get_pos())
 
@@ -448,8 +447,6 @@ class Client:
                             self.Player.inventory.container.contents[holding.invSlot] = holding.Itemstack
                         load = False
                         self.state = 2
-                    if e.key == p.K_SPACE:
-                        self.Player.inventory.container.AddTo(item.ItemStack(5, item.allItems["0x000"]))
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
                     mouse = p.mouse.get_pos()  # get mouse position
                     for x in buttons:
@@ -490,8 +487,6 @@ class Client:
                                 holding=None
                             else:
                                 holding = tohold
-
-
 
                 methods.text_to_screen("PAUSED", dataTypes.w//2, dataTypes.h//8, self.screen, font=dataTypes.GUI_FONT_BIG)
 
@@ -548,6 +543,9 @@ class Client:
         mpbar = pygame.Surface((550, 10))
         pygame.draw.rect(mpbar, dataTypes.BLUE, (0,0, (self.Player.currentMp/self.Player.stats.magic)*550, 10))
 
+        #expBar = pygame.Surface((550, 5))
+        #pygame.draw.rect()
+
         self.screen.blit(hpbar, (dataTypes.w//4, dataTypes.h-125))
         self.screen.blit(mpbar, (dataTypes.w//4, dataTypes.h-100))
 
@@ -579,6 +577,8 @@ class Client:
 
         mpbar = pygame.Surface((550, 10))
         pygame.draw.rect(mpbar, dataTypes.BLUE, (0, 0, (self.Player.currentMp / self.Player.stats.magic) * 550, 10))
+
+        xpBar
 
         self.screen.blit(hpbar, (dataTypes.w // 4, dataTypes.h - 125))
         self.screen.blit(mpbar, (dataTypes.w // 4, dataTypes.h - 100))

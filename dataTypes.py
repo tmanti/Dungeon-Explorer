@@ -3,6 +3,7 @@ import random
 import pygame
 import spritesheet
 
+#define constants
 FPS = 120
 frames = FPS/8
 
@@ -30,19 +31,25 @@ GUI_FONT_SMALL = pygame.font.Font("Pixel-Miners.otf", 20)
 GUI_FONT_SMALLER = pygame.font.Font("Pixel-Miners.otf", 17)
 GUI_FONT_BUTTON = pygame.font.Font("Pixel-Miners.otf", 27)
 
+#position object
 class pos:
     def __init__(self, x, y):
+        #set variables
         self.x = x
         self.y = y
 
+        #override methods
         self.__repr__ = self.__str__
 
     def return_Position(self):
+        #returns dict
         return {"x":self.x, "y":self.y}
 
+    #returns string
     def __str__(self):
         return str(self.x)+ ":" + str(self.y)
 
+#level object
 class Level:
     def __init__(self, lvl, exp):
         self.lvl = int(lvl)
