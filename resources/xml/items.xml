@@ -85,7 +85,7 @@
 		<SlotType>4</SlotType>
 		<Tier>1</Tier>
 		<Description>A basic short staff</Description>
-		<Damage>1-4</Damage>
+		<Damage>1-2</Damage>
 		<RateOfFire>2</RateOfFire>
 		<Range>1</Range>
 	</Object>

@@ -10,6 +10,7 @@ import json
 import enemy
 import methods
 import random
+import spritesheet
 
 # TODO LIST - make someone say mada mada
 #for miller
@@ -73,7 +74,7 @@ class Client:
 
     def __init__(self):
         #initialize pygame and the screen
-        self.screen = p.display.set_mode((dataTypes.w, dataTypes.h), pygame.FULLSCREEN)
+        self.screen = p.display.set_mode((dataTypes.w, dataTypes.h))#, pygame.FULLSCREEN)
         pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
         self.state = 1
@@ -91,6 +92,32 @@ class Client:
         self.enemies = p.sprite.Group()
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
+
+        warrSS = spritesheet.spritesheet("resources/Sprites/items/warrior.png")
+        warriorSlots = {
+            "weapon": warrSS.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "special": warrSS.image_at((8, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "armour": warrSS.image_at((0, 8, 8, 8), colorkey=dataTypes.WHITE),
+            "ring": warrSS.image_at((8, 8, 8, 8), colorkey=dataTypes.WHITE)
+        }
+
+        rangerSS = spritesheet.spritesheet("resources/Sprites/items/ranger.png")
+        rangerSlots = {
+            "weapon": rangerSS.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "special": rangerSS.image_at((8, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "armour": rangerSS.image_at((0, 8, 8, 8), colorkey=dataTypes.WHITE),
+            "ring": rangerSS.image_at((8, 8, 8, 8), colorkey=dataTypes.WHITE)
+        }
+
+        mageSS = spritesheet.spritesheet("resources/Sprites/items/mage.png")
+        mageSlots = {
+            "weapon": mageSS.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "special": mageSS.image_at((8, 0, 8, 8), colorkey=dataTypes.WHITE),
+            "armour": mageSS.image_at((0, 8, 8, 8), colorkey=dataTypes.WHITE),
+            "ring": mageSS.image_at((8, 8, 8, 8), colorkey=dataTypes.WHITE)
+        }
+
+        self.slots = {"Warrior": warriorSlots, "Ranger": rangerSlots, "Mage": mageSlots}
 
     def run(self):
         #main game loop
@@ -287,7 +314,9 @@ class Client:
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
                     self.state = 3
-            if e.type == pygame.USEREVENT+1:
+                if e.key == p.K_SPACE:
+                    self.Player.inventory.container.AddTo(item.ItemStack(5, item.allItems["0x000"]))
+            if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:
                 self.Player.Fire(pygame.mouse.get_pos())
 
         loadedChunks = []
@@ -328,23 +357,16 @@ class Client:
         #deal damage to object collided with
         hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, False, False)
         for hit in hits:
-            hits[hit][0].hit(hit.damage)
+            outcome = hits[hit][0].hit(hit.damage)
+            if outcome[0]:
+                self.Player.level.exp+=outcome[2]
 
         self.Player.update(self.gennedChunks)
 
         self.screen.blit(self.Player.playerAnim, (dataTypes.w/2-16 + self.Player.drawOffset, dataTypes.h/2-16))
 
         #gui
-        pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
-
-        if self.Player.inventory.weapon.material.image:
-            self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w//4+100, 950))
-        if self.Player.inventory.special.material.image:
-            self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w//4+200, 950))
-        if self.Player.inventory.armour.material.image:
-            self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w//4+300, 950))
-        if self.Player.inventory.ring.material.image:
-            self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w//4+400, 950))
+        self.drawPlayerUI()
 
         p.display.update()
 
@@ -358,10 +380,18 @@ class Client:
 
         while load:
             for e in pygame.event.get():
+                if e.type == p.QUIT:
+                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+                    p.quit()
+                    exit(0)
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
                         load = False
                         self.state = 2
+                    if e.key == p.K_SPACE:
+                        self.Player.inventory.container.AddTo(item.ItemStack(5, item.allItems["0x000"]))
+                    if e.key == p.K_LSHIFT:
+                        print(self.Player.inventory.container.contents["0"].amount)
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
                     mouse = p.mouse.get_pos()  # get mouse position
                     for x in buttons:
@@ -380,22 +410,37 @@ class Client:
                 Inventory.fill(dataTypes.DARK_GRAY)
                 buttons.update(Inventory)
 
-                pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
-
-                if self.Player.inventory.weapon.material.image:
-                    self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w // 4 + 100, 950))
-                if self.Player.inventory.special.material.image:
-                    self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w // 4 + 200, 950))
-                if self.Player.inventory.armour.material.image:
-                    self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w // 4 + 300, 950))
-                if self.Player.inventory.ring.material.image:
-                    self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w // 4 + 400, 950))
+                for y in range(5):
+                    for x in range(6):
+                        if self.Player.inventory.container.contents[str(x+6*y)].material.image:
+                            Inventory.blit(pygame.transform.scale(self.Player.inventory.container.contents[str(x+6*y)].material.image, (60, 60)), (64*x+125, 64*y+100))
+                            methods.text_to_screen(str(self.Player.inventory.container.contents[str(x+6*y)].amount), 64*x+125+50, 64*y+100+50, Inventory, font=dataTypes.GUI_FONT_SMALLER)
+                        else:
+                            methods.text_to_screen(str(x+6*y), 64*x+125, 64*y+100, Inventory, font=dataTypes.GUI_FONT_SMALL, center=False)
 
                 self.screen.blit(Inventory, (200, 200))
 
                 display.flip()
 
+    def drawPlayerUI(self):
+        pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
 
+        if self.Player.inventory.weapon.material.image:
+            self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w // 4 + 100, 950))
+        else:
+            self.screen.blit(self.slots[self.Player.playerClass.name]["weapon"], (dataTypes.w // 4 + 100, 950))
+        if self.Player.inventory.special.material.image:
+            self.screen.blit(self.Player.inventory.special.material.image, (dataTypes.w // 4 + 200, 950))
+        else:
+            self.screen.blit(self.slots[self.Player.playerClass.name]["special"], (dataTypes.w // 4 + 200, 950))
+        if self.Player.inventory.armour.material.image:
+            self.screen.blit(self.Player.inventory.armour.material.image, (dataTypes.w // 4 + 300, 950))
+        else:
+            self.screen.blit(self.slots[self.Player.playerClass.name]["armour"], (dataTypes.w // 4 + 300, 950))
+        if self.Player.inventory.ring.material.image:
+            self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w // 4 + 400, 950))
+        else:
+            self.screen.blit(self.slots[self.Player.playerClass.name]["ring"], (dataTypes.w // 4 + 400, 950))
 
     def Load(self, name):
         # TEMP - load player save

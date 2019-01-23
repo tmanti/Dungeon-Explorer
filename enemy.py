@@ -168,8 +168,10 @@ class Goblin(pygame.sprite.Sprite):
         print("Hit for " + str(damage))
         self.stats.health-=damage
         if self.stats.health <= 0:
-            print(self.data.droptable.get_Drops())
             self.kill()
+            return [True, self.data.droptable.get_Drops(), random.randint(1, 3)] #did kill - #drops - #exp gained
+        else:
+            return [False]
 
 
 

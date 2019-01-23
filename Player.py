@@ -197,6 +197,7 @@ class player(pygame.sprite.Sprite):
 
         if self.attacking != attacking and attacking == True and self.inventory.weapon.material.type != "0x000":
             pygame.time.set_timer(pygame.USEREVENT+1, 2500//self.stats.dexterity+self.inventory.weapon.material.rateOfFire)
+            print(2500//self.stats.dexterity+self.inventory.weapon.material.rateOfFire)
             self.attacking = True
 
         if self.attacking or self.AttackingToggled:

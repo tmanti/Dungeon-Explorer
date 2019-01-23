@@ -1,6 +1,7 @@
 import item
 import random
 import pygame
+import spritesheet
 
 FPS = 120
 frames = FPS/8
@@ -74,14 +75,32 @@ class container:
         if contents:
             self.contents = {}
             for x in range(self.size):
-                self.contents[str(x)] = item.ItemStack(1, item.allItems[contents[str(x)]])
+                self.contents[str(x)] = item.ItemStack(contents[str(x)][0],
+                                                       item.allItems[contents[str(x)][1]])
         else:
             self.contents={str(_):item.ItemStack(1, item.Nothing) for _ in range(self.size)}
+
+    def AddTo(self, ItemStack):
+        contains, index = self.contains(ItemStack.material.type)
+        if contains:
+            self.contents[index].amount += ItemStack.amount
+        else:
+            for x in self.contents:
+                if self.contents[x].material.type == item.Nothing.type:
+                    self.contents[x] = ItemStack
+                    return
+
+    def contains(self, type):
+        for x in self.contents:
+            if self.contents[x].material.type == "type":
+                return True, x
+        else:
+            return False, None
 
     def return_Container(self):
         toReturn = {}
         for x in self.contents:
-            toReturn[x] = self.contents[x].material.type
+            toReturn[x] = [self.contents[x].amount, self.contents[x].material.type]
         return toReturn
 
 class playerInventory:
@@ -94,9 +113,6 @@ class playerInventory:
 
     def return_playerInventory(self):
         return {"weapon":self.weapon.material.type, "special":self.special.material.type, "armour":self.armour.material.type, "ring":self.ring.material.type, "container":self.container.return_Container()}
-
-    def newWarriorInv(self):
-        self.weapon = "Test"
 
 class playerData:
     def __init__(self, position, inventory, stats, classType, Level):
