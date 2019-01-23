@@ -363,7 +363,7 @@ class Client:
                 if e.key == p.K_f:
                     contains, index = self.Player.inventory.container.containsGroup("Health")
                     if contains:
-                        self.Player.currentHp += self.Player.inventory.container.contents[index].useMeta[1]
+                        self.Player.currentHp += int(self.Player.inventory.container.contents[index].material.useMeta[1])
                         self.Player.inventory.container.contents[index].amount -= 1
 
                         if self.Player.currentHp > self.Player.stats.health:
@@ -419,6 +419,8 @@ class Client:
             outcome = hits[hit][0].hit(hit.damage)
             if outcome[0]:
                 self.Player.level.exp+=outcome[2]
+                if self.Player.level.exp > 100:
+                    self.Player.levelUp()
                 for x in outcome[1]:
                     self.Player.inventory.container.AddTo(x)
                     print("Item Get" + x.material.name)
@@ -552,11 +554,14 @@ class Client:
         mpbar = pygame.Surface((550, 10))
         pygame.draw.rect(mpbar, dataTypes.BLUE, (0,0, (self.Player.currentMp/self.Player.stats.magic)*550, 10))
 
-        #expBar = pygame.Surface((550, 5))
-        #pygame.draw.rect()
+        expBar = pygame.Surface((550, 5))
+        pygame.draw.rect(expBar, (173,216,230), (0, 0, (self.Player.level.exp/100)*550, 5))
 
         self.screen.blit(hpbar, (dataTypes.w//4, dataTypes.h-125))
         self.screen.blit(mpbar, (dataTypes.w//4, dataTypes.h-100))
+        self.screen.blit(expBar, (dataTypes.w//4, dataTypes.h-85))
+        methods.text_to_screen("Lvl: "+str(self.Player.level.lvl), dataTypes.w//8, 950, self.screen, font=dataTypes.GUI_FONT)
+
 
     def drawPlayerUISlots(self, group):
         pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
@@ -587,10 +592,12 @@ class Client:
         mpbar = pygame.Surface((550, 10))
         pygame.draw.rect(mpbar, dataTypes.BLUE, (0, 0, (self.Player.currentMp / self.Player.stats.magic) * 550, 10))
 
-        #xpBar = pygame.Surface((550, 5))
+        expBar = pygame.Surface((550, 5))
+        pygame.draw.rect(expBar, (173,216,230), (0, 0, (self.Player.level.exp/100)*550, 5))
 
         self.screen.blit(hpbar, (dataTypes.w // 4, dataTypes.h - 125))
         self.screen.blit(mpbar, (dataTypes.w // 4, dataTypes.h - 100))
+        self.screen.blit(expBar, (dataTypes.w//4, dataTypes.h-85))
 
     def Load(self, name):
         # TEMP - load player save

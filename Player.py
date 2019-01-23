@@ -247,7 +247,10 @@ class player(pygame.sprite.Sprite):
 
     def hit(self, damage):
         print("took " + str(damage))
-        self.currentHp-=damage-self.stats.defence
+        dmg =damage-self.stats.defence
+        if dmg <= 0:
+            dmg=1
+        self.currentHp-=dmg
         if self.currentHp <= 0:
             return True
         else:
@@ -260,6 +263,9 @@ class player(pygame.sprite.Sprite):
         self.stats.vitality += 2
         self.stats.speed += 1
         self.stats.defence += 2
+
+        self.level.exp = self.level.exp%100
+        self.level.lvl+=1
 
 
 def generateNewPlayerData(playerClass):
