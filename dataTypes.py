@@ -92,7 +92,7 @@ class container:
 
     def contains(self, type):
         for x in self.contents:
-            if self.contents[x].material.type == "type":
+            if self.contents[x].material.type == type:
                 return True, x
         else:
             return False, None

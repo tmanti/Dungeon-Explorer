@@ -67,6 +67,51 @@ def ParseSaveData(saveData):
 
     return dataTypes.saveData(player, worldData)
 
+class invElement(pygame.sprite.Sprite):
+    def __init__(self, x, y, image, slot, Itemstack):
+        super().__init__()
+        self.position = pos(x, y)
+        self.image = image
+
+        self.Itemstack = Itemstack
+
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.position.x, self.position.y)
+        self.invSlot = slot
+
+class InvSlot(pygame.sprite.Sprite):
+    def __init__(self, x, y, slot, itemStack=None, replacementImage = None):
+        super().__init__()
+        self.position = pos(x, y)
+
+        self.invSlot = slot
+
+        if itemStack:
+            icon = pygame.transform.scale(itemStack.material.image, (60, 60))
+            methods.text_to_screen(str(itemStack.amount), 50, 50, icon,font=dataTypes.GUI_FONT_SMALLER)
+            self.image = icon
+        elif replacementImage:
+            self.image = replacementImage
+        else:
+            self.image =pygame.Surface((64,64))
+            methods.text_to_screen(self.invSlot, 32, 32, self.image, font=dataTypes.GUI_FONT_SMALL, center=True)
+
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.position.x, self.position.y)
+
+        if itemStack:
+            self.elem = invElement(self.position.x, self.position.y, self.image, self.invSlot, itemStack)
+        else:
+            self.elem = None
+
+    def ret_InvElemt(self):
+        if self.elem:
+            a= self.elem
+            self.elem= item.ItemStack(1, item.allItems["0xfff"])
+            return a
+        else:
+            return None
+
 #main client object
 class Client:
     #define constants
@@ -351,6 +396,11 @@ class Client:
             x.bullets.update(self.Player.position)
             x.bullets.draw(self.screen)
             hits = pygame.sprite.spritecollide(self.Player, x.bullets, True)
+            for hit in hits:
+                dead = self.Player.hit(hit.damage)
+                if dead:
+                    dbInt.deleteUser(self.name)
+                    self.state = 1
 
         self.Player.bullets.update(self.Player.position)
         self.Player.bullets.draw(self.screen)
@@ -361,6 +411,9 @@ class Client:
             outcome = hits[hit][0].hit(hit.damage)
             if outcome[0]:
                 self.Player.level.exp+=outcome[2]
+                for x in outcome[1]:
+                    self.Player.inventory.container.AddTo(x)
+                    print("Item Get" + x.material.name)
 
         self.Player.update(self.gennedChunks)
 
@@ -379,20 +432,24 @@ class Client:
         buttons = p.sprite.Group()
         buttons.add(methods.backButton(500, 550, text="Back To Menu", fonts=[dataTypes.GUI_FONT_SMALL, dataTypes.GUI_FONT_SMALLER], boxOffset=200))
 
+        slots = p.sprite.Group()
+
+        holding = None
+
         while load:
             for e in pygame.event.get():
                 if e.type == p.QUIT:
-                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
+                    #dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
                     p.quit()
                     exit(0)
                 if e.type == p.KEYDOWN:
                     if e.key == p.K_ESCAPE:
+                        if holding:
+                            self.Player.inventory.container.contents[holding.invSlot] = holding.Itemstack
                         load = False
                         self.state = 2
                     if e.key == p.K_SPACE:
                         self.Player.inventory.container.AddTo(item.ItemStack(5, item.allItems["0x000"]))
-                    if e.key == p.K_LSHIFT:
-                        print(self.Player.inventory.container.contents["0"].amount)
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
                     mouse = p.mouse.get_pos()  # get mouse position
                     for x in buttons:
@@ -402,6 +459,39 @@ class Client:
                                 dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
                                 load=False
                                 self.state = 1
+                    for x in slots:
+                        if x.rect.collidepoint(e.pos):
+                            if x.invSlot in ["weapon", "special", "ring", "armour"]:
+                                if x.invSlot == "weapon" and self.Player.playerClass.name == Player.warriorClass.name:
+                                    tohold = x.ret_InvElemt()
+                                    slots.remove(x)
+                                    if holding:
+                                        if int(holding.Itemstack.material.SlotType) in [1, 4, 7]:
+                                            self.Player.inventory.weapon = holding.Itemstack
+                                        else:
+                                            continue
+                                    else:
+                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                    holding = tohold
+
+                                continue
+                            tohold = x.ret_InvElemt()
+                            slots.remove(x)
+                            traded = False
+                            if holding:
+                                if self.Player.inventory.container.contents[x.invSlot].material.type == holding.Itemstack.material.type:
+                                    self.Player.inventory.container.contents[x.invSlot].amount+= holding.Itemstack.amount
+                                    traded=True
+                                else:
+                                    self.Player.inventory.container.contents[x.invSlot] = holding.Itemstack
+                            else:
+                                self.Player.inventory.container.contents[x.invSlot] = item.ItemStack(1, item.allItems["0xfff"])
+                            if traded:
+                                holding=None
+                            else:
+                                holding = tohold
+
+
 
                 methods.text_to_screen("PAUSED", dataTypes.w//2, dataTypes.h//8, self.screen, font=dataTypes.GUI_FONT_BIG)
 
@@ -411,15 +501,23 @@ class Client:
                 Inventory.fill(dataTypes.DARK_GRAY)
                 buttons.update(Inventory)
 
+                slots.empty()
+
                 for y in range(5):
                     for x in range(6):
                         if self.Player.inventory.container.contents[str(x+6*y)].material.image:
-                            Inventory.blit(pygame.transform.scale(self.Player.inventory.container.contents[str(x+6*y)].material.image, (60, 60)), (64*x+125, 64*y+100))
-                            methods.text_to_screen(str(self.Player.inventory.container.contents[str(x+6*y)].amount), 64*x+125+50, 64*y+100+50, Inventory, font=dataTypes.GUI_FONT_SMALLER)
+                            slots.add(InvSlot(64*x+125+200+16, 64*y+100+200+16, str(x+6*y), itemStack=self.Player.inventory.container.contents[str(x+6*y)]))
                         else:
-                            methods.text_to_screen(str(x+6*y), 64*x+125, 64*y+100, Inventory, font=dataTypes.GUI_FONT_SMALL, center=False)
+                            slots.add(InvSlot(64*x+125+200+16, 64*y+100+200+16, str(x+6*y)))
 
                 self.screen.blit(Inventory, (200, 200))
+
+                self.drawPlayerUISlots(slots)
+
+                slots.draw(self.screen)
+                if holding:
+                    holding.rect.center = p.mouse.get_pos()
+                    self.screen.blit(holding.image, holding.rect)
 
                 display.flip()
 
@@ -428,6 +526,7 @@ class Client:
 
         if self.Player.inventory.weapon.material.image:
             self.screen.blit(self.Player.inventory.weapon.material.image, (dataTypes.w // 4 + 100, 950))
+
         else:
             self.screen.blit(self.slots[self.Player.playerClass.name]["weapon"], (dataTypes.w // 4 + 100, 950))
         if self.Player.inventory.special.material.image:
@@ -443,7 +542,46 @@ class Client:
         else:
             self.screen.blit(self.slots[self.Player.playerClass.name]["ring"], (dataTypes.w // 4 + 400, 950))
 
+        hpbar = pygame.Surface((550, 20))
+        pygame.draw.rect(hpbar, dataTypes.RED, (0, 0, (self.Player.currentHp/self.Player.stats.health)*550, 20))
 
+        mpbar = pygame.Surface((550, 10))
+        pygame.draw.rect(mpbar, dataTypes.BLUE, (0,0, (self.Player.currentMp/self.Player.stats.magic)*550, 10))
+
+        self.screen.blit(hpbar, (dataTypes.w//4, dataTypes.h-125))
+        self.screen.blit(mpbar, (dataTypes.w//4, dataTypes.h-100))
+
+    def drawPlayerUISlots(self, group):
+        pygame.draw.rect(self.screen, dataTypes.GRAY, (0, 850, dataTypes.w, 150))
+
+        if self.Player.inventory.weapon.material.image:
+            group.add(InvSlot(dataTypes.w // 4 + 100, 950, "weapon", itemStack=self.Player.inventory.weapon))
+        else:
+            group.add(InvSlot(dataTypes.w//4+100, 950, "weapon", replacementImage=self.slots[self.Player.playerClass.name]["weapon"]))
+        if self.Player.inventory.special.material.image:
+            group.add(InvSlot(dataTypes.w // 4 + 200, 950, "special", itemStack=self.Player.inventory.special))
+        else:
+            group.add(InvSlot(dataTypes.w // 4 + 200, 950, "special",
+                              replacementImage=self.slots[self.Player.playerClass.name]["special"]))
+        if self.Player.inventory.armour.material.image:
+            group.add(InvSlot(dataTypes.w // 4 + 300, 950, "armour", itemStack=self.Player.inventory.special))
+        else:
+            group.add(InvSlot(dataTypes.w // 4 + 300, 950, "armour",
+                              replacementImage=self.slots[self.Player.playerClass.name]["armour"]))
+        if self.Player.inventory.ring.material.image:
+            group.add(InvSlot(dataTypes.w // 4 + 400, 950, "ring", itemStack=self.Player.inventory.ring))
+        else:
+            group.add(InvSlot(dataTypes.w // 4 + 400, 950, "ring",
+                              replacementImage=self.slots[self.Player.playerClass.name]["ring"]))
+
+        hpbar = pygame.Surface((550, 20))
+        pygame.draw.rect(hpbar, dataTypes.RED, (0, 0, (self.Player.currentHp / self.Player.stats.health) * 550, 20))
+
+        mpbar = pygame.Surface((550, 10))
+        pygame.draw.rect(mpbar, dataTypes.BLUE, (0, 0, (self.Player.currentMp / self.Player.stats.magic) * 550, 10))
+
+        self.screen.blit(hpbar, (dataTypes.w // 4, dataTypes.h - 125))
+        self.screen.blit(mpbar, (dataTypes.w // 4, dataTypes.h - 100))
 
     def Load(self, name):
         # TEMP - load player save

@@ -83,6 +83,9 @@ class player(pygame.sprite.Sprite):
         self.inventory = setupData.inventory
         self.stats = setupData.stats
 
+        self.currentHp = self.stats.health
+        self.currentMp = self.stats.magic
+
         self.bullets = pygame.sprite.Group()
 
         self.level = setupData.level
@@ -195,9 +198,8 @@ class player(pygame.sprite.Sprite):
             self.attacking = False
             pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
-        if self.attacking != attacking and attacking == True and self.inventory.weapon.material.type != "0x000":
-            pygame.time.set_timer(pygame.USEREVENT+1, 2500//self.stats.dexterity+self.inventory.weapon.material.rateOfFire)
-            print(2500//self.stats.dexterity+self.inventory.weapon.material.rateOfFire)
+        if self.attacking != attacking and attacking == True and self.inventory.weapon.material.SlotType == str(self.playerClass.slotTypes[0]):
+            pygame.time.set_timer(pygame.USEREVENT+1, 2500//(self.stats.dexterity+self.inventory.weapon.material.rateOfFire))
             self.attacking = True
 
         if self.attacking or self.AttackingToggled:
@@ -228,6 +230,8 @@ class player(pygame.sprite.Sprite):
         self.position.x += velocity[0]
         self.position.y += velocity[1]
 
+        self.currentHp += self.stats.vitality/2000
+
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass, self.level)
 
@@ -239,6 +243,15 @@ class player(pygame.sprite.Sprite):
         moveToPos.y += self.position.y
         startPos = dataTypes.pos(self.position.x+dataTypes.w//2, self.position.y+dataTypes.h//2)
         self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, startPos, moveToPos, angle, random.randint(self.inventory.weapon.material.damage[0], self.inventory.weapon.material.damage[1]), toTravel=self.playerClass.projectileDistance))
+
+    def hit(self, damage):
+        print("took " + str(damage))
+        self.currentHp-=damage
+        if self.currentHp <= 0:
+            return True
+        else:
+            return False
+
 
 def generateNewPlayerData(playerClass):
     return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))

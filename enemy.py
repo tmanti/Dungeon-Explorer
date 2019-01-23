@@ -83,10 +83,13 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.data = data
 
-        self.stats = dataTypes.entityStats(hp=stats["hp"], defen=stats["def"], spd=stats["spd"], atk=stats["atk"],
+        self.stats = dataTypes.entityStats(hp=stats["hp"], defen=stats["def"], spd=stats["spd"],
                                            dex=stats["dex"])
-
         self.position = dataTypes.pos(x, y)
+
+        self.damage = stats["atk"]
+        if len(self.damage) == 1:
+            self.damage.append(self.damage[0])
 
         self.canAttack = True
         self.wait = 0
@@ -115,7 +118,7 @@ class Enemy(pygame.sprite.Sprite):
         self.tilePos = dataTypes.pos(self.position.x // 32, self.position.y // 32)
         self.chunkPos = dataTypes.pos(self.tilePos.x // dataTypes.chunkSize, self.tilePos.y // dataTypes.chunkSize)
         self.HpBar = pygame.Surface((50, 10))
-        pygame.draw.rect(self.HpBar, dataTypes.RED, (0, 0, ((50 / goblins[self.data.type].stats["hp"]) * self.stats.health), 10))
+        pygame.draw.rect(self.HpBar, dataTypes.RED, (0, 0, ((50 / allMobs[self.data.type].stats["hp"]) * self.stats.health), 10))
 
         velo = [0, 0]
 
@@ -166,7 +169,7 @@ class Enemy(pygame.sprite.Sprite):
         moveToPos = dataTypes.pos(self.projRange*math.cos(angle/55.47)+dataTypes.w//2, self.projRange*math.sin(-angle/55.47)+ dataTypes.h//2)
         moveToPos.x+=playerPos.x
         moveToPos.y += playerPos.y
-        self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.position.x, self.position.y), moveToPos, angle, toTravel=self.projRange*32))
+        self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.position.x, self.position.y), moveToPos, angle, toTravel=self.projRange*32, damage=random.randint(self.damage[0], self.damage[1])))
 
     def hit(self, damage):
         print("Hit for " + str(damage))

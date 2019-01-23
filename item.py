@@ -68,7 +68,7 @@ class ItemStack:
     def return_Itemstack(self):
         return [self.amount, self.material]
 
-Nothing = Material("None", "0xfff", "None", None, None, None)
+Nothing = Material("None", "0xfff", "None", 11, None, None)
 allItems = {"0xfff":Nothing}
 Equipment = {}
 
@@ -97,7 +97,7 @@ def init():
             allItems[child.get('type')] = Material(child.get('id'),
                                                    child.get('type'),
                                                    itemClass,
-                                                   child.find("SlotType"),
-                                                   child.find("Description"),
+                                                   child.find("SlotType").text,
+                                                   child.find("Description").text,
                                                    texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"),
-                                                   use=[child.find("Use").find("Action"), child.find("Use").find("Amount")])
+                                                   use=[child.find("Use").find("Action").text, child.find("Use").find("Amount").text])

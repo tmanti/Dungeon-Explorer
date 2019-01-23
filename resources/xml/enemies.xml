@@ -37,7 +37,7 @@
 			<Index>1x0</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -63,7 +63,7 @@
 			<Index>0x1</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -89,7 +89,7 @@
         <Index>1x1</Index>
     </Texture>
     <ProjectileTexture>
-        <File>projectile</File>
+        <File>projectiles</File>
         <Index>0x0</Index>
     </ProjectileTexture>
     <stats>
@@ -115,7 +115,7 @@
             <Index>4x1</Index>
         </Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -141,7 +141,7 @@
 			<Index>4x2</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -167,7 +167,7 @@
 			<Index>5x1</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -193,7 +193,7 @@
 			<Index>5x2</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -219,7 +219,7 @@
 			<Index>0x1</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -245,7 +245,7 @@
 			<Index>2x0x2</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -271,7 +271,7 @@
 			<Index>0x2x2</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
@@ -297,7 +297,7 @@
 			<Index>0x4x2</Index>
 		</Texture>
         <ProjectileTexture>
-            <File>projectile</File>
+            <File>projectiles</File>
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
