@@ -27,7 +27,7 @@ class spriteRef:
         return "[%s, %s]" % (self.index, self.fileLocation)
 
 class Material:
-    def __init__(self, name, type, itemClass, slotType, desc, tier=None, texture=None, rateOfFire = None, damage = None, range=None, projectile=None, use=[]):
+    def __init__(self, name, type, itemClass, slotType, desc, tier=None, texture=None, rateOfFire = None, damage = None, range=None, projectile=None, use=[], group=None):
         self.name = name
         self.type = type
         self.itemClass = itemClass
@@ -49,13 +49,9 @@ class Material:
         self.damage = damage
         self.range = range
         self.useMeta = use
+        self.group = group
 
         self.__repr__ = self.__str__
-
-
-    def use(self):
-        if self.itemClass == "equipment":
-            pass
 
     def __str__(self):
         return "<%s type=%s id=%s {SlotType=%s, description=%s, Texture=%s}>" % (self.itemClass, self.type, self.name, self.SlotType, self.description, self.Texture)
@@ -99,5 +95,6 @@ def init():
                                                    itemClass,
                                                    child.find("SlotType").text,
                                                    child.find("Description").text,
+                                                   group=child.find("Group").text,
                                                    texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"),
                                                    use=[child.find("Use").find("Action").text, child.find("Use").find("Amount").text])

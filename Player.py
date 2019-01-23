@@ -230,7 +230,8 @@ class player(pygame.sprite.Sprite):
         self.position.x += velocity[0]
         self.position.y += velocity[1]
 
-        self.currentHp += self.stats.vitality/2000
+        if self.currentHp < self.stats.health:
+            self.currentHp += self.stats.vitality/2000
 
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass, self.level)
@@ -262,7 +263,7 @@ class player(pygame.sprite.Sprite):
 
 
 def generateNewPlayerData(playerClass):
-    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=1, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
 
 #testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass(), dataTypes.Level(1, 0))
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

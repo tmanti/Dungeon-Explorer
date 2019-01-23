@@ -104,6 +104,13 @@ class container:
         else:
             return False, None
 
+    def containsGroup(self, groupId):
+        for x in self.contents:
+            if self.contents[x].material.group == groupId:
+                return True, x
+        else:
+            return False, None
+
     def return_Container(self):
         toReturn = {}
         for x in self.contents:

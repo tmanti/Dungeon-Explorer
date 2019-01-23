@@ -219,6 +219,7 @@
 	<Object id="Small Health Potion" type="0x000">
 		<Class>Consumable</Class>
 		<Item/>
+		<Group>Health</Group>
 		<Texture>
 			<File>items</File>
 			<Index>0x0</Index>

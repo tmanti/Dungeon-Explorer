@@ -360,6 +360,15 @@ class Client:
             if e.type == p.KEYDOWN:
                 if e.key == p.K_ESCAPE:
                     self.state = 3
+                if e.key == p.K_f:
+                    contains, index = self.Player.inventory.container.containsGroup("Health")
+                    if contains:
+                        self.Player.currentHp += self.Player.inventory.container.contents[index].useMeta[1]
+                        self.Player.inventory.container.contents[index].amount -= 1
+
+                        if self.Player.currentHp > self.Player.stats.health:
+                            self.Player.currentHp = self.Player.stats.health
+
             if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:
                 self.Player.Fire(pygame.mouse.get_pos())
 
