@@ -78,23 +78,27 @@ class EnemyData:
 
         self.droptable = drops
 
-class Goblin(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, stats, data):
         super().__init__()
         self.data = data
-        
-        self.stats = dataTypes.entityStats(hp=stats["hp"], defen=stats["def"], spd=stats["spd"], atk=stats["atk"], dex=stats["dex"])
 
-        self.position = dataTypes.pos(x,y)
+        self.stats = dataTypes.entityStats(hp=stats["hp"], defen=stats["def"], spd=stats["spd"], atk=stats["atk"],
+                                           dex=stats["dex"])
+
+        self.position = dataTypes.pos(x, y)
 
         self.canAttack = True
         self.wait = 0
 
-        ss=spritesheet.spritesheet(self.data.Texture.fileLocation)
-        self.image = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], self.data.Texture.size, self.data.Texture.size), colorkey=dataTypes.WHITE)
+        ss = spritesheet.spritesheet(self.data.Texture.fileLocation)
+        self.image = ss.image_at(
+            (self.data.Texture.index[0], self.data.Texture.index[1], self.data.Texture.size, self.data.Texture.size),
+            colorkey=dataTypes.WHITE)
 
         ss = spritesheet.spritesheet(self.data.projectile.fileLocation)
-        self.projImage = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8), colorkey=dataTypes.WHITE)
+        self.projImage = ss.image_at((self.data.Texture.index[0], self.data.Texture.index[1], 8, 8),
+                                     colorkey=dataTypes.WHITE)
 
         self.rect = self.image.get_rect()
         self.rect.x = self.position.x

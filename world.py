@@ -32,9 +32,9 @@ class Chunk:
                     else:
                         self.tileGroup.add(grassTile(pos))
                         self.tiles[pos.__str__()] = "grass"
-                        spawn = random.randint(1, 300)
+                        spawn = random.randint(1, 600)
                         if spawn == 5 and enemiesGroup != None:
-                            enemiesGroup.add(enemy.Goblin(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"].stats, enemy.allMobs["0xg01"]))
+                            enemiesGroup.add(enemy.Enemy(pos.x*32+dataTypes.w//2, pos.y*32+dataTypes.h//2, enemy.allMobs["0xg01"].stats, enemy.allMobs["0xg01"]))
                 elif noise < 0.9:
                     self.tileGroup.add(mountainTile(pos))
                     self.tiles[pos.__str__()] = "mountain"

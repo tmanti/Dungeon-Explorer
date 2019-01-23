@@ -241,7 +241,7 @@ class player(pygame.sprite.Sprite):
         self.bullets.add(Bullet(self.inventory.weapon.material.projectileImage, startPos, moveToPos, angle, random.randint(self.inventory.weapon.material.damage[0], self.inventory.weapon.material.damage[1]), toTravel=self.playerClass.projectileDistance))
 
 def generateNewPlayerData(playerClass):
-    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
+    return dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), playerClass(), dataTypes.Level(1, 0))
 
-testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=20, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass(), dataTypes.Level(1, 0))
+#testPlayerData = dataTypes.playerData(pos(0, 0), dataTypes.playerInventory(), dataTypes.entityStats(hp=40, mp=20, defen=5, spd=3, atk=5, dex=5, vit=5), warriorClass(), dataTypes.Level(1, 0))
 className = {1:warriorClass(), 2:mageClass(), 3:rangerClass()}

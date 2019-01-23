@@ -350,6 +350,7 @@ class Client:
         for x in self.enemies:
             x.bullets.update(self.Player.position)
             x.bullets.draw(self.screen)
+            hits = pygame.sprite.spritecollide(self.Player, x.bullets, True)
 
         self.Player.bullets.update(self.Player.position)
         self.Player.bullets.draw(self.screen)
@@ -441,6 +442,8 @@ class Client:
             self.screen.blit(self.Player.inventory.ring.material.image, (dataTypes.w // 4 + 400, 950))
         else:
             self.screen.blit(self.slots[self.Player.playerClass.name]["ring"], (dataTypes.w // 4 + 400, 950))
+
+
 
     def Load(self, name):
         # TEMP - load player save

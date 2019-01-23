@@ -48,6 +48,17 @@ class DBInterface():
         else:
             print("Save not found")
             return None
+
+    def deleteUser(self, name):#delete a user from db
+        userRef = self.session.query(PlayerSave).filter_by(username=name).first()#reference to user
+        if userRef:#if exists
+            self.session.delete(userRef)#delete user
+            self.session.commit()#commit to db
+        else:#not found
+            print("no user found")
+            return None
+
+
     #return all save data
     def returnAllSaves(self):
         return self.session.query(PlayerSave).all()
