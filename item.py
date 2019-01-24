@@ -89,6 +89,15 @@ def init():
                                                    range=int(child.find("Range").text),
                                                    projectile=spriteRef(child.find("ProjectileTexture").find("File").text, child.find("ProjectileTexture").find("Index").text, "items"))
             Equipment[child.get('type')] = allItems[child.get('type')]
+        elif itemClass == "Equipment" and child.find("Special")!= None:
+            allItems[child.get('type')] = Material(child.get('id'),
+                                                   child.get('type'),
+                                                   itemClass,
+                                                   child.find("SlotType").text,
+                                                   child.find("Description").text,
+                                                   tier="UT",
+                                                   texture=spriteRef(child.find("Texture").find("File").text, child.find("Texture").find("Index").text, "items"),
+                                                   use=[child.find("Use").find("Action").text, child.find("Use").find("Amount").text])
         elif itemClass == "Consumable" and child.find("Item") != None:
             allItems[child.get('type')] = Material(child.get('id'),
                                                    child.get('type'),

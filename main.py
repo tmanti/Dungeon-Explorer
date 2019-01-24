@@ -46,6 +46,8 @@ def GenerateNewSave(playerName, playerClass):
     player = Player.generateNewPlayerData(playerClass)
     worldData = dataTypes.worldData()
 
+    player.playerClass.setupClass(player.inventory)
+
     saveData = dataTypes.saveData(player, worldData).return_save()
     dbInt.newSave(playerName, saveData)
 
@@ -378,6 +380,27 @@ class Client:
 
                         if self.Player.currentHp > self.Player.stats.health:
                             self.Player.currentHp = self.Player.stats.health
+                if e.key == p.K_SPACE:
+                    if self.Player.inventory.special and self.Player.canUseSpecial:
+                        if self.Player.inventory.special.material.useMeta[0] == "Teleport":
+                            mouse = pygame.mouse.get_pos()
+                            self.Player.position.x += mouse[0]-dataTypes.w//2
+                            self.Player.position.y += mouse[1]-dataTypes.h//2
+                            self.Player.boostStats.vitality+=int(self.Player.inventory.special.material.useMeta[1])
+                            self.Player.boostStats.attack+=int(self.Player.inventory.special.material.useMeta[1])//2
+                        elif self.Player.inventory.special.material.useMeta[0] == "Speed":
+                            self.Player.boostStats.speed+=int(self.Player.inventory.special.material.useMeta[1])
+                        elif self.Player.inventory.special.material.useMeta[0] == "Dexterity":
+                            self.Player.boostStats.dexterity+=int(self.Player.inventory.special.material.useMeta[1])
+                        self.Player.canUseSpecial = False
+                        pygame.time.set_timer(pygame.USEREVENT + 2, 3000)
+                    else:
+                        print("Cant Use That Yet")
+
+            if e.type == pygame.USEREVENT+2:
+                self.Player.canUseSpecial = True
+                pygame.time.set_timer(pygame.USEREVENT+2, 0)
+                self.Player.boostStats = dataTypes.entityStats()
 
             if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:
                 self.Player.Fire(pygame.mouse.get_pos())
@@ -458,6 +481,7 @@ class Client:
 
         while load:
             for e in pygame.event.get():
+                mouse = p.mouse.get_pos()
                 if e.type == p.QUIT:
                     #dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
                     p.quit()
@@ -469,7 +493,6 @@ class Client:
                         load = False
                         self.state = 2
                 if e.type == p.MOUSEBUTTONDOWN and e.button == 1:  # if it is a click
-                    mouse = p.mouse.get_pos()  # get mouse position
                     for x in buttons:
                         if ((x.x + x.w+200) > mouse[0] > (x.x+200)) and ((x.y + x.h+200) > mouse[1] > (x.y+200)):
                             if x.text == "Back To Menu":
@@ -500,42 +523,42 @@ class Client:
                                         if self.Player.playerClass.slotTypes[1] == int(holding.Itemstack.material.SlotType):
                                             tohold = x.ret_InvElemt()
                                             slots.remove(x)
-                                            if int(holding.Itemstack.material.SlotType) == 1:
-                                                self.Player.inventory.weapon = holding.Itemstack
-                                            else:
-                                                continue
+                                            self.Player.inventory.special = holding.Itemstack
                                             holding = tohold
+                                        else:
+                                            continue
+                                        holding = tohold
                                     else:
                                         holding = x.ret_InvElemt()
-                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        self.Player.inventory.special = item.ItemStack(1, item.Nothing)
                                         slots.remove(x)
                                 if x.invSlot == "armour":
                                     if holding:
                                         if self.Player.playerClass.slotTypes[2] == int(holding.Itemstack.material.SlotType):
                                             tohold = x.ret_InvElemt()
                                             slots.remove(x)
-                                            if int(holding.Itemstack.material.SlotType) == 1:
-                                                self.Player.inventory.weapon = holding.Itemstack
-                                            else:
-                                                continue
+                                            self.Player.inventory.armour = holding.Itemstack
                                             holding = tohold
+                                        else:
+                                            continue
+                                        holding = tohold
                                     else:
                                         holding = x.ret_InvElemt()
-                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        self.Player.inventory.armour = item.ItemStack(1, item.Nothing)
                                         slots.remove(x)
                                 if x.invSlot == "ring":
                                     if holding:
-                                        if 10 == int(holding.Itemstack.material.SlotType):
+                                        if self.Player.playerClass.slotTypes[3] == int(holding.Itemstack.material.SlotType):
                                             tohold = x.ret_InvElemt()
                                             slots.remove(x)
-                                            if int(holding.Itemstack.material.SlotType) == 1:
-                                                self.Player.inventory.weapon = holding.Itemstack
-                                            else:
-                                                continue
+                                            self.Player.inventory.ring = holding.Itemstack
+                                            holding = tohold
+                                        else:
+                                            continue
                                             holding = tohold
                                     else:
                                         holding = x.ret_InvElemt()
-                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        self.Player.inventory.ring = item.ItemStack(1, item.Nothing)
                                         slots.remove(x)
                                 continue
                             tohold = x.ret_InvElemt()
@@ -563,7 +586,7 @@ class Client:
                 buttons.update(Inventory)
 
                 slots.empty()
-                slots.add(InvSlot(300, 700, "Garbage", replacementImage=pygame.transform.scale(pygame.image.load("resources/Sprites/garbage.png"), (8*4, 8*4))))
+                slots.add(InvSlot(250, 550, "Garbage", replacementImage=pygame.transform.scale(pygame.image.load("resources/Sprites/garbage.png"), (8*4, 8*4))))
 
                 for y in range(5):
                     for x in range(6):
@@ -571,6 +594,19 @@ class Client:
                             slots.add(InvSlot(64*x+125+200+16, 64*y+100+200+16, str(x+6*y), itemStack=self.Player.inventory.container.contents[str(x+6*y)]))
                         else:
                             slots.add(InvSlot(64*x+125+200+16, 64*y+100+200+16, str(x+6*y)))
+
+                for x in slots:
+                    if x.rect.collidepoint(pygame.mouse.get_pos()):
+                        if x.elem:
+                            if x.elem.Itemstack.material.type =="0xfff":
+                                continue
+
+                            methods.text_to_screen(x.elem.Itemstack.material.name+": "+x.elem.Itemstack.material.description, 300, 500, Inventory, font=dataTypes.GUI_FONT_DESC, center=True)
+                            if not x.elem.Itemstack.material.damage == None:
+                                methods.text_to_screen(str(x.elem.Itemstack.material.damage[0]) + "-"+str(x.elem.Itemstack.material.damage[1]) + "  Damage,  " + str(x.elem.Itemstack.material.range) + "  Range",
+                                                   300, 550, Inventory, font=dataTypes.GUI_FONT_DESC, center=True)
+                            elif not x.elem.Itemstack.material.useMeta==[]:
+                                methods.text_to_screen("Use: " + x.elem.Itemstack.material.useMeta[0], 300, 550, Inventory, font=dataTypes.GUI_FONT_DESC, center=True)
 
                 self.screen.blit(Inventory, (200, 200))
 

@@ -421,7 +421,7 @@
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
-      <Object type="0xt02" id="Evil Ent">
+      <Object type="0xt01" id="Evil Ent">
         <Group>Trees</Group>
         <Texture>
 			<File>enemies</File>

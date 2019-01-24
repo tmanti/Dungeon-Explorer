@@ -16,6 +16,7 @@ class warriorClass:
 
     def setupClass(self, playerInv):
         playerInv.weapon =item.ItemStack(1,  item.allItems["0xa00"])
+        playerInv.special = item.ItemStack(1, item.allItems["0xs00"])
         #moresetup
 
         return playerInv
@@ -28,6 +29,7 @@ class mageClass:
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xb00"])
+        playerInv.special = item.ItemStack(1, item.allItems["0xs01"])
         # moresetup
 
         return playerInv
@@ -40,6 +42,7 @@ class rangerClass:
 
     def setupClass(self, playerInv):
         playerInv.weapon = item.ItemStack(1, item.allItems["0xc00"])
+        playerInv.special = item.ItemStack(1, item.allItems["0xs02"])
         # moresetup
 
         return playerInv
@@ -82,6 +85,8 @@ class player(pygame.sprite.Sprite):
         self.chunkPos = dataTypes.pos(self.tilePos.x//16, self.tilePos.y//16)
         self.inventory = setupData.inventory
         self.stats = setupData.stats
+        self.boostStats = dataTypes.entityStats()
+        self.canUseSpecial = True
 
         self.currentHp = self.stats.health
         self.currentMp = self.stats.magic
@@ -93,8 +98,6 @@ class player(pygame.sprite.Sprite):
         self.drawOffset = 0
 
         self.playerClass = setupData.playerClass
-
-        self.inventory = self.playerClass.setupClass(self.inventory)
 
         ss = spritesheet.spritesheet('resources/Sprites/player/' + self.playerClass.name + '.png')#get spritesheet reference
         self.playerIdle = [#list of player idle states
@@ -172,19 +175,19 @@ class player(pygame.sprite.Sprite):
         #0 - down, 1 - right, 2 - up, 3 - left
 
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            velocity[1] -= 1*self.stats.speed
+            velocity[1] -= 1*self.stats.speed+self.boostStats.speed
             self.playerAnim = self.playerWalk[2].next()
             self.lastFaced = 2
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            velocity[1] += 1 * self.stats.speed
+            velocity[1] += 1 * self.stats.speed+self.boostStats.speed
             self.playerAnim = self.playerWalk[0].next()
             self.lastFaced = 0
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            velocity[0] -= 1 * self.stats.speed
+            velocity[0] -= 1 * self.stats.speed+self.boostStats.speed
             self.playerAnim = self.playerWalk[3].next()
             self.lastFaced = 3
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            velocity[0] += 1 *self.stats.speed
+            velocity[0] += 1 *self.stats.speed+self.boostStats.speed
             self.playerAnim = self.playerWalk[1].next()
             self.lastFaced = 1
 
@@ -199,7 +202,7 @@ class player(pygame.sprite.Sprite):
             pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
         if self.attacking != attacking and attacking == True and self.inventory.weapon.material.SlotType == str(self.playerClass.slotTypes[0]):
-            pygame.time.set_timer(pygame.USEREVENT+1, 2500//(self.stats.dexterity+self.inventory.weapon.material.rateOfFire))
+            pygame.time.set_timer(pygame.USEREVENT+1, 2500//(self.stats.dexterity+self.inventory.weapon.material.rateOfFire+self.boostStats.dexterity))
             self.attacking = True
 
         if self.attacking or self.AttackingToggled:
@@ -231,7 +234,9 @@ class player(pygame.sprite.Sprite):
         self.position.y += velocity[1]
 
         if self.currentHp < self.stats.health:
-            self.currentHp += self.stats.vitality/2000
+            self.currentHp += self.stats.vitality+self.boostStats.vitality/2000
+        elif self.currentMp < self.stats.magic:
+            self.currentMp += 5/2000
 
     def return_playerData(self):
         return dataTypes.playerData(self.position, self.inventory, self.stats, self.playerClass, self.level)

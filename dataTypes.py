@@ -31,6 +31,7 @@ GUI_FONT_BIG = pygame.font.Font("Pixel-Miners.otf", 40)
 GUI_FONT_SMALL = pygame.font.Font("Pixel-Miners.otf", 20)
 GUI_FONT_SMALLER = pygame.font.Font("Pixel-Miners.otf", 17)
 GUI_FONT_BUTTON = pygame.font.Font("Pixel-Miners.otf", 27)
+GUI_FONT_DESC = pygame.font.Font("Pixel-Miners.otf", 11)
 
 #position object
 class pos:

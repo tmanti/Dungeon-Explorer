@@ -26,7 +26,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>1x0</Index>
+			<Index>0x0</Index>
 		</ProjectileTexture>
 		<SlotType>1</SlotType>
 		<Tier>2</Tier>
@@ -44,7 +44,7 @@
 			</Texture>
 			<ProjectileTexture>
 				<File>projectiles</File>
-				<Index>2x0</Index>
+				<Index>1x0</Index>
 			</ProjectileTexture>
 			<SlotType>1</SlotType>
 			<Tier>3</Tier>
@@ -62,7 +62,7 @@
 			</Texture>
 			<ProjectileTexture>
 				<File>projectiles</File>
-				<Index>3x0</Index>
+				<Index>1x0</Index>
 			</ProjectileTexture>
 			<SlotType>1</SlotType>
 			<Tier>4</Tier>
@@ -98,7 +98,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>1x2</Index>
+			<Index>0x2</Index>
 		</ProjectileTexture>
 		<SlotType>4</SlotType>
 		<Tier>2</Tier>
@@ -116,7 +116,7 @@
 			</Texture>
 			<ProjectileTexture>
 					<File>projectiles</File>
-					<Index>2x2</Index>
+					<Index>1x2</Index>
 			</ProjectileTexture>
 			<SlotType>4</SlotType>
 			<Tier>3</Tier>
@@ -135,7 +135,7 @@
 			</Texture>
 			<ProjectileTexture>
 					<File>projectiles</File>
-					<Index>3x2</Index>
+					<Index>1x2</Index>
 			</ProjectileTexture>
 			<SlotType>4</SlotType>
 			<Tier>4</Tier>
@@ -171,7 +171,7 @@
 		</Texture>
 		<ProjectileTexture>
 			<File>projectiles</File>
-			<Index>1x1</Index>
+			<Index>0x1</Index>
 		</ProjectileTexture>
 		<SlotType>7</SlotType>
 		<Tier>2</Tier>
@@ -189,7 +189,7 @@
 			</Texture>
 			<ProjectileTexture>
 					<File>projectiles</File>
-					<Index>2x1</Index>
+					<Index>1x1</Index>
 			</ProjectileTexture>
 			<SlotType>7</SlotType>
 			<Tier>3</Tier>
@@ -207,7 +207,7 @@
 			</Texture>
 			<ProjectileTexture>
 					<File>projectiles</File>
-					<Index>3x1</Index>
+					<Index>1x1</Index>
 			</ProjectileTexture>
 			<SlotType>7</SlotType>
 			<Tier>4</Tier>
@@ -228,6 +228,34 @@
 		<Use>
 			<Action>Speed</Action>
 			<Amount>10</Amount>
+		</Use>
+	</Object>
+	<Object id="Spell of the Divine" type="0xs01">
+		<Class>Equipment</Class>
+		<Special/>
+		<Texture>
+			<File>equipment</File>
+			<Index>0x4</Index>
+		</Texture>
+		<SlotType>5</SlotType>
+		<Description>A stone slab embuied with strong magic</Description>
+		<Use>
+			<Action>Teleport</Action>
+			<Amount>10</Amount>
+		</Use>
+	</Object>
+	<Object id="Quiver of Might" type="0xs02">
+		<Class>Equipment</Class>
+		<Special/>
+		<Texture>
+			<File>equipment</File>
+			<Index>0x5</Index>
+		</Texture>
+		<SlotType>8</SlotType>
+		<Description>A quiver with the power of the wind</Description>
+		<Use>
+			<Action>Dexterity</Action>
+			<Amount>15</Amount>
 		</Use>
 	</Object>
 	<Object id="Small Health Potion" type="0x000">
