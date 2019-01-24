@@ -216,6 +216,20 @@
 			<RateOfFire>2</RateOfFire>
 			<Range>1</Range>
 	</Object>
+	<Object id="Helm Of the Hero" type="0xs00">
+		<Class>Equipment</Class>
+		<Special/>
+		<Texture>
+			<File>equipment</File>
+			<Index>0x3</Index>
+		</Texture>
+		<SlotType>2</SlotType>
+		<Description>A helm used by heros of the realm</Description>
+		<Use>
+			<Action>Speed</Action>
+			<Amount>10</Amount>
+		</Use>
+	</Object>
 	<Object id="Small Health Potion" type="0x000">
 		<Class>Consumable</Class>
 		<Item/>

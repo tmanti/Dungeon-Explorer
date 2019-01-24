@@ -19,7 +19,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -50,7 +50,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -91,7 +91,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
         </DropTable>
@@ -117,38 +117,38 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
         </DropTable>
         <Behavior type="follow" distance="3"/>
     </Object>
     <Object type="0xr01" id="Rat">
-    <Group>Bats</Group>
-    <Texture>
-        <File>enemies</File>
-        <Index>1x1</Index>
-    </Texture>
-    <ProjectileTexture>
-        <File>projectiles</File>
-        <Index>0x0</Index>
-    </ProjectileTexture>
-    <stats>
-        <Hitpoints>20</Hitpoints>
-        <Defence>1</Defence>
-        <Speed>3</Speed>
-        <Attack>2-4</Attack>
-        <Dexterity>3</Dexterity>
-    </stats>
-    <DropTable>
-        <DropCell>
-            <itemId>0x000</itemId>
-            <Chance>50</Chance>
-            <Amount>1-5</Amount>
-        </DropCell>
-    </DropTable>
-    <Behavior type="follow" distance="3"/>
-</Object>
+        <Group>Bats</Group>
+        <Texture>
+            <File>enemies</File>
+            <Index>1x1</Index>
+        </Texture>
+        <ProjectileTexture>
+            <File>projectiles</File>
+            <Index>0x0</Index>
+        </ProjectileTexture>
+        <stats>
+            <Hitpoints>20</Hitpoints>
+            <Defence>1</Defence>
+            <Speed>3</Speed>
+            <Attack>2-4</Attack>
+            <Dexterity>3</Dexterity>
+        </stats>
+        <DropTable>
+            <DropCell>
+                <itemId>0x000</itemId>
+                <Chance>20</Chance>
+                <Amount>1-5</Amount>
+            </DropCell>
+        </DropTable>
+        <Behavior type="follow" distance="3"/>
+    </Object>
     <Object type="0xi01" id="Fire Imp">
         <Group>Imps</Group>
         <Texture>
@@ -169,7 +169,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -210,7 +210,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
         </DropTable>
@@ -236,7 +236,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
         </DropTable>
@@ -262,7 +262,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -303,7 +303,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -344,7 +344,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
                  <DropCell>
@@ -376,7 +376,7 @@
             <Index>0x0</Index>
         </ProjectileTexture>
         <stats>
-            <Hitpoints>300</Hitpoints>
+            <Hitpoints>6000</Hitpoints>
             <Defence>10</Defence>
             <Speed>5</Speed>
             <Attack>20-40</Attack>
@@ -385,7 +385,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
             <DropCell>
@@ -441,7 +441,7 @@
         <DropTable>
             <DropCell>
                 <itemId>0x000</itemId>
-                <Chance>50</Chance>
+                <Chance>20</Chance>
                 <Amount>1-5</Amount>
             </DropCell>
         </DropTable>

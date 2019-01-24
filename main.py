@@ -189,6 +189,10 @@ class Client:
         toGen = dataTypes.pos(-1, -1)
         genTemp = dataTypes.pos(toGen.x, toGen.y)
 
+        pygame.mixer.music.load("resources/audio/MainMenu.wav")
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play(-1)
+
         for y in range(3):
             genTemp.y = toGen.y + y
             genTemp.x = toGen.x
@@ -257,6 +261,7 @@ class Client:
                                 elif x.text == 'Exit':
                                     load=False
                                     self.running = False
+                                    exit()
                                 menuSwapped = True
                     if menuState == 2 and not menuSwapped:
                         for x in buttons2Load:
@@ -264,6 +269,10 @@ class Client:
                                 self.Load(x.text)
                                 load = False
                                 menuSwapped = True
+                                pygame.mixer.music.stop()
+                                pygame.mixer.music.load("resources/audio/inGame.wav")
+                                pygame.mixer.music.set_volume(0.1)
+                                pygame.mixer.music.play(-1)
                         for x in buttons2NewSave:
                             if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
                                 menuState = 3
@@ -277,6 +286,7 @@ class Client:
                                         GenerateNewSave("".join(TextField), classes[classesIndex])
                                         self.Load("".join(TextField))
                                         load=False
+                                        pygame.mixer.music.stop()
                         for x in buttons3Next:
                             if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
                                 classesIndex = x.press(classesIndex)
@@ -414,7 +424,7 @@ class Client:
         self.Player.bullets.draw(self.screen)
         #check for colosion between bullet gorups
         #deal damage to object collided with
-        hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, False, False)
+        hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, True, False)
         for hit in hits:
             outcome = hits[hit][0].hit(hit.damage)
             if outcome[0]:
@@ -423,7 +433,7 @@ class Client:
                     self.Player.levelUp()
                 for x in outcome[1]:
                     self.Player.inventory.container.AddTo(x)
-                    print("Item Get" + x.material.name)
+                    print("Item Get " + x.material.name)
 
         self.Player.update(self.gennedChunks)
 
@@ -462,17 +472,32 @@ class Client:
                     mouse = p.mouse.get_pos()  # get mouse position
                     for x in buttons:
                         if ((x.x + x.w+200) > mouse[0] > (x.x+200)) and ((x.y + x.h+200) > mouse[1] > (x.y+200)):
-                            print(x.text)
                             if x.text == "Back To Menu":
                                 dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
                                 load=False
                                 self.state = 1
                     for x in slots:
                         if x.rect.collidepoint(e.pos):
+                            if x.invSlot == "Garbage":
+                                holding = None
+
                             if x.invSlot in ["weapon", "special", "ring", "armour"]:
                                 if x.invSlot == "weapon":
                                     if holding:
                                         if self.Player.playerClass.slotTypes[0] == int(holding.Itemstack.material.SlotType):
+                                            tohold = x.ret_InvElemt()
+                                            slots.remove(x)
+                                            self.Player.inventory.weapon = holding.Itemstack
+                                            holding = tohold
+                                        else:
+                                            continue
+                                    else:
+                                        holding = x.ret_InvElemt()
+                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        slots.remove(x)
+                                if x.invSlot == "special":
+                                    if holding:
+                                        if self.Player.playerClass.slotTypes[1] == int(holding.Itemstack.material.SlotType):
                                             tohold = x.ret_InvElemt()
                                             slots.remove(x)
                                             if int(holding.Itemstack.material.SlotType) == 1:
@@ -484,7 +509,34 @@ class Client:
                                         holding = x.ret_InvElemt()
                                         self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
                                         slots.remove(x)
-
+                                if x.invSlot == "armour":
+                                    if holding:
+                                        if self.Player.playerClass.slotTypes[2] == int(holding.Itemstack.material.SlotType):
+                                            tohold = x.ret_InvElemt()
+                                            slots.remove(x)
+                                            if int(holding.Itemstack.material.SlotType) == 1:
+                                                self.Player.inventory.weapon = holding.Itemstack
+                                            else:
+                                                continue
+                                            holding = tohold
+                                    else:
+                                        holding = x.ret_InvElemt()
+                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        slots.remove(x)
+                                if x.invSlot == "ring":
+                                    if holding:
+                                        if 10 == int(holding.Itemstack.material.SlotType):
+                                            tohold = x.ret_InvElemt()
+                                            slots.remove(x)
+                                            if int(holding.Itemstack.material.SlotType) == 1:
+                                                self.Player.inventory.weapon = holding.Itemstack
+                                            else:
+                                                continue
+                                            holding = tohold
+                                    else:
+                                        holding = x.ret_InvElemt()
+                                        self.Player.inventory.weapon = item.ItemStack(1, item.Nothing)
+                                        slots.remove(x)
                                 continue
                             tohold = x.ret_InvElemt()
                             slots.remove(x)
@@ -511,6 +563,7 @@ class Client:
                 buttons.update(Inventory)
 
                 slots.empty()
+                slots.add(InvSlot(300, 700, "Garbage", replacementImage=pygame.transform.scale(pygame.image.load("resources/Sprites/garbage.png"), (8*4, 8*4))))
 
                 for y in range(5):
                     for x in range(6):

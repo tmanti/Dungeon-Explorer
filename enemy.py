@@ -30,9 +30,10 @@ class dropCell:
         self.chance = chance
 
 class Behavior:
-    def __init__(self, type, distance=0):
+    def __init__(self, type, distance=0, maxFollow=20):
         self.type = type
         self.distance = int(distance)*32
+        self.maxFollow = maxFollow*32
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, projectileTexture, startPos, moveTo, rotation, bulletSpeed=1, toTravel=0, damage=0):
@@ -124,28 +125,28 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.data.behavior.type == "follow":
             direction = [playerPos.x+dataTypes.w//2>self.position.x, playerPos.y+dataTypes.h//2 > self.position.y]
+            if ((playerPos.x+dataTypes.w//2-self.position.x)**2 + (playerPos.y+dataTypes.h//2-self.position.y)**2)**0.5 < self.data.behavior.maxFollow:
+                if abs(playerPos.x+dataTypes.w//2-self.position.x) > self.data.behavior.distance:
+                    if direction[0]:
+                        velo[0]+=self.stats.speed
+                    else:
+                        velo[0]-=self.stats.speed
+                elif (playerPos.y+dataTypes.h//2-self.data.behavior.distance < self.position.y < playerPos.y+dataTypes.h//2+self.data.behavior.distance):
+                    if direction[0]:
+                        velo[0]-=self.stats.speed
+                    else:
+                        velo[0]+=self.stats.speed
 
-            if abs(playerPos.x+dataTypes.w//2-self.position.x) > self.data.behavior.distance:
-                if direction[0]:
-                    velo[0]+=self.stats.speed
-                else:
-                    velo[0]-=self.stats.speed
-            elif (playerPos.y+dataTypes.h//2-self.data.behavior.distance < self.position.y < playerPos.y+dataTypes.h//2+self.data.behavior.distance):
-                if direction[0]:
-                    velo[0]-=self.stats.speed
-                else:
-                    velo[0]+=self.stats.speed
-
-            if abs(playerPos.y+dataTypes.h//2-self.position.y) > self.data.behavior.distance:
-                if direction[1]:
-                    velo[1]+=self.stats.speed
-                else:
-                    velo[1]-=self.stats.speed
-            elif (playerPos.x+dataTypes.w//2-self.data.behavior.distance < self.position.x < playerPos.x+dataTypes.w//2+self.data.behavior.distance):
-                if direction[1]:
-                    velo[1]-=self.stats.speed
-                else:
-                    velo[1]+=self.stats.speed
+                if abs(playerPos.y+dataTypes.h//2-self.position.y) > self.data.behavior.distance:
+                    if direction[1]:
+                        velo[1]+=self.stats.speed
+                    else:
+                        velo[1]-=self.stats.speed
+                elif (playerPos.x+dataTypes.w//2-self.data.behavior.distance < self.position.x < playerPos.x+dataTypes.w//2+self.data.behavior.distance):
+                    if direction[1]:
+                        velo[1]-=self.stats.speed
+                    else:
+                        velo[1]+=self.stats.speed
 
         if ((playerPos.x+dataTypes.w//2-self.position.x)**2 + (playerPos.y+dataTypes.h//2-self.position.y)**2)**0.5 < 5*32 and self.canAttack:
             self.Fire(playerPos)
@@ -172,7 +173,6 @@ class Enemy(pygame.sprite.Sprite):
         self.bullets.add(Bullet(self.projImage, dataTypes.pos(self.position.x, self.position.y), moveToPos, angle, toTravel=self.projRange*32, damage=random.randint(self.damage[0], self.damage[1])))
 
     def hit(self, damage):
-        print("Hit for " + str(damage))
         self.stats.health-=damage
         if self.stats.health <= 0:
             self.kill()
@@ -208,4 +208,3 @@ def init():
         if child.find("Group").text == "Goblins":
             goblins[child.get('type')] = allMobs[child.get('type')]
         #elif child.find("")
-    print(allMobs)
