@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-#import startscreen
+import startscreen
 import Player
 import db
 import dataTypes
@@ -82,9 +82,11 @@ class invElement(pygame.sprite.Sprite):
         self.rect.center = (self.position.x, self.position.y)
         self.invSlot = slot
 
+#inventory slot data type
 class InvSlot(pygame.sprite.Sprite):
     def __init__(self, x, y, slot, itemStack=None, replacementImage = None):
-        super().__init__()
+        super().__init__()#init sprite
+        #store variables
         self.position = pos(x, y)
 
         self.invSlot = slot
@@ -108,6 +110,7 @@ class InvSlot(pygame.sprite.Sprite):
             self.elem = None
 
     def ret_InvElemt(self):
+        #return inventory elemnt soted
         if self.elem:
             a= self.elem
             self.elem= item.ItemStack(1, item.allItems["0xfff"])
@@ -122,7 +125,7 @@ class Client:
 
     def __init__(self):
         #initialize pygame and the screen
-        self.screen = p.display.set_mode((dataTypes.w, dataTypes.h))#, pygame.FULLSCREEN)
+        self.screen = p.display.set_mode((dataTypes.w, dataTypes.h), pygame.FULLSCREEN)#make fullscreen
         pygame.display.set_caption('Dungeon Explorer')  # Title on the title bar of the screen
 
         self.state = 1
@@ -141,7 +144,7 @@ class Client:
         #genned Chunks dict to easily store all genned chunks for easy reuse
         self.gennedChunks = {}
 
-        warrSS = spritesheet.spritesheet("resources/Sprites/items/warrior.png")
+        warrSS = spritesheet.spritesheet("resources/Sprites/items/warrior.png")#inv slots images
         warriorSlots = {
             "weapon": warrSS.image_at((0, 0, 8, 8), colorkey=dataTypes.WHITE),
             "special": warrSS.image_at((8, 0, 8, 8), colorkey=dataTypes.WHITE),
@@ -170,8 +173,10 @@ class Client:
     def run(self):
         #main game loop
         while self.running:
+            #tick clock
             clock.tick(dataTypes.FPS)
 
+            #run the states
             self.states[self.state]()
 
         #once while loop broken
@@ -179,11 +184,12 @@ class Client:
         return
 
     def main_menu(self):
+        #define constants for background
         load = True
 
         menuState = 1 #1 is main menu, 2 is play menu
 
-        gennedChunks = {}
+        gennedChunks = {}#store genned chunks
         loadedChunks = []
 
         World = world.world(random.randint(1, 10000))
@@ -191,10 +197,12 @@ class Client:
         toGen = dataTypes.pos(-1, -1)
         genTemp = dataTypes.pos(toGen.x, toGen.y)
 
+        #play menu music
         pygame.mixer.music.load("resources/audio/MainMenu.wav")
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1)
 
+        #create map
         for y in range(3):
             genTemp.y = toGen.y + y
             genTemp.x = toGen.x
@@ -205,6 +213,7 @@ class Client:
                     gennedChunks[str(genTemp)].genChunk(World.genNoiseMap(gennedChunks[str(genTemp)].tilePos))
                 loadedChunks.append(gennedChunks[str(genTemp)])
 
+        #store buttons to be used in each screen
         buttons1 = p.sprite.Group()
         buttons1.add(methods.playButton(dataTypes.w//2, 400), methods.instructionsButton(dataTypes.w//2, 500), methods.backButton(dataTypes.w//2, 600, text="Exit"))
 
@@ -221,6 +230,7 @@ class Client:
 
         buttons4 = p.sprite.Group(methods.backButton(dataTypes.w // 2, 100))
 
+        #contants/misc vars
         saves = 5
 
         temp = 0
@@ -229,23 +239,24 @@ class Client:
 
         accs = []
 
+        #get save files
         for x in dbInt.returnAllSaves():
             buttons2Load.add(methods.loadButton(dataTypes.w // 2, 300 + temp * 100, x.name, fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
             accs.append(x.name)
             temp += 1
             saves -= 1
-
+        #left over slots to be filled
         for y in range(saves):
             buttons2NewSave.add(methods.newSaveButton(dataTypes.w//2, 300+temp*100+y*100, fonts=[dataTypes.GUI_FONT, dataTypes.GUI_FONT_BUTTON]))
 
+        #more misc vars for menus
         TextField = []
         classes = [Player.warriorClass, Player.mageClass, Player.rangerClass]
         classesIndex = 0
 
-        errorMessages = []
-
+        #menu loop
         while load:
-            for e in pygame.event.get():
+            for e in pygame.event.get():#event queue
                 if e.type == p.QUIT:
                     quit()
                 if e.type == p.KEYDOWN:
@@ -256,7 +267,7 @@ class Client:
                     if not menuSwapped and menuState == 1:
                         for x in buttons1:  # for each button on screen 1
                             if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):  # if it is on a button and it it is o the r
-                                if x.text == 'Play':
+                                if x.text == 'Play':#button logic
                                     menuState = 2
                                 elif x.text == 'Instructions':
                                     menuState = 4
@@ -265,44 +276,44 @@ class Client:
                                     self.running = False
                                     exit()
                                 menuSwapped = True
-                    if menuState == 2 and not menuSwapped:
-                        for x in buttons2Load:
-                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
-                                self.Load(x.text)
+                    if menuState == 2 and not menuSwapped:#if it is menu state 2
+                        for x in buttons2Load:#for each bytton
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):#check if inside
+                                self.Load(x.text)#start playing game audio and swap to game state
                                 load = False
                                 menuSwapped = True
                                 pygame.mixer.music.stop()
                                 pygame.mixer.music.load("resources/audio/inGame.wav")
                                 pygame.mixer.music.set_volume(0.1)
                                 pygame.mixer.music.play(-1)
-                        for x in buttons2NewSave:
-                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
-                                menuState = 3
+                        for x in buttons2NewSave:#for each button
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):#check if click was inside
+                                menuState = 3#button logic
                                 menuSwapped = True
                                 TextField = []
-                    if menuState == 3 and not menuSwapped:
-                        for x in buttons3:
-                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
-                                if len(TextField) > 0:
+                    if menuState == 3 and not menuSwapped:#3rd menu
+                        for x in buttons3:#for each bytton
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):#check if click was on button
+                                if len(TextField) > 0:#generate new save
                                     if "".join(TextField) not in accs:
                                         GenerateNewSave("".join(TextField), classes[classesIndex])
                                         self.Load("".join(TextField))
                                         load=False
                                         pygame.mixer.music.stop()
-                        for x in buttons3Next:
-                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
-                                classesIndex = x.press(classesIndex)
-                        for x in buttons3Back:
-                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):
+                        for x in buttons3Next:#for each button
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):#if click was on button
+                                classesIndex = x.press(classesIndex)#press the button
+                        for x in buttons3Back:#for each button
+                            if (x.x + x.w > mouse[0] > x.x) and (x.y + x.h > mouse[1] > x.y):#if click was on button
                                 TextField = []
                                 classesIndex = 0
                                 menuState = 2
                     if menuState == 4 and not menuSwapped:
                         for x in buttons4:
-                            if p.Rect(x.x, x.y, x.w, x.h).collidepoint(mouse[0], mouse[1]):
+                            if p.Rect(x.x, x.y, x.w, x.h).collidepoint(mouse[0], mouse[1]):#if click was on button
                                 menuState = 1
                                 menuSwapped = True
-                if menuState == 3:
+                if menuState == 3:#typeing logic for text field
                     if e.type == p.KEYDOWN:
                         if e.key == p.K_BACKSPACE:
                             if len(TextField) > 0:
@@ -313,11 +324,13 @@ class Client:
                             TextField.append(pygame.key.name(e.key))
 
 
-                if e.type == p.MOUSEBUTTONUP:
+                if e.type == p.MOUSEBUTTONUP:#allow for another button to be pressed
                     menuSwapped = False
 
+            #tick the clock
             clock.tick(dataTypes.FPS)
 
+            #menu state 1 main menu
             if menuState == 1:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
@@ -325,6 +338,7 @@ class Client:
                 methods.text_to_screen("DUNGEON EXPLORER", dataTypes.w//2, 200, self.screen, font=dataTypes.GAME_FONT_BIG)
                 buttons1.update(self.screen)
 
+            #menustate 2, load screen
             elif menuState == 2:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
@@ -332,6 +346,7 @@ class Client:
                 buttons2NewSave.update(self.screen)
                 buttons2Load.update(self.screen)
 
+            #create new character
             elif menuState == 3:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
@@ -342,6 +357,7 @@ class Client:
                 buttons3.update(self.screen)
                 buttons3Back.update(self.screen)
                 buttons3Next.update(self.screen)
+            #information screen
             elif menuState == 4:
                 for chunk in loadedChunks:
                     chunk.tileGroup.draw(self.screen)
@@ -351,14 +367,15 @@ class Client:
                 methods.text_to_screen("left click you can fight back.", dataTypes.w // 2, dataTypes.h // 4 + 150,self.screen, font=dataTypes.GUI_FONT)
                 methods.text_to_screen("The arrow keys or WASD allow you", dataTypes.w // 2, dataTypes.h // 4 + 200, self.screen, font=dataTypes.GUI_FONT)
                 methods.text_to_screen("to move and avoid projectiles.",dataTypes.w // 2, dataTypes.h // 4 + 250, self.screen, font=dataTypes.GUI_FONT)
-                methods.text_to_screen("Equip items enemies drop", dataTypes.w // 2, dataTypes.h // 4 + 300, self.screen, font=dataTypes.GUI_FONT)
-                methods.text_to_screen("to become more powerful.", dataTypes.w // 2, dataTypes.h // 4 + 350, self.screen, font=dataTypes.GUI_FONT)
-                methods.text_to_screen("Try to survive as long as possible.", dataTypes.w // 2, dataTypes.h // 4 + 400, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("The Spacebar is a special ability", dataTypes.w//2, dataTypes.h//4+300, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("Equip items enemies drop", dataTypes.w // 2, dataTypes.h // 4 + 350, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("to become more powerful.", dataTypes.w // 2, dataTypes.h // 4 + 400, self.screen, font=dataTypes.GUI_FONT)
+                methods.text_to_screen("Try to survive as long as possible.", dataTypes.w // 2, dataTypes.h // 4 + 450, self.screen, font=dataTypes.GUI_FONT)
 
                 buttons4.update(self.screen)
 
             display.update()
-
+        #once broken from loop go to game state
         self.state = 2
 
     def game(self):
@@ -366,43 +383,43 @@ class Client:
         #allChunks = [[int(allChunks[x][0]), int(allChunks[x][1])] for x in range(len(allChunks))]
         for e in p.event.get():  # event queue
             if e.type == p.QUIT:
-                self.running = False
-                if self.name:
-                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())
-            if e.type == p.KEYDOWN:
-                if e.key == p.K_ESCAPE:
+                self.running = False#stop game
+                if self.name:#if ingame
+                    dbInt.save(self.name, dataTypes.saveData(self.Player.return_playerData(), self.World.returnWorldData()).return_save())#save data
+            if e.type == p.KEYDOWN:#if keysroke
+                if e.key == p.K_ESCAPE:#open pause menu
                     self.state = 3
-                if e.key == p.K_f:
-                    contains, index = self.Player.inventory.container.containsGroup("Health")
-                    if contains:
-                        self.Player.currentHp += int(self.Player.inventory.container.contents[index].material.useMeta[1])
+                if e.key == p.K_f:#use hp pot
+                    contains, index = self.Player.inventory.container.containsGroup("Health")#see if inventory has one
+                    if contains:#if it does
+                        self.Player.currentHp += int(self.Player.inventory.container.contents[index].material.useMeta[1])#consume and deduct it fromhow many the player has
                         self.Player.inventory.container.contents[index].amount -= 1
 
                         if self.Player.currentHp > self.Player.stats.health:
                             self.Player.currentHp = self.Player.stats.health
-                if e.key == p.K_SPACE:
+                if e.key == p.K_SPACE:#if it is space (use ability)
                     if self.Player.inventory.special and self.Player.canUseSpecial:
-                        if self.Player.inventory.special.material.useMeta[0] == "Teleport":
-                            mouse = pygame.mouse.get_pos()
+                        if self.Player.inventory.special.material.useMeta[0] == "Teleport":#use teleport ability
+                            mouse = pygame.mouse.get_pos()#move player
                             self.Player.position.x += mouse[0]-dataTypes.w//2
                             self.Player.position.y += mouse[1]-dataTypes.h//2
-                            self.Player.boostStats.vitality+=int(self.Player.inventory.special.material.useMeta[1])
+                            self.Player.boostStats.vitality+=int(self.Player.inventory.special.material.useMeta[1])#add stat boosts
                             self.Player.boostStats.attack+=int(self.Player.inventory.special.material.useMeta[1])//2
-                        elif self.Player.inventory.special.material.useMeta[0] == "Speed":
-                            self.Player.boostStats.speed+=int(self.Player.inventory.special.material.useMeta[1])
-                        elif self.Player.inventory.special.material.useMeta[0] == "Dexterity":
-                            self.Player.boostStats.dexterity+=int(self.Player.inventory.special.material.useMeta[1])
-                        self.Player.canUseSpecial = False
-                        pygame.time.set_timer(pygame.USEREVENT + 2, 3000)
+                        elif self.Player.inventory.special.material.useMeta[0] == "Speed":#use speed ability
+                            self.Player.boostStats.speed+=int(self.Player.inventory.special.material.useMeta[1])#boost player speed
+                        elif self.Player.inventory.special.material.useMeta[0] == "Dexterity":#use dexterity ability
+                            self.Player.boostStats.dexterity+=int(self.Player.inventory.special.material.useMeta[1])#boot firerate
+                        self.Player.canUseSpecial = False#cant use special
+                        pygame.time.set_timer(pygame.USEREVENT + 2, 3000)#add event to cancel it
                     else:
-                        print("Cant Use That Yet")
+                        print("Cant Use That Yet")#error message if they cant use ability
 
-            if e.type == pygame.USEREVENT+2:
-                self.Player.canUseSpecial = True
-                pygame.time.set_timer(pygame.USEREVENT+2, 0)
-                self.Player.boostStats = dataTypes.entityStats()
+            if e.type == pygame.USEREVENT+2:#if ability event
+                self.Player.canUseSpecial = True#allow to use epcial
+                pygame.time.set_timer(pygame.USEREVENT+2, 0)#reset event timer
+                self.Player.boostStats = dataTypes.entityStats()#stop boosts
 
-            if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:
+            if e.type == pygame.USEREVENT+1 and int(self.Player.inventory.weapon.material.SlotType) == self.Player.playerClass.slotTypes[0]:#if it is attack event, attack
                 self.Player.Fire(pygame.mouse.get_pos())
 
         loadedChunks = []
@@ -448,7 +465,7 @@ class Client:
         #check for colosion between bullet gorups
         #deal damage to object collided with
         hits = pygame.sprite.groupcollide(self.Player.bullets, self.enemies, True, False)
-        for hit in hits:
+        for hit in hits:#
             outcome = hits[hit][0].hit(hit.damage)
             if outcome[0]:
                 self.Player.level.exp+=outcome[2]
